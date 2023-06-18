@@ -86,7 +86,7 @@ class Wildcard2Subject(ConverterBase):
 
         return self.convert(self.data_to_convert)
 
-    def convert(self, data: Any) -> str:
+    def convert(self, data: Any, *, aggressive: bool = False) -> str:
         """
         Converts the given dataset.
 
@@ -94,6 +94,7 @@ class Wildcard2Subject(ConverterBase):
             The data to convert.
         """
 
+        _ = aggressive
         subject = data.strip()
 
         if not subject:

@@ -134,7 +134,7 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
             self.try_to_query_status_from_collection()
 
         if not self.status.status and self.do_syntax_check_first:
-            self.try_to_query_status_from_syntax_lookup()
+            self.try_to_query_status_from_syntax_lookup(from_domain_test=True)
 
             if self.status.status:
                 status_post_syntax_checker = self.status.status
@@ -165,7 +165,7 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
             self.use_http_code_lookup
             and self.should_we_continue_test(status_post_syntax_checker)
         ):
-            self.try_to_query_status_from_http_status_code()
+            self.try_to_query_status_from_http_status_code(from_domain_test=True)
 
         if not self.status.status:
             self.status.status = PyFunceble.storage.STATUS.down

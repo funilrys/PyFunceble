@@ -341,18 +341,21 @@ class ConfigLoader:
             )
             config = self.dict_helper.from_yaml_file(self.path_to_config)
 
+        config_comparer = ConfigComparison(
+            local_config=config,
+            upstream_config=self.dict_helper.from_yaml_file(
+                self.path_to_default_config
+            ),
+        )
+
         if (
             not config
             or not isinstance(config, dict)
             or self.merge_upstream
             or is_3_x_version(config)
+            or not config_comparer.is_local_identical()
         ):  # pragma: no cover ## Testing the underlying comparison method is sufficent
-            config = ConfigComparison(
-                local_config=config,
-                upstream_config=self.dict_helper.from_yaml_file(
-                    self.path_to_default_config
-                ),
-            ).get_merged()
+            config = config_comparer.get_merged()
 
             self.dict_helper.set_subject(config).to_yaml_file(self.path_to_config)
 

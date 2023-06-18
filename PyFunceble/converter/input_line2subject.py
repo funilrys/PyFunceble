@@ -55,6 +55,7 @@ from typing import Any, List
 
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.converter.base import ConverterBase
+from PyFunceble.converter.url2netloc import Url2Netloc
 
 
 class InputLine2Subject(ConverterBase):
@@ -88,14 +89,30 @@ class InputLine2Subject(ConverterBase):
         Provides the subject to test.
         """
 
-        return self.convert(self.data_to_convert)
+        return self.convert(self.data_to_convert, aggressive=self.aggressive)
 
-    def convert(self, data: Any) -> List[str]:
+    @staticmethod
+    def extract_base(subject: str) -> str:
+        """
+        Extracts the base of the given subject - assuming that it may be a URL.
+
+        :param subject:
+            The subject to work with.
+        """
+
+        try:
+            return Url2Netloc(subject).get_converted()
+        except ValueError:
+            return subject
+
+    def convert(self, data: Any, *, aggressive: bool = False) -> List[str]:
         """
         Converts the given dataset.
 
         :param data:
             The data to convert.
+        :param bool aggressive:
+            Whether we should aggressively decode subjects.
         """
 
         result = []
@@ -122,10 +139,22 @@ class InputLine2Subject(ConverterBase):
                     # This is for the hosts format.
                     # If the first entry is an IP, we will only extract
                     # the entries after the first one.
-                    result.extend(splitted[1:])
+
+                    datasets = splitted[1:]
+
+                    if aggressive:
+                        datasets = [self.extract_base(x) for x in datasets]
+
+                    result.extend(datasets)
                 else:
+                    if aggressive:
+                        splitted = [self.extract_base(x) for x in splitted]
+
                     # All other cases, we extract every entries.
                     result.extend(splitted)
             else:
+                if aggressive:
+                    subject = self.extract_base(subject)
+
                 result.append(subject)
         return result

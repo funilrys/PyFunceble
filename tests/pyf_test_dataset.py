@@ -326,7 +326,7 @@ NOT_RESERVED_IPV6: List[str] = [
 DEFAULT_CONFIG: dict = {
     "cli_decoding": {
         "adblock": False,
-        "adblock_aggressive": False,
+        "aggressive": False,
         "rpz": False,
         "wildcard": False,
     },

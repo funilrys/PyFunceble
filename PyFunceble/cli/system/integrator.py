@@ -191,6 +191,28 @@ class SystemIntegrator(SystemBase):
             )
 
     @SystemBase.ensure_args_is_given
+    def check_deprecated(self) -> "SystemIntegrator":
+        """
+        Checks or do some deprecation checks.
+
+        This method will basically check if deprecated keys are still given and
+        provide guidance for end-users.
+
+        !!! warning
+
+            The messages are not directly printed, but rather stored in the
+            PyFunceble.cli.storage.EXTRA_MESSAGES list.
+        """
+
+        if "adblock_aggressive" in PyFunceble.storage.CONFIGURATION.cli_decoding:
+            PyFunceble.cli.storage.EXTRA_MESSAGES.append(
+                f"{colorama.Style.BRIGHT}{colorama.Fore.MAGENTA}The "
+                "'cli_decoding.adblock_aggressive' configuration key has been "
+                "replaced by the 'cli_decoding.aggressive' key but you are "
+                "still setting it."
+            )
+
+    @SystemBase.ensure_args_is_given
     def start(self) -> "SystemIntegrator":
         """
         Starts a group of actions provided by this interface.
@@ -210,6 +232,7 @@ class SystemIntegrator(SystemBase):
 
         self.inject_into_config()
         self.check_config()
+        self.check_deprecated()
 
         PyFunceble.cli.facility.CredentialLoader.start()
         PyFunceble.cli.factory.DBSession.init_db_sessions()

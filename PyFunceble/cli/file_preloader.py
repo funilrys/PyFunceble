@@ -442,6 +442,7 @@ class FilePreloader:
                         for subject in get_subjects_from_line(
                             line,
                             self.checker_type,
+                            subject_type=self.protocol["subject_type"],
                             adblock_inputline2subject=self.adblock_inputline2subject,
                             wildcard2subject=self.wildcard2subject,
                             rpz_policy2subject=self.rpz_policy2subject,

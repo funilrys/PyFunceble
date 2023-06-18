@@ -885,15 +885,26 @@ class AvailabilityCheckerBase(CheckerBase):
 
         return self
 
-    def try_to_query_status_from_http_status_code(self) -> "AvailabilityCheckerBase":
+    def try_to_query_status_from_http_status_code(
+        self, *, from_domain_test: bool = False
+    ) -> "AvailabilityCheckerBase":
         """
         Tries to query the status from the HTTP status code.
+
+        :param bool from_domain_test:
+            Whether we wanted to test a test - actually.
+
+            Setting this argument to :py:class:`True` will exit the http_status_code
+            test if the given subject is already a URL.
         """
 
         PyFunceble.facility.Logger.info(
             "Started to try to query the status of %r from: HTTP Status code Lookup",
             self.status.idna_subject,
         )
+
+        if from_domain_test and self.status.url_syntax:
+            return self
 
         if not self.status.url_syntax and not RegexHelper("[^a-z0-9._]").match(
             self.idna_subject, return_match=False
@@ -945,9 +956,22 @@ class AvailabilityCheckerBase(CheckerBase):
 
         return self
 
-    def try_to_query_status_from_syntax_lookup(self) -> "AvailabilityCheckerBase":
+    def try_to_query_status_from_syntax_lookup(
+        self, from_domain_test: bool = False, from_url_test: bool = False
+    ) -> "AvailabilityCheckerBase":
         """
         Tries to query the status from the syntax.
+
+        :param bool from_domain_test:
+            Whether we wanted to test a domain - actually.
+
+            Setting this argument to :py:class:`True` will assume that we are
+            exclusively checking the syntax of domain/ip.
+        :param bool from_url_test:
+            Whether we wanted to test a url - actually.
+
+            Setting this argument to :py:class:`True` will assume that we are
+            exclusively checking the syntax of url.
         """
 
         PyFunceble.facility.Logger.info(
@@ -955,11 +979,18 @@ class AvailabilityCheckerBase(CheckerBase):
             self.status.idna_subject,
         )
 
-        if (
-            not self.status.domain_syntax
-            and not self.status.ip_syntax
-            and not self.status.url_syntax
-        ):
+        if from_domain_test:
+            is_invalid = not self.status.domain_syntax and not self.status.ip_syntax
+        elif from_url_test:
+            is_invalid = not self.status.url_syntax
+        else:
+            is_invalid = (
+                not self.status.domain_syntax
+                and not self.status.ip_syntax
+                and not self.status.url_syntax
+            )
+
+        if is_invalid:
             self.status.status = PyFunceble.storage.STATUS.invalid
             self.status.status_source = "SYNTAX"
 

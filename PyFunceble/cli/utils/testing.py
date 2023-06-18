@@ -182,6 +182,7 @@ def get_subjects_from_line(
     line: str,
     checker_type: str,
     *,
+    subject_type: str = "domain",
     adblock_inputline2subject: Optional[AdblockInputLine2Subject] = None,
     wildcard2subject: Optional[Wildcard2Subject] = None,
     rpz_policy2subject: Optional[RPZPolicy2Subject] = None,
@@ -198,37 +199,56 @@ def get_subjects_from_line(
     result = []
 
     if adblock_inputline2subject is None:
-        adblock_inputline2subject = AdblockInputLine2Subject()
+        adblock_inputline2subject = AdblockInputLine2Subject(
+            aggressive=bool(PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive)
+        )
 
     if wildcard2subject is None:
-        wildcard2subject = Wildcard2Subject()
+        wildcard2subject = Wildcard2Subject(
+            aggressive=bool(PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive)
+        )
 
     if rpz_policy2subject is None:
         rpz_policy2subject = RPZPolicy2Subject()
 
     if rpz_inputline2subject is None:
-        rpz_inputline2subject = RPZInputLine2Subject()
+        rpz_inputline2subject = RPZInputLine2Subject(
+            aggressive=bool(PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive)
+        )
 
     if inputline2subject is None:
-        inputline2subject = InputLine2Subject()
+        inputline2subject = InputLine2Subject(
+            aggressive=bool(PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive)
+        )
 
     if subject2complements is None:
         subject2complements = Subject2Complements()
 
     if url2netloc is None:
-        url2netloc = Url2Netloc()
+        url2netloc = Url2Netloc(
+            aggressive=bool(PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive)
+        )
 
     if cidr2subject is None:
         cidr2subject = CIDR2Subject()
 
+    adblock_inputline2subject.aggressive = (
+        wildcard2subject.aggressive
+    ) = (
+        rpz_inputline2subject.aggressive
+    ) = inputline2subject.aggressive = url2netloc.aggressive = bool(
+        PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive
+    )
+
+    if inputline2subject.aggressive and subject_type == "url":
+        # URL Decoder doesn't have an aggressive mode.
+        # Therefore, we fix the "misconfiguration"
+        inputline2subject.aggressive = not inputline2subject.aggressive
+
     if PyFunceble.storage.CONFIGURATION.cli_decoding.adblock:
         result.extend(
             # pylint: disable=line-too-long
-            adblock_inputline2subject.set_aggressive(
-                bool(PyFunceble.storage.CONFIGURATION.cli_decoding.adblock_aggressive)
-            )
-            .set_data_to_convert(line)
-            .get_converted()
+            adblock_inputline2subject.set_data_to_convert(line).get_converted()
         )
     elif PyFunceble.storage.CONFIGURATION.cli_decoding.wildcard:
         result.append(wildcard2subject.set_data_to_convert(line).get_converted())

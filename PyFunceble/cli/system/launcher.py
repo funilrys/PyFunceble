@@ -576,6 +576,7 @@ class SystemLauncher(SystemBase):
                         for subject in get_subjects_from_line(
                             line,
                             self.checker_type,
+                            subject_type=protocol["subject_type"],
                             adblock_inputline2subject=self.adblock_inputline2subject,
                             wildcard2subject=self.wildcard2subject,
                             rpz_policy2subject=self.rpz_policy2subject,
@@ -626,6 +627,7 @@ class SystemLauncher(SystemBase):
                 for subject in get_subjects_from_line(
                     protocol["idna_subject"],
                     self.checker_type,
+                    subject_type=protocol["subject_type"],
                     adblock_inputline2subject=self.adblock_inputline2subject,
                     wildcard2subject=self.wildcard2subject,
                     rpz_policy2subject=self.rpz_policy2subject,

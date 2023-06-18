@@ -25,8 +25,8 @@
     If this index is set to :code:`False`, every time we read a given file, we
     will consider one line as an element to test.
 
-:code:`cli_decoding[adblock_aggressive]`
-""""""""""""""""""""""""""""""""""""""""
+:code:`cli_decoding[aggressive]`
+""""""""""""""""""""""""""""""""
 
     **Type:** :code:`boolean`
 

@@ -10,7 +10,7 @@ cli_decoding:
   # Provides everything related to the decoding from the CLI.
 
   # Activates the aggressive decoding.
-  adblock_aggressive: no
+  aggressive: no
 
   # Activates the decoding using the adblock decoder.
   adblock: no

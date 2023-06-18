@@ -72,19 +72,16 @@ class AdblockInputLine2Subject(ConverterBase):
     def __init__(
         self,
         data_to_convert: Optional[Any] = None,
-        aggressive: bool = False,
         *,
+        aggressive: bool = False,
         regex_helper: Optional[RegexHelper] = None,
     ) -> None:
-        if aggressive is not None:
-            self.aggressive = aggressive
-
         if regex_helper is None:
             self._regex_helper = RegexHelper()
         else:
             self._regex_helper = regex_helper
 
-        super().__init__(data_to_convert=data_to_convert)
+        super().__init__(data_to_convert=data_to_convert, aggressive=aggressive)
 
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
@@ -102,37 +99,6 @@ class AdblockInputLine2Subject(ConverterBase):
         super(AdblockInputLine2Subject, self.__class__).data_to_convert.fset(
             self, value
         )
-
-    @property
-    def aggressive(self) -> bool:
-        """
-        Provides the state of the :code:`_aggressive` attribute.
-        """
-
-        return self._aggressive
-
-    @aggressive.setter
-    def aggressive(self, value: bool) -> None:
-        """
-        Provides a way to activate/deactivate the aggressive decoding.
-
-        :raise TypeError:
-            When the given data to convert is not :py:class:`str`
-        """
-
-        if not isinstance(value, bool):
-            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
-
-        self._aggressive = value
-
-    def set_aggressive(self, value: bool) -> "AdblockInputLine2Subject":
-        """
-        Provides a way to activate/deactivate the aggressive decoding.
-        """
-
-        self.aggressive = value
-
-        return self
 
     @staticmethod
     def should_be_ignored(line: str) -> bool:

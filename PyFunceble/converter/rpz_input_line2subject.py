@@ -72,7 +72,7 @@ class RPZInputLine2Subject(InputLine2Subject):
 
         return self.convert(self.data_to_convert)
 
-    def convert(self, data: Any) -> List[str]:
+    def convert(self, data: Any, *, aggressive: bool = False) -> List[str]:
         """
         Converts the given dataset.
 
@@ -80,6 +80,7 @@ class RPZInputLine2Subject(InputLine2Subject):
             The data to convert.
         """
 
+        _ = aggressive
         result = []
         subject = data.strip()
 

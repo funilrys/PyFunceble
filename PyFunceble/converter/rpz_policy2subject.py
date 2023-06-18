@@ -266,7 +266,7 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
 
         return self.convert(self.data_to_convert)
 
-    def convert(self, data: Any) -> Optional[str]:
+    def convert(self, data: Any, *, aggressive: bool = False) -> Optional[str]:
         """
         Converts the given dataset.
 
@@ -274,6 +274,7 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
             The data to convert.
         """
 
+        _ = aggressive
         subject = data.strip()
 
         if (
