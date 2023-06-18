@@ -70,26 +70,34 @@ repo_url: https://github.com/funilrys/PyFunceble
 
 nav:
   - Home:
-    - index.md
-    - Installation: use/installation.md
-    - Update: use/update.md
+      - index.md
+      - Installation: use/installation.md
+      - Update: use/update.md
   - User Guides:
       - Installation: use/installation.md
       - Update: use/update.md
+      - Configuration:
+        - use/configuration/index.md
+        - Location: use/configuration/location.md
+        - Environment Variables: use/configuration/environment-variables.md
+      - CI/CD:
+          - GitHub Actions: use/ci-cd/github-actions.md
+          - GitLab CI/CD: use/ci-cd/gitlab-ci-cd.md
+          - Travis CI: use/ci-cd/travis-ci.md
       - FAQ: use/faq.md
       - Known Issues: use/known-issues.md
   - Developer Guides:
       - Getting Started: develop/getting-started.md
       - Checker Reponses: develop/checker-responses.md
       - Examples:
-        - Domain Availability: develop/examples/domain-availability.md
-        - Domain Syntax: develop/examples/domain-syntax.md
-        - Domain & IP Availability: develop/examples/domain-ip-availability.md
-        - IP Availability: develop/examples/ip-availability.md
-        - IP Syntax: develop/examples/ip-syntax.md
-        - URL Availability: develop/examples/url-availability.md
-        - URL Syntax: develop/examples/url-syntax.md
-        - File Generation: develop/examples/file-generation.md
+          - Domain Availability: develop/examples/domain-availability.md
+          - Domain Syntax: develop/examples/domain-syntax.md
+          - Domain & IP Availability: develop/examples/domain-ip-availability.md
+          - IP Availability: develop/examples/ip-availability.md
+          - IP Syntax: develop/examples/ip-syntax.md
+          - URL Availability: develop/examples/url-availability.md
+          - URL Syntax: develop/examples/url-syntax.md
+          - File Generation: develop/examples/file-generation.md
       - Code References: develop/api-references/
   - Contribution Guides:
       - Contributing: contributing/contributing.md
