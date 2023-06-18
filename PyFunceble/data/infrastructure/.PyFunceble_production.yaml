@@ -2,7 +2,7 @@ debug:
   # Provides everything related to the debug mode.
 
   # Activates the debug/logging.
-  active: False
+  active: no
   # Sets the logging level.
   level: info
 
@@ -10,16 +10,16 @@ cli_decoding:
   # Provides everything related to the decoding from the CLI.
 
   # Activates the aggressive decoding.
-  adblock_aggressive: False
+  adblock_aggressive: no
 
   # Activates the decoding using the adblock decoder.
-  adblock: False
+  adblock: no
 
   # Activates the decoding using the RPZ decoder.
-  rpz: False
+  rpz: no
 
   # Activated the decoding using the Wildcard decoder.
-  wildcard: False
+  wildcard: no
 
 cli_testing:
   # Provides everything directly related to the CLI testing.
@@ -32,21 +32,21 @@ cli_testing:
   max_workers: null
 
   # Activates the automatic continuation after a break or shortage.
-  autocontinue: False
+  autocontinue: no
 
   # Activates the storage and creation of a database of all INACTIVA and INVALID
   # subjects for continuous testing.
-  inactive_db: True
+  inactive_db: yes
 
   # Activates the storage of some WHOIS information in order to avoid having
   # to spam the WHOIS servers.
-  whois_db: True
+  whois_db: yes
 
   # Activates the generation of complements.
-  complements: False
+  complements: no
 
   # Activates the expansion of CIDR to single addresses.
-  cidr_expand: False
+  cidr_expand: no
 
   # Sets the cooldown time to apply between each tests.
   cooldown_time: 0.0
@@ -61,11 +61,11 @@ cli_testing:
   file_filter: null
 
   # Activates the mining of data.
-  mining: False
+  mining: no
 
   # Acknowledges that we may test for local network component.
   # NOTE: Activating this, will remove the syntax checker completely.
-  local_network: False
+  local_network: no
 
   # Activates or disable the preloading of the given input file(s).
   # When this is activated, we take the time to pre load and decode the content
@@ -73,7 +73,7 @@ cli_testing:
   # auto continue.
   #
   # Note: This has no effect if the auto-continue is deactivated.
-  preload_file: False
+  preload_file: no
 
   # Activates or disables a chancy tester mode that unleashes the safety
   # workflow in place.
@@ -88,14 +88,14 @@ cli_testing:
   #   This mode makes the graphical CLI output unparsable - either.
   #
   #   **MAY THE FORCE BE WITH YOU!**
-  chancy_tester: False
+  chancy_tester: no
 
   ci:
     # Provides everything related to the Continuous integration.
 
     # Activates the continuous integration mode.
     # WARNING: Do not activate without asking or knowing what you are doing.
-    active: False
+    active: no
 
     # Sets the commit message to apply everytime except for the last one.
     commit_message: "PyFunceble - AutoSave"
@@ -125,31 +125,31 @@ cli_testing:
     # Provides everything related to the display mode.
 
     # Activates the printing of dots.
-    dots: False
+    dots: no
 
     # Activates the printing of the execution time.
-    execution_time: False
+    execution_time: no
 
     # Activates the output of the percentage information.
-    percentage: True
+    percentage: yes
 
     # Activates the output of the top registrar information.
-    registrar: False
+    registrar: no
 
     # Activates the quiet mode.
-    quiet: False
+    quiet: no
 
     # Activates the output of very few information.
-    less: True
+    less: yes
 
     # Activates the output of all information.
-    all: False
+    all: no
 
     # Activates the output of the status and it's status (only)
-    simple: False
+    simple: no
 
     # Activates the coloration of stdout.
-    colour: True
+    colour: yes
 
     # Sets the status do display to STDOUT.
     # NOTE: This does not have any effect with the generated files.
@@ -165,13 +165,13 @@ cli_testing:
     # WARNING: Only one can be used at a time.
 
     # Activates the availability test.
-    availability: True
+    availability: yes
 
     # Activates the syntax test.
-    syntax: False
+    syntax: no
 
     # Activates the reputation test.
-    reputation: False
+    reputation: no
 
   days_between:
     # Provides everything which is x days periodic.
@@ -188,57 +188,57 @@ cli_testing:
     # WARNING: The sorting mode is only applied to the files. NOT STDOUT.
 
     # Activates the hierarchical sorting.
-    hierarchical: False
+    hierarchical: no
 
     # Activates the standard sorting.
-    standard: True
+    standard: yes
 
   file_generation:
     # Provides everything related to the generation of file.
 
     # Deactivates the generation of any status file.
-    no_file: False
+    no_file: no
 
     # Activates the generation of the hosts file(s).
-    hosts: False
+    hosts: no
 
     # Activates the generation of the plain (or raw) file(s).
-    plain: True
+    plain: yes
 
     # Activates the generation of the analytic file(s).
-    analytic: True
+    analytic: yes
 
     # Activate the generation of an unified file for the copy of what is
     # outputted to STDOUT.
-    unified_results: False
+    unified_results: no
 
     # Activates or disables the merging of the results of all inputted files into
     # one single output subdirectory.
-    merge_output_dirs: False
+    merge_output_dirs: no
 
 lookup:
   # Provides everything related to the lookup.
 
   # Activates the usage of the DNS lookup.
-  dns: True
+  dns: yes
 
   # Activates the usage of the HTTP status code lookup.
-  http_status_code: True
+  http_status_code: yes
 
   # Activates the usage of the network information socket.
-  netinfo: True
+  netinfo: yes
 
   # Activates the usage of our special rules.
-  special: True
+  special: yes
 
   # Activates the usage of the WHOIS record.
-  whois: True
+  whois: yes
 
   # Activates the usage of the reputation data reputation.
-  reputation: False
+  reputation: no
 
   # Activate the usage of the collection.
-  collection: False
+  collection: no
 
   # Sets the timeout to apply to each of our lookup tools who support a timeout
   # option.
@@ -248,13 +248,13 @@ dns:
   # Provides everything related to the DNS lookup.
 
   # Activates the follow-up of the given order.
-  follow_server_order: true
+  follow_server_order: yes
 
   # Activates the trust mode. Meaning that if one of the DNS give us a negative
   # response (without error), we take it as it is.
-  # When this mode is deactivated (false), when one of the DNS give us a negative
+  # When this mode is deactivated (no), when one of the DNS give us a negative
   # response (without error), we still ask all other servers.
-  trust_server: false
+  trust_server: no
 
   # Sets the list of server to communicate with.
   # It must be a list.
@@ -280,7 +280,7 @@ dns:
   delay: 0.0
 
 # Not Implemented yet. Reserved for future usage and implementation.
-share_logs: False
+share_logs: no
 
 user_agent:
   # Provides everything related to the user agent choice.
@@ -336,7 +336,7 @@ proxy:
 
 
 # Activates the verification of the certificate.
-verify_ssl_certificate: False
+verify_ssl_certificate: no
 
 # Set the maximum number of retries to perform.
 # This should be an integer >= 0.
@@ -347,7 +347,7 @@ http_codes:
 
   # Informs PyFunceble that the end-user (not PyFunceble) is managing this list.
   # This means that you won't get any update in this section.
-  self_managed: False
+  self_managed: no
 
   list:
     up:
@@ -430,7 +430,7 @@ collection:
   # Activates the push of dataset into the collection.
   # WARNING: This is useless, if you don't have an API Token set as the
   # COLLECTION_API_TOKEN environment variable.
-  push: False
+  push: no
 
   # Sets the preferred pull origin.
   #
