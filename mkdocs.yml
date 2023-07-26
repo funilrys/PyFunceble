@@ -54,6 +54,10 @@ plugins:
   - autorefs
   - mkdocstrings:
       default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: sphinx
   - gen-files:
       scripts:
         - docs/gen_ref_pages.py
