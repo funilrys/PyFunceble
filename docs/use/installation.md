@@ -237,5 +237,6 @@ You can install the package from source through `pip3`:
 
 ```shell
 cd /path/to/source
+git checkout dev|master # switch to desired branch - if source is a git repo
 pip3 install --user .
 ```
