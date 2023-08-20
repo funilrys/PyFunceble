@@ -215,7 +215,7 @@ def get_filtering_group_data() -> List[Tuple[List[str], dict]]:
                 "--aggressive",
             ],
             {
-                "dest": "cli_decoding.adblock_aggressive",
+                "dest": "cli_decoding.aggressive",
                 "action": "store_true",
                 "help": argparse.SUPPRESS,
             },

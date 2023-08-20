@@ -491,6 +491,25 @@ class TestConfigLoader(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_conditional_switch_lookup_timeout_less_than_zero(self) -> None:
+        """
+        Tests the method which let us switch some of our values based on
+        some assumption.
+
+        In this test, we check the the lookup timeout is getting switched to 5
+        when the given value is lower than 0.
+        """
+
+        given = copy.deepcopy(self.our_config)
+        given["lookup"]["timeout"] = -1.34
+
+        expected = copy.deepcopy(given)
+        expected["lookup"]["timeout"] = 5
+
+        actual = self.config_loader.conditional_switch(given)
+
+        self.assertEqual(expected, actual)
+
     def test_overwite_file_found(self) -> None:
         """
         Tests the loading of the configuration file for the case the an

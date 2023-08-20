@@ -134,6 +134,7 @@ class ConfigComparison:
         "ci_distribution_branch": "cli_testing.ci.distribution_branch",
         "whois_database": "cli_testing.whois_db",
         "wildcard": "cli_decoding.wildcard",
+        "cli_decoding.adblock_aggressive": "cli_decoding.aggressive",
     }
 
     OLD_TO_NEW_NEGATE: dict = {
@@ -278,6 +279,9 @@ class ConfigComparison:
         if "self_managed" in self.local_config["http_codes"] and not bool(
             self.local_config["http_codes"]["self_managed"]
         ):
+            if "http_codes" not in self.upstream_config:
+                return False
+
             for index, values in self.local_config["http_codes"]["list"].items():
                 if set(self.upstream_config["http_codes"]["list"][index]) != set(
                     values
@@ -312,7 +316,10 @@ class ConfigComparison:
             if value not in flatten_upstream:  # pragma: no cover ## Safety.
                 raise RuntimeError(f"<value> ({value!r}) not found.")
 
-            flatten_original[value] = original_local[key]
+            if "." not in key:
+                flatten_original[value] = original_local[key]
+            else:
+                flatten_original[value] = flatten_original[key]
 
             del flatten_original[key]
 
@@ -323,7 +330,10 @@ class ConfigComparison:
             if value not in flatten_upstream:  # pragma: no cover ## Safety.0
                 raise RuntimeError(f"<value> ({value!r}) not found.")
 
-            flatten_original[value] = not original_local[key]
+            if "." not in key:
+                flatten_original[value] = not original_local[key]
+            else:
+                flatten_original[value] = not flatten_original[key]
 
             del flatten_original[key]
 

@@ -58,11 +58,20 @@ class ConverterBase:
     Provides the base of all converter class.
     """
 
+    _aggressive: bool = False
     _data_to_convert: Optional[Any] = None
 
-    def __init__(self, data_to_convert: Optional[Any] = None) -> None:
+    def __init__(
+        self,
+        data_to_convert: Optional[Any] = None,
+        *,
+        aggressive: bool = None,
+    ) -> None:
         if data_to_convert is not None:
             self.data_to_convert = data_to_convert
+
+        if aggressive is not None:
+            self.aggressive = aggressive
 
     @property
     def data_to_convert(self) -> Optional[Any]:
@@ -95,6 +104,37 @@ class ConverterBase:
 
         return self
 
+    @property
+    def aggressive(self) -> bool:
+        """
+        Provides the state of the :code:`_aggressive` attribute.
+        """
+
+        return self._aggressive
+
+    @aggressive.setter
+    def aggressive(self, value: bool) -> None:
+        """
+        Provides a way to activate/deactivate the aggressive decoding.
+
+        :raise TypeError:
+            When the given data to convert is not :py:class:`str`
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._aggressive = value
+
+    def set_aggressive(self, value: bool) -> "ConverterBase":
+        """
+        Provides a way to activate/deactivate the aggressive decoding.
+        """
+
+        self.aggressive = value
+
+        return self
+
     def get_converted(self) -> Optional[Any]:
         """
         Provides the converted data.
@@ -102,9 +142,14 @@ class ConverterBase:
 
         raise NotImplementedError()
 
-    def convert(self, data: Any) -> Optional[Any]:
+    def convert(self, data: Any, *, aggressive: bool = False) -> Optional[Any]:
         """
         Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        :param aggressive.
+            Whether we should aggressively extract datasets.
         """
 
         raise NotImplementedError()

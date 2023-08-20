@@ -364,6 +364,11 @@ class ProducerWorker(WorkerBase):
             self.counter.set_differ_to_inline(False)
             self.registrar_counter.set_differ_to_inline(False)
 
+            if hasattr(test_result, "registrar") and test_result.registrar:
+                self.registrar_counter.set_parent_dirname(
+                    test_dataset["destination"]
+                ).count(test_result.registrar)
+
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
         if not isinstance(consumed, tuple):
             PyFunceble.facility.Logger.info(

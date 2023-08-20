@@ -89,13 +89,15 @@ class InternalUrlConverter(ConverterBase):
 
         return self.convert(self.data_to_convert)
 
-    def convert(self, data: Any) -> str:
+    def convert(self, data: Any, *, aggressive: bool = False) -> str:
         """
         Converts the given dataset.
 
         :param data:
             The data to convert.
         """
+
+        _ = aggressive
 
         if VersionUtility(PyFunceble.storage.PROJECT_VERSION).is_dev():
             return data.replace("master", "dev")

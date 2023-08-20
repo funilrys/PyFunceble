@@ -132,7 +132,7 @@ class Subject2Complements(ConverterBase):
 
         return self.convert(self.data_to_convert)
 
-    def convert(self, data: Any) -> List[str]:
+    def convert(self, data: Any, *, aggressive: bool = False) -> List[str]:
         """
         Converts the given dataset.
 
@@ -140,6 +140,7 @@ class Subject2Complements(ConverterBase):
             The data to convert.
         """
 
+        _ = aggressive
         result = []
 
         checker = DomainSyntaxChecker(data)

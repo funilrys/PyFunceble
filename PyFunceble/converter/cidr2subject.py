@@ -100,7 +100,7 @@ class CIDR2Subject(ConverterBase):
 
         return self.convert(self.data_to_convert)
 
-    def convert(self, data: Any) -> List[str]:
+    def convert(self, data: Any, *, aggressive: bool = False) -> List[str]:
         """
         Converts the given dataset.
 
@@ -108,6 +108,7 @@ class CIDR2Subject(ConverterBase):
             The data to convert.
         """
 
+        _ = aggressive
         result = set()
 
         subject = data.strip()

@@ -37,17 +37,17 @@ You can simply change
         adblock: False
 
         # Activate this only if you want to get as much as possible.
-        adblock_aggressive: False
+        aggressive: False
 
 to
 
 ::
 
     cli_decoding:
-        adblock: False
+        adblock: True
 
         # Activate this only if you want to get as much as possible.
-        adblock_aggressive: False
+        aggressive: False
 
 
 into your personal :code:`.PyFunceble.yaml` or use the :code:`--adblock`

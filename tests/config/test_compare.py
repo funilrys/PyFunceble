@@ -566,6 +566,60 @@ class TestConfigCompare(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_merged_nested_old2new(self) -> None:
+        """
+        Tests the method which let us get the (clean) merged configuration
+        for the case that one of the given migration path is nested.
+        """
+
+        given_local = {
+            "cli_decoding": {"aggressive_test": False}
+        }  # pylint: disable=use-dict-literal
+        given_upstream = copy.deepcopy(self.our_config)
+        given_upstream["cli_decoding"]["aggressive_world"] = True
+
+        config_comparison = ConfigComparison(
+            local_config=given_local, upstream_config=given_upstream
+        )
+        config_comparison.OLD_TO_NEW = {
+            "cli_decoding.aggressive_test": "cli_decoding.aggressive_world"
+        }
+        config_comparison.OLD_TO_NEW_NEGATE = {}
+
+        expected = self.our_config
+        expected["cli_decoding"]["aggressive_world"] = False
+
+        actual = config_comparison.get_merged()
+
+        self.assertEqual(expected, actual)
+
+    def test_get_merged_nested_old2newnegate(self) -> None:
+        """
+        Tests the method which let us get the (clean) merged configuration
+        for the case that one of the given migration path is nested and negated.
+        """
+
+        given_local = {
+            "cli_decoding": {"aggressive_test": False}
+        }  # pylint: disable=use-dict-literal
+        given_upstream = copy.deepcopy(self.our_config)
+        given_upstream["cli_decoding"]["aggressive_world"] = True
+
+        config_comparison = ConfigComparison(
+            local_config=given_local, upstream_config=given_upstream
+        )
+        config_comparison.OLD_TO_NEW = {}
+        config_comparison.OLD_TO_NEW_NEGATE = {
+            "cli_decoding.aggressive_test": "cli_decoding.aggressive_world"
+        }
+
+        expected = self.our_config
+        expected["cli_decoding"]["aggressive_world"] = True
+
+        actual = config_comparison.get_merged()
+
+        self.assertEqual(expected, actual)
+
 
 if __name__ == "__main__":
     unittest.main()

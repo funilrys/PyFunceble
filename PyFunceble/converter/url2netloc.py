@@ -121,7 +121,7 @@ class Url2Netloc(ConverterBase):
 
         return self.convert(self.data_to_convert)
 
-    def convert(self, data: Any) -> str:
+    def convert(self, data: Any, *, aggressive: bool = False) -> str:
         """
         Converts the given dataset.
 
@@ -129,6 +129,7 @@ class Url2Netloc(ConverterBase):
             The data to convert.
         """
 
+        _ = aggressive
         parsed_url = self.parse_single_url(data)
 
         if not parsed_url.netloc and parsed_url.path:
