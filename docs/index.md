@@ -25,13 +25,13 @@
 </p>
 <p align="center">
     <a href="https://pepy.tech/project/pyfunceble-dev">
-        <img src="https://pepy.tech/badge/pyfunceble-dev" alt="image">
+        <img src="https://static.pepy.tech/badge/pyfunceble-dev" alt="image">
     </a>
     <a href="https://pepy.tech/project/pyfunceble-dev">
-        <img src="https://pepy.tech/badge/pyfunceble-dev/month" alt="image">
+        <img src="https://static.pepy.tech/badge/pyfunceble-dev/month" alt="image">
     </a>
     <a href="https://pepy.tech/project/pyfunceble-dev">
-        <img src="https://pepy.tech/badge/pyfunceble-dev/week" alt="image">
+        <img src="https://static.pepy.tech/badge/pyfunceble-dev/week" alt="image">
     </a>
 </p>
 
@@ -47,9 +47,9 @@ PyFunceble can be included in your existing project through:
 
 - its standard built-in CLI implementation.
 - its [Python
-  API](https://pyfunceble.readthedocs.io/en/dev/api/index.html).
+  API](./develop/api-references).
 - the [PyFunceble
-  web-worker](https://github.com/pyfunceble/web-worker) project that
+  web-worker](https://github.com/pyfunceble/web-worker) (beta) project that
   provides the core functionalities of PyFunceble behind a web API.
 
 The PyFunceble CLI can test from a hosts file, a plain list of subjects,

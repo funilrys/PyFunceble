@@ -8,9 +8,9 @@
 [![image](https://img.shields.io/pypi/v/pyfunceble-dev.png)](https://pypi.org/project/pyfunceble-dev)
 [![image](https://img.shields.io/github/issues/funilrys/PyFunceble.png)](https://github.com/funilrys/PyFunceble/issues)
 
-[![image](https://pepy.tech/badge/pyfunceble-dev)](https://pepy.tech/project/pyfunceble-dev)
-[![image](https://pepy.tech/badge/pyfunceble-dev/month)](https://pepy.tech/project/pyfunceble-dev)
-[![image](https://pepy.tech/badge/pyfunceble-dev/week)](https://pepy.tech/project/pyfunceble-dev)
+[![image](https://static.pepy.tech/badge/pyfunceble-dev)](https://pepy.tech/project/pyfunceble-dev)
+[![image](https://static.pepy.tech/badge/pyfunceble-dev/month)](https://pepy.tech/project/pyfunceble-dev)
+[![image](https://static.pepy.tech/badge/pyfunceble-dev/week)](https://pepy.tech/project/pyfunceble-dev)
 
 **PyFunceble** aims to provide an accurate availability check through
 the usage of multiple sources which are for example - to only list a

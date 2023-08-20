@@ -2,7 +2,7 @@
 
 ## How to speed up the test process
 
-!!! danger Beware
+!!! danger "Beware!!!!"
 
     When talking about speed, a lot of things have to be taken into consideration.
     Here is a non-exhaustive list of things that can fluctuate the testing speed.
@@ -42,10 +42,10 @@ dangerous `--chancy` argument.
     This has been a design decision because having safely formatted files is more
     important that having the feeling that the output is pretty quick.
 
-!!! danger Beware
+!!! danger "Beware!!!!"
 
     No contributor or maintainer of PyFunceble shall be responsible for your
     decisions. If you felt chancy enough to use the `--chancy` argument, you
     shouldn't not yield when something inexpected happens.
 
-    You are still welcome to purpose some changes though :smile:.
+    You are still welcome to propose some changes though :smile:.

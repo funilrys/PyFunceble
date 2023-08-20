@@ -50,7 +50,8 @@ markdown_extensions:
 
 plugins:
   - search
-  - offline
+  - offline:
+      enabled: true
   - autorefs
   - mkdocstrings:
       default_handler: python
@@ -81,9 +82,10 @@ nav:
       - Installation: use/installation.md
       - Update: use/update.md
       - Configuration:
-        - use/configuration/index.md
-        - Location: use/configuration/location.md
-        - Environment Variables: use/configuration/environment-variables.md
+          - use/configuration/index.md
+          - Location: use/configuration/location.md
+          - Environment Variables: use/configuration/environment-variables.md
+          - Parameters: use/configuration/parameters/
       - CI/CD:
           - GitHub Actions: use/ci-cd/github-actions.md
           - GitLab CI/CD: use/ci-cd/gitlab-ci-cd.md

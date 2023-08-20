@@ -74,11 +74,11 @@ read and use them. #MayTheForceBeWithYou :star:
 | GITLAB_CI            | Used to detect whether we are running under a GitLab CI/CD runner.                                      |
 | GITLAB_USER_ID       | Used to detect whether we are running under a GitLab CI/CD runner.                                      |
 | TRAVIS_BUILD_DIR     | Used to detect whether we are running under a Travis CI instance.                                       |
-| JENKINS_URL          | Used to detect whether we are running under a Jenkins CI worker.                                         |
-| JENKINS_HOME         | Used to detect whether we are running under a Jenkins CI worker.                                         |
+| JENKINS_URL          | Used to detect whether we are running under a Jenkins CI worker.                                        |
+| JENKINS_HOME         | Used to detect whether we are running under a Jenkins CI worker.                                        |
+
 
 ## Beta Features
-
 !!! danger "Beware!!!"
 
     This section is documented, but most of the features below them are not open to everyone - yet.

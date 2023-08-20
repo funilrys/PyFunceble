@@ -11,4 +11,4 @@ mkdocs-git-revision-date-localized-plugin
 mkdocs-gen-files
 mkdocs-literate-nav
 mkdocs-section-index
-mkdocs-attr
+mkdocs-git-authors-plugin

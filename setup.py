@@ -208,7 +208,7 @@ def get_long_description():  # pragma: no cover
     This function return the long description.
     """
 
-    return open("README.rst", encoding="utf-8").read()
+    return open("README.md", encoding="utf-8").read()
 
 
 if __name__ == "__main__":
