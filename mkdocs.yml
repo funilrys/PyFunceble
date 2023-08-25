@@ -81,6 +81,10 @@ nav:
   - User Guides:
       - Installation: use/installation.md
       - Update: use/update.md
+      - Getting Started: use/getting-started.md
+      - Examples:
+          - Availability Check: use/examples/availability.md
+          - Syntax Check: use/examples/syntax.md
       - Configuration:
           - use/configuration/index.md
           - Location: use/configuration/location.md
