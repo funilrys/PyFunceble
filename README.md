@@ -39,7 +39,7 @@ Action, Travis CI, or GitLab CI.
 
 Happy testing with PyFunceble!
 
-[![image](https://github.com/PyFunceble/gifs/raw/dev/domain.gif)](https://github.com/PyFunceble/gifs/raw/dev/domain.gif)
+[![image](https://github.com/PyFunceble/gifs/raw/master/repo-showcase.gif)](https://github.com/PyFunceble/gifs/raw/master/repo-showcase.gif)
 
 # Table of Content
 
