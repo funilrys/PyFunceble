@@ -211,6 +211,43 @@ def get_long_description():  # pragma: no cover
     return open("README.rst", encoding="utf-8").read()
 
 
+def get_console_scripts():  # pragma: no cover
+    """
+    Provides the console scripts based on the environment.
+    """
+
+    result = [
+        "PyFunceble=PyFunceble.cli.entry_points.pyfunceble.cli:tool",
+        "pyfunceble=PyFunceble.cli.entry_points.pyfunceble.cli:tool",
+        "clean-pyfunceble=PyFunceble.cli.entry_points.clean:cleaner",
+    ]
+
+    dev_console_vars = [
+        "PYFUNCEBLE_INSTALL_DEVTOOLS",
+        "PYFUNCEBLE_DEVTOOLS",
+    ]
+
+    helper_console_vars = [
+        "PYFUNCEBLE_INSTALL_HELPERS",
+        "PYFUNCEBLE_HELPTOOLS",
+    ]
+
+    if any(x in os.environ for x in dev_console_vars):
+        result.append(
+            "production-pyfunceble=PyFunceble.cli.entry_points.production:producer"
+        )
+
+    if any(x in os.environ for x in helper_console_vars):
+        result.extend(
+            [
+                "public-suffix-pyfunceble=PyFunceble.cli.entry_points.public_suffix:generator",
+                "iana-pyfunceble=PyFunceble.cli.entry_points.iana:generator",
+            ]
+        )
+
+    return result
+
+
 if __name__ == "__main__":
     setuptools.setup(
         name="PyFunceble-dev",
@@ -257,14 +294,5 @@ if __name__ == "__main__":
             "License :: OSI Approved",
         ],
         test_suite="setup._test_suite",
-        entry_points={
-            "console_scripts": [
-                "PyFunceble=PyFunceble.cli.entry_points.pyfunceble.cli:tool",
-                "pyfunceble=PyFunceble.cli.entry_points.pyfunceble.cli:tool",
-                "public-suffix-pyfunceble=PyFunceble.cli.entry_points.public_suffix:generator",
-                "iana-pyfunceble=PyFunceble.cli.entry_points.iana:generator",
-                "production-pyfunceble=PyFunceble.cli.entry_points.production:producer",
-                "clean-pyfunceble=PyFunceble.cli.entry_points.clean:cleaner",
-            ]
-        },
+        entry_points={"console_scripts": get_console_scripts()},
     )
