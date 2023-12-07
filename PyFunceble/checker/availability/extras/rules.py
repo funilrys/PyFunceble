@@ -41,7 +41,7 @@ License:
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -88,6 +88,13 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             r"\.dr\.ag$": [(self.switch_to_down_if_status_code, 503)],
             r"\.fc2\.com$": [self.handle_fc2_dot_com],
             r"\.github\.io$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.web\.app$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.myhuaweicloudz\.com$": [(self.switch_to_down_if_status_code, 403)],
+            r"\.glitchz\.me$": [(self.switch_to_down_if_status_code, 403)],
+            r"^s3\.ap-south-1\.amazonaws\.com$": [(self.switch_to_down_if_status_code, 403)],
+            r"\.sz.id$": [(self.switch_to_down_if_status_code, 302)],
+            r"^u\.pcloud\.com$": [(self.switch_to_down_if_status_code, 302)],
+            r"\.translate\.goog$": [(self.switch_to_down_if_status_code, 403)],
             r"\.godaddysites\.com$": [(self.switch_to_down_if_status_code, 404)],
             r"\.hpg.com.br$": [(self.switch_to_down_if_status_code, 404)],
             r"\.imgur\.com$": [self.handle_imgur_dot_com],
@@ -204,8 +211,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
         Handles the :code:`imgur.com` case.
 
         .. warning:.
-            This method assume that we know that we are handling a imgur.com
-            sub-domain.
+            This method are assuming we are handling a imgur.com subdomain.
         """
 
         req = PyFunceble.factory.Requester.get(
