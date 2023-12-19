@@ -59,6 +59,8 @@ import dns.resolver
 from PyFunceble.config.loader import ConfigLoader
 from PyFunceble.query.dns.resolver import Resolver
 
+# pylint: disable=invalid-field-call
+
 
 class TestResolver(unittest.TestCase):
     """
