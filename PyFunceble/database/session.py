@@ -150,6 +150,7 @@ class DBSession:
                 autoflush=True,
                 autocommit=False,
                 expire_on_commit=False,
+                pre_ping=True,
             )
 
         return self
@@ -180,7 +181,11 @@ class DBSession:
         )
 
         return sqlalchemy.orm.sessionmaker(
-            bind=engine, autoflush=True, autocommit=False, expire_on_commit=False
+            bind=engine,
+            autoflush=True,
+            autocommit=False,
+            expire_on_commit=False,
+            pre_ping=True,
         )
 
     @execute_if_authorized(None)
@@ -195,7 +200,11 @@ class DBSession:
         )
 
         return sqlalchemy.orm.sessionmaker(
-            bind=engine, autoflush=True, autocommit=False, expire_on_commit=False
+            bind=engine,
+            autoflush=True,
+            autocommit=False,
+            expire_on_commit=False,
+            pre_ping=True,
         )
 
     def close(self) -> "DBSession":
