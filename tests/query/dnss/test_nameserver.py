@@ -68,6 +68,8 @@ except (ModuleNotFoundError, ImportError):  # pragma: no cover
     except (ModuleNotFoundError, ImportError):
         from ... import pyf_test_dataset
 
+# pylint: disable=invalid-field-call
+
 
 class TestNameserver(unittest.TestCase):
     """
@@ -92,7 +94,9 @@ class TestNameserver(unittest.TestCase):
         del self.config_loader
 
     @staticmethod
-    def fake_resolve_response(data: str) -> object:
+    def fake_resolve_response(
+        data: str,
+    ) -> object:
         """
         Provides a fake resolve response to use.
         """

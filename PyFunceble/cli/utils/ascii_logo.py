@@ -123,4 +123,4 @@ def get_result_representation(status: str) -> str:
     else:
         color = "cyan"
 
-    return colorify(color, text=PyFunceble.cli.storage.ASCII_PYUNCEBLE_RESULT)
+    return colorify(color, text=PyFunceble.cli.storage.ASCII_PYFUNCEBLE)

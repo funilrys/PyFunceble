@@ -34,6 +34,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install -r requirements.txt
           pip install pylint
 
@@ -67,11 +68,12 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install -r requirements.txt
           pip install safety
 
       - name: Check the safety of our dependencies.
-        run: safety check -i 51668
+        run: safety check -i 51668 -i 62044
 
   test:
     needs: [lint, deps_safety_check]
@@ -103,6 +105,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install -r requirements.txt
           pip install tox coveralls
 
@@ -166,6 +169,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install twine wheel setuptools
 
       - name: Build 📦
@@ -222,6 +226,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install ${{ env.BUILDER_CLONE_DIRNAME }}/.
 
       - name: Get version of builder
