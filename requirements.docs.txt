@@ -12,3 +12,5 @@ mkdocs-gen-files
 mkdocs-literate-nav
 mkdocs-section-index
 mkdocs-git-authors-plugin
+mkdocs-macros-plugin
+pymdown-extensions

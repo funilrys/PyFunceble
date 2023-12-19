@@ -45,8 +45,8 @@ markdown_extensions:
   - tables
   - attr_list
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 plugins:
   - search
@@ -68,7 +68,6 @@ plugins:
   - git-revision-date-localized:
       enable_creation_date: yes
       fallback_to_build_date: yes
-  - termynal
 
 repo_name: funilrys/PyFunceble
 repo_url: https://github.com/funilrys/PyFunceble
@@ -108,7 +107,7 @@ nav:
           - URL Availability: develop/examples/url-availability.md
           - URL Syntax: develop/examples/url-syntax.md
           - File Generation: develop/examples/file-generation.md
-      - Code References: develop/api-references/
+      - Code References: develop/api-references/index.md
   - Contribution Guides:
       - Contributing: contributing/contributing.md
       - Code of Conduct: contributing/code-of-conduct.md

@@ -47,7 +47,7 @@ PyFunceble can be included in your existing project through:
 
 - its standard built-in CLI implementation.
 - its [Python
-  API](./develop/api-references).
+  API](./develop/api-references/index.md).
 - the [PyFunceble
   web-worker](https://github.com/pyfunceble/web-worker) (beta) project that
   provides the core functionalities of PyFunceble behind a web API.

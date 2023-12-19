@@ -16,14 +16,14 @@
     - Disk I/O in particular as PyFunceble is heavy on the I/O _(cf: RAM Drives and NVMe disks are very suitable for PyFunceble's CSV storage)_
     - ...
 
-### With dedicated Server, VM or machine
-
 If you have a dedicated server, VM or machine for PyFunceble, you can simply increase
 the number of maximal workers PyFunceble is allowed to use through the `--max-workers`
 argument or its `cli_testing.max_workers` setting.
 
-By default, the number of worker is equal to the number of CPU Cores minus 2 (`CPU Cores - 2`).
+By default, the number of worker is equal to the number of CPU Cores minus 2 (`CPU Cores - 2`),
+but with a minimum of 1.
 Meaning that if you have `8` CPU threads, the value will be automatically set to `6`.
+If you have `2` CPU threads, the value will be automatically set to `1`.
 
 If that is still not sufficient for you, and you feel chancy, you my try to use the
 dangerous `--chancy` argument.

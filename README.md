@@ -43,6 +43,8 @@ Happy testing with PyFunceble!
 
 # Table of Content
 
+- [The tool to check the availability or syntax of domain, IP or URL](#the-tool-to-check-the-availability-or-syntax-of-domain-ip-or-url)
+- [Table of Content](#table-of-content)
 - [Installation](#installation)
   - [Packages \& Versioning](#packages--versioning)
   - [PyPi - Python Package Index](#pypi---python-package-index)
@@ -244,18 +246,18 @@ up-to-date by yourself.
 
 Here is an overview of the packages and where they are hosted.
 
-| Host   | Package        | Repository                                                              |
-|--------|----------------|------------------------------------------------------------------------------------------------------------|
-| GitHub | pyfunceble     | [https://github.com/funilrys/PyFunceble/tree/master](https://github.com/funilrys/PyFunceble/tree/master)  |
-| GitHub | pyfunceble-dev | [https://github.com/funilrys/PyFunceble/tree/dev](https://github.com/funilrys/PyFunceble/tree/dev)        |
-| GitLab | pyfunceble     | [https://gitlab.com/funilrys/PyFunceble/tree/master](https://gitlab.com/funilrys/PyFunceble/tree/master)  |
-| GitLab | pyfunceble-dev | [https://gitlab.com/funilrys/PyFunceble/tree/master](https://gitlab.com/funilrys/PyFunceble/tree/master) |
+| Host   | Package        | Branch   | Repository                                                                                               |
+| ------ | -------------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| GitHub | pyfunceble     | `master` | [https://github.com/funilrys/PyFunceble/tree/master](https://github.com/funilrys/PyFunceble/tree/master) |
+| GitHub | pyfunceble-dev | `dev`    | [https://github.com/funilrys/PyFunceble/tree/dev](https://github.com/funilrys/PyFunceble/tree/dev)       |
+| GitLab | pyfunceble     | `master` | [https://gitlab.com/funilrys/PyFunceble/tree/master](https://gitlab.com/funilrys/PyFunceble/tree/master) |
+| GitLab | pyfunceble-dev | `dev`    | [https://gitlab.com/funilrys/PyFunceble/tree/master](https://gitlab.com/funilrys/PyFunceble/tree/master) |
 
 You can install the package from source through `pip3`:
 
 ```shell
-cd /path/to/source
-pip3 install --user .
+pip3 install --user https://github.com/funilrys/PyFunceble/archive/{{branch}}.zip # From Github
+pip3 install --user https://gitlab.com/funilrys/PyFunceble/-/archive/{{branch}}/PyFunceble-{{branch}}.zip # From GitLab
 ```
 
 # Usage

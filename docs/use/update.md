@@ -2,6 +2,15 @@
 
 Updating PyFunceble is as easy as the installation.
 
+## Overview: Update Method
+
+| OS        | Technology                  | Tools        | Link                                 |
+| --------- | --------------------------- | ------------ | ------------------------------------ |
+| Any       | PyPi - Python Package Index | `pip3`       | [Link](#pypi---python-package-index) |
+| Any       | Container Image Registry    | `docker`     | [Link](#container-image-registry)    |
+| Any       | Git                         | `pip3`       | [Link](#git-repository)              |
+| Any       | Zip File                    | `pip3`       | [Link](#from-source)                 |
+| ArchLinux | AUR Helper                  | `aur-helper` | [Link](#arch-linux)                  |
 
 ## PyPi - Python Package Index
 
@@ -91,7 +100,8 @@ aur-helper -Syu pyfunceble
 You can update the **pyfunceble** package manually through the following:
 
 ```shell
-curl https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pyfunceble -o PKGBUILD
+git clone https://aur.archlinux.org/pyfunceble.git pyfunceble
+cd pyfunceble
 makepkg -fsri
 ```
 
@@ -110,7 +120,8 @@ aur-helper -Syu pyfunceble-dev
 You can update the **pyfunceble** package manually through the following:
 
 ```shell
-curl https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pyfunceble-dev -o PKGBUILD
+git clone https://aur.archlinux.org/pyfunceble-dev.git pyfunceble-dev
+cd pyfunceble-dev
 makepkg -fsri
 ```
 
@@ -176,4 +187,29 @@ You can update the **pyfunceble-dev** package from GitLab through `pip3`:
 
 ```shell
 pip3 install --user --upgrade git+https://gitlab.com/funilrys/PyFunceble.git@dev#egg=PyFunceble-dev
+```
+
+## From Source
+
+Updating from the source with `pip3` is just like a normal update of `pip`
+installed package. Just add `--upgrade` to your installation command and you are good
+to go.
+
+Here is an overview of the packages and where they are hosted.
+
+| Host   | Package        | Branch   | Repository                                                                                               |
+| ------ | -------------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| GitHub | pyfunceble     | `master` | [https://github.com/funilrys/PyFunceble/tree/master](https://github.com/funilrys/PyFunceble/tree/master) |
+| GitHub | pyfunceble-dev | `dev`    | [https://github.com/funilrys/PyFunceble/tree/dev](https://github.com/funilrys/PyFunceble/tree/dev)       |
+| GitLab | pyfunceble     | `master` | [https://gitlab.com/funilrys/PyFunceble/tree/master](https://gitlab.com/funilrys/PyFunceble/tree/master) |
+| GitLab | pyfunceble-dev | `dev`    | [https://gitlab.com/funilrys/PyFunceble/tree/master](https://gitlab.com/funilrys/PyFunceble/tree/master) |
+
+You can install the package from source through `pip3`:
+
+```shell
+# From Github
+pip3 install --upgrade --user https://github.com/funilrys/PyFunceble/archive/{{branch}}.zip
+
+# From GitLab
+pip3 install --upgrade --user https://gitlab.com/funilrys/PyFunceble/-/archive/{{branch}}/PyFunceble-{{branch}}.zip
 ```

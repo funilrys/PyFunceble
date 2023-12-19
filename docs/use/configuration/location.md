@@ -69,4 +69,4 @@ That means, that if you don't set the `PYFUNCEBLE_CONFIG_DIR` environment variab
 
 If you cloned the [PyFunceble](https://github.com/funilrys/PyFunceble) repository,
 and you are trying to run a test from the root folder, PyFunceble will consider
-the root folder as its configuration directory.
+the repository's root folder as its configuration directory.
