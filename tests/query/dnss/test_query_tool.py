@@ -64,7 +64,7 @@ import dns.query
 from PyFunceble.config.loader import ConfigLoader
 from PyFunceble.query.dns.query_tool import DNSQueryTool, DNSQueryToolRecord
 
-# pylint: disable=protected-access, too-many-lines
+# pylint: disable=protected-access, too-many-lines, invalid-field-call
 
 
 class TestDNSQueryTool(unittest.TestCase):
