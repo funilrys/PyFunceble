@@ -100,7 +100,9 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             r"\.tumblr\.com$": [(self.switch_to_down_if_status_code, 404)],
             r"\.web\.app$": [(self.switch_to_down_if_status_code, 404)],
             r"\.wix\.com$": [(self.switch_to_down_if_status_code, 404)],
-            r"^s3\.ap-south-1\.amazonaws\.com$": [(self.switch_to_down_if_status_code, 403)],
+            r"^s3\.ap-south-1\.amazonaws\.com$": [
+                (self.switch_to_down_if_status_code, 403)
+            ],
             r"^u\.pcloud\.com$": [(self.switch_to_down_if_status_code, 302)],
             r"\.wordpress\.com$": [
                 (self.switch_to_down_if_status_code, 410),
