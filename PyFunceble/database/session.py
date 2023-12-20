@@ -142,7 +142,9 @@ class DBSession:
 
         if PyFunceble.sessions.DB_ENGINE is None:
             PyFunceble.sessions.DB_ENGINE = sqlalchemy.create_engine(
-                self.credential.get_uri(), poolclass=sqlalchemy.pool.NullPool
+                self.credential.get_uri(),
+                poolclass=sqlalchemy.pool.NullPool,
+                pool_pre_ping=True,
             )
 
             PyFunceble.sessions.DB_FACTORY = sqlalchemy.orm.sessionmaker(
@@ -176,11 +178,16 @@ class DBSession:
         """
 
         engine = sqlalchemy.create_engine(
-            self.credential.get_uri(), poolclass=sqlalchemy.pool.NullPool
+            self.credential.get_uri(),
+            poolclass=sqlalchemy.pool.NullPool,
+            pool_pre_ping=True,
         )
 
         return sqlalchemy.orm.sessionmaker(
-            bind=engine, autoflush=True, autocommit=False, expire_on_commit=False
+            bind=engine,
+            autoflush=True,
+            autocommit=False,
+            expire_on_commit=False,
         )
 
     @execute_if_authorized(None)
@@ -190,12 +197,13 @@ class DBSession:
         Create and return a new session.
         """
 
-        engine = sqlalchemy.create_engine(
-            self.credential.get_uri(),
-        )
+        engine = sqlalchemy.create_engine(self.credential.get_uri(), pool_pre_ping=True)
 
         return sqlalchemy.orm.sessionmaker(
-            bind=engine, autoflush=True, autocommit=False, expire_on_commit=False
+            bind=engine,
+            autoflush=True,
+            autocommit=False,
+            expire_on_commit=False,
         )
 
     def close(self) -> "DBSession":
