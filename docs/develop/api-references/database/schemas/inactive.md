@@ -1,0 +1,1 @@
+::: PyFunceble.database.schemas.inactive
