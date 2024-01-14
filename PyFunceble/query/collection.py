@@ -51,8 +51,6 @@ License:
 """
 
 import json
-import logging
-from datetime import datetime
 from typing import List, Optional, Union
 
 import requests
@@ -106,6 +104,11 @@ class CollectionQueryTool:
     The preferred data origin
     """
 
+    _is_modern_api: Optional[bool] = None
+    """
+    Whether we are working with the modern or legacy API.
+    """
+
     session: Optional[requests.Session] = None
 
     def __init__(
@@ -136,6 +139,7 @@ class CollectionQueryTool:
         self.session.headers.update(
             {
                 "Authorization": f"Bearer {self.token}" if self.token else None,
+                "X-Pyfunceble-Version": PyFunceble.storage.PROJECT_VERSION,
                 "Content-Type": "application/json",
             }
         )
@@ -242,6 +246,43 @@ class CollectionQueryTool:
 
         return self
 
+    @property
+    def is_modern_api(self) -> bool:
+        """
+        Provides the value of the :code:`_is_modern_api` attribute.
+        """
+
+        return self._is_modern_api
+
+    @is_modern_api.setter
+    def is_modern_api(self, value: bool) -> None:
+        """
+        Sets the value of the :code:`_is_modern_api` attribute.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`bool`.
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._is_modern_api = value
+
+    def set_is_modern_api(self, value: bool) -> "CollectionQueryTool":
+        """
+        Sets the value of the :code:`_is_modern_api` attribute.
+
+        :param value:
+            The value to set.
+        """
+
+        self.is_modern_api = value
+
+        return self
+
     def guess_and_set_url_base(self) -> "CollectionQueryTool":
         """
         Try to guess the URL base to work with.
@@ -252,10 +293,30 @@ class CollectionQueryTool:
                 self.url_base = PyFunceble.storage.CONFIGURATION.collection.url_base
             else:
                 self.url_base = self.STD_URL_BASE
+        elif EnvironmentVariableHelper("PYFUNCEBLE_COLLECTION_API_URL").exists():
+            self.url_base = EnvironmentVariableHelper(
+                "PYFUNCEBLE_COLLECTION_API_URL"
+            ).get_value()
         else:
             self.url_base = self.STD_URL_BASE
 
         return self
+
+    def guess_and_set_is_modern_api(self) -> "CollectionQueryTool":
+        """
+        Try to guess if we are working with a legacy version.
+        """
+
+        try:
+            response = self.session.get(
+                f"{self.url_base}/v1/stats/subject",
+            )
+
+            response.raise_for_status()
+
+            self.is_modern_api = False
+        except (requests.RequestException, json.decoder.JSONDecodeError):
+            self.is_modern_api = True
 
     @property
     def preferred_status_origin(self) -> Optional[str]:
@@ -319,6 +380,21 @@ class CollectionQueryTool:
 
         return self
 
+    def ensure_is_modern_api_is_set(func):  # pylint: disable=no-self-argument
+        """
+        Ensures that the :code:`is_modern_api` attribute is set before running
+        the decorated method.
+        """
+
+        def wrapper(self, *args, **kwargs):
+            if self.is_modern_api is None:
+                self.guess_and_set_is_modern_api()
+
+            return func(self, *args, **kwargs)  # pylint: disable=not-callable
+
+        return wrapper
+
+    @ensure_is_modern_api_is_set
     def pull(self, subject: str) -> Optional[dict]:
         """
         Pulls all data related to the subject or :py:class:`None`
@@ -333,12 +409,18 @@ class CollectionQueryTool:
             The response of the search.
         """
 
-        logging.info("Starting to search subject: %r", subject)
+        PyFunceble.facility.Logger.info("Starting to search subject: %r", subject)
 
         if not isinstance(subject, str):
             raise TypeError(f"<subject> should be {str}, {type(subject)} given.")
 
-        url = f"{self.url_base}/v1/subject/search"
+        if self.is_modern_api:
+            if self.token:
+                url = f"{self.url_base}/v1/aggregation/subject/search"
+            else:
+                url = f"{self.url_base}/v1/hub/aggregation/subject/search"
+        else:
+            url = f"{self.url_base}/v1/subject/search"
 
         try:
             response = self.session.post(
@@ -349,25 +431,28 @@ class CollectionQueryTool:
             response_json = response.json()
 
             if response.status_code == 200:
-                logging.debug(
+                PyFunceble.facility.Logger.debug(
                     "Successfully search subject: %r. Response: %r",
                     subject,
                     response_json,
                 )
 
-                logging.info("Finished to search subject: %r", subject)
+                PyFunceble.facility.Logger.info(
+                    "Finished to search subject: %r", subject
+                )
 
                 return response_json
         except (requests.RequestException, json.decoder.JSONDecodeError):
             response_json = {}
 
-        logging.debug(
+        PyFunceble.facility.Logger.debug(
             "Failed to search subject: %r. Response: %r", subject, response_json
         )
-        logging.info("Finished to search subject: %r", subject)
+        PyFunceble.facility.Logger.info("Finished to search subject: %r", subject)
 
         return None
 
+    @ensure_is_modern_api_is_set
     def push(
         self,
         checker_status: Union[
@@ -418,29 +503,15 @@ class CollectionQueryTool:
         if checker_status.subject == "":
             raise ValueError("<checker_status.subject> cannot be empty.")
 
-        status_to_subject = {
-            "status": checker_status.status,
-            "status_source": checker_status.status_source,
-            "tested_at": checker_status.tested_at.isoformat(),
-            "subject": checker_status.idna_subject,
-        }
-
         if (
-            hasattr(checker_status, "expiration_date")
+            not self.is_modern_api
+            and hasattr(checker_status, "expiration_date")
             and checker_status.expiration_date
         ):
-            self.__push_whois(
-                {
-                    "subject": checker_status.idna_subject,
-                    "expiration_date": datetime.strptime(
-                        checker_status.expiration_date, "%d-%b-%Y"
-                    ).isoformat(),
-                    "registrar": checker_status.registrar,
-                }
-            )
+            self.__push_whois(checker_status)
 
         data = self.__push_status(
-            checker_status.checker_type.lower(), status_to_subject
+            checker_status.checker_type.lower(), checker_status.to_json()
         )
 
         return data
@@ -462,7 +533,9 @@ class CollectionQueryTool:
 
         return self
 
-    def __push_status(self, checker_type: str, data: dict) -> Optional[dict]:
+    def __push_status(
+        self, checker_type: str, data: Union[dict, str]
+    ) -> Optional[dict]:
         """
         Submits the given status to the collection.
 
@@ -486,31 +559,45 @@ class CollectionQueryTool:
         if checker_type not in self.SUPPORTED_CHECKERS:
             raise ValueError(f"<checker_type> ({checker_type}) is not supported.")
 
-        logging.info("Starting to submit status: %r", data)
+        PyFunceble.facility.Logger.info("Starting to submit status: %r", data)
 
-        url = f"{self.url_base}/v1/status/{checker_type}"
+        if self.is_modern_api:
+            if not self.token:
+                url = f"{self.url_base}/v1/hub/status/{checker_type}"
+            else:
+                url = f"{self.url_base}/v1/contracts/self-delivery"
+        else:
+            url = f"{self.url_base}/v1/status/{checker_type}"
 
         try:
-            response = self.session.post(
-                url,
-                json=data,
-            )
+            if isinstance(data, dict):
+                response = self.session.post(
+                    url,
+                    json=data,
+                )
+            else:
+                response = self.session.post(
+                    url,
+                    data=data,
+                )
 
             response_json = response.json()
 
             if response.status_code == 200:
-                logging.debug("Successfully submitted data: %r to %s", data, url)
+                PyFunceble.facility.Logger.debug(
+                    "Successfully submitted data: %r to %s", data, url
+                )
 
-                logging.info("Finished to submit status: %r", data)
+                PyFunceble.facility.Logger.info("Finished to submit status: %r", data)
                 return response_json
         except (requests.RequestException, json.decoder.JSONDecodeError):
             response_json = {}
 
-        logging.debug(
+        PyFunceble.facility.Logger.debug(
             "Failed to submit data: %r to %s. Response: %r", data, url, response_json
         )
 
-        logging.info("Finished to submit status: %r", data)
+        PyFunceble.facility.Logger.info("Finished to submit status: %r", data)
 
         return None
 
@@ -538,7 +625,7 @@ class CollectionQueryTool:
         if not isinstance(data, dict):  # pragma: no cover ## Should never happen
             raise TypeError(f"<data> should be {dict}, {type(data)} given.")
 
-        logging.info("Starting to submit WHOIS: %r", data)
+        PyFunceble.facility.Logger.info("Starting to submit WHOIS: %r", data)
 
         url = f"{self.url_base}/v1/status/whois"
 
@@ -551,16 +638,18 @@ class CollectionQueryTool:
             response_json = response.json()
 
             if response.status_code == 200:
-                logging.debug("Successfully submitted WHOIS data: %r to %s", data, url)
+                PyFunceble.facility.Logger.debug(
+                    "Successfully submitted WHOIS data: %r to %s", data, url
+                )
 
-                logging.info("Finished to submit WHOIS: %r", data)
+                PyFunceble.facility.Logger.info("Finished to submit WHOIS: %r", data)
                 return response_json
         except (requests.RequestException, json.decoder.JSONDecodeError):
             response_json = {}
 
-        logging.debug(
+        PyFunceble.facility.Logger.debug(
             "Failed to WHOIS data: %r to %s. Response: %r", data, url, response_json
         )
 
-        logging.info("Finished to submit WHOIS: %r", data)
+        PyFunceble.facility.Logger.info("Finished to submit WHOIS: %r", data)
         return None
