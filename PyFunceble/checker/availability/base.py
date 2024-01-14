@@ -793,8 +793,21 @@ class AvailabilityCheckerBase(CheckerBase):
                         }
                     )
             else:
-                self.status.expiration_date = known_record["expiration_date"]
-                self.status.registrar = known_record["registrar"]
+                # We pass the known record to the lookup record - so that other
+                # methods can use it.
+                self.whois_query_tool.lookup_record.record = known_record.get(
+                    "record", None
+                )
+                self.whois_query_tool.lookup_record.expiration_date = known_record.get(
+                    "expiration_date", None
+                )
+                self.whois_query_tool.lookup_record.registrar = known_record.get(
+                    "registrar", None
+                )
+                self.status.whois_lookup_record = self.whois_query_tool.lookup_record
+
+                self.status.expiration_date = known_record.get("expiration_date", None)
+                self.status.registrar = known_record.get("registrar", None)
                 self.status.whois_record = None
         else:
             self.status.expiration_date = self.whois_query_tool.expiration_date
