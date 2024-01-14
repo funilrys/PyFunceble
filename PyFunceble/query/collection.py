@@ -51,7 +51,6 @@ License:
 """
 
 import json
-from datetime import datetime
 from typing import List, Optional, Union
 
 import requests
@@ -391,7 +390,7 @@ class CollectionQueryTool:
             if self.is_modern_api is None:
                 self.guess_and_set_is_modern_api()
 
-            return func(self, *args, **kwargs)
+            return func(self, *args, **kwargs)  # pylint: disable=not-callable
 
         return wrapper
 
