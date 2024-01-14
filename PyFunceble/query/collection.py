@@ -533,7 +533,9 @@ class CollectionQueryTool:
 
         return self
 
-    def __push_status(self, checker_type: str, data: dict | str) -> Optional[dict]:
+    def __push_status(
+        self, checker_type: str, data: Union[dict, str]
+    ) -> Optional[dict]:
         """
         Submits the given status to the collection.
 
