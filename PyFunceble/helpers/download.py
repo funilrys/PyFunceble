@@ -74,7 +74,7 @@ class DownloadHelper:
     _retries: int = 3
 
     _session: requests.Session
-    _session_adapter: HTTPAdapter | None = None
+    _session_adapter: Optional[HTTPAdapter] = None
 
     def __init__(
         self,
