@@ -73,12 +73,16 @@ class DownloadHelper:
     _certificate_validation: bool = True
     _retries: int = 3
 
+    _session: requests.Session
+    _session_adapter: HTTPAdapter | None = None
+
     def __init__(
         self,
         url: Optional[str] = None,
         *,
         certificate_validation: bool = True,
         retries: int = 3,
+        session: Optional[requests.Session] = None,
     ) -> None:
         if url:
             self.url = url
@@ -88,6 +92,28 @@ class DownloadHelper:
 
         if retries:
             self.retries = retries
+
+        if session:
+            self._session = session
+            self._session_given = True
+        else:
+            self._session, self._session_adapter = self.__get_session()
+
+    @property
+    def session(self) -> requests.Session:
+        """
+        Provides the current state of the :code:`_session` attribute.
+        """
+
+        return self._session
+
+    @property
+    def session_adapter(self) -> HTTPAdapter:
+        """
+        Provides the current state of the :code:`_session_adapter` attribute.
+        """
+
+        return self._session_adapter
 
     @property
     def url(self) -> Optional[str]:
@@ -208,6 +234,37 @@ class DownloadHelper:
 
         return self
 
+    def close_session_after(func):  # pylint: disable=no-self-argument
+        """
+        Closes the session after the decorated method.
+        """
+
+        def wrapper(self, *args, **kwargs):
+            try:
+                return func(self, *args, **kwargs)  # pylint: disable=not-callable
+            finally:
+                if self.session_adapter:
+                    self.session_adapter.close()
+                    self.session.close()
+
+        return wrapper
+
+    def __get_session(self) -> requests.Session:
+        """
+        Provides the session to use.
+        """
+
+        session = requests.Session()
+
+        retries = Retry(total=self.retries, backoff_factor=3)
+        adapter = HTTPAdapter(max_retries=retries)
+
+        session.mount("http://", adapter)
+        session.mount("https://", adapter)
+
+        return session, adapter
+
+    @close_session_after
     def download_text(self, *, destination: Optional[str] = None) -> str:
         """
         Download the body of the set url.
@@ -220,19 +277,17 @@ class DownloadHelper:
             destination, but we also return the output.
 
         :param destination: The download destination.
+        :param session:
+            The session to use.
+
+            .. warning::
+                If not given, we create a new one.
+
 
         :raise UnableToDownload: When could not unable to download the URL.
         """
 
-        session = requests.Session()
-
-        retries = Retry(total=self.retries, backoff_factor=3)
-        adapter = HTTPAdapter(max_retries=retries)
-
-        session.mount("http://", adapter)
-        session.mount("https://", adapter)
-
-        req = session.get(self.url, verify=self.certificate_validation)
+        req = self.session.get(self.url, verify=self.certificate_validation)
 
         if req.status_code == 200:
             response = req.text
@@ -240,12 +295,10 @@ class DownloadHelper:
             if destination and isinstance(destination, str):
                 FileHelper(destination).write(req.text, overwrite=True)
 
-            adapter.close()
             req.close()
             return response
 
-        adapter.close()
-        session.close()
+        req.close()
         raise PyFunceble.helpers.exceptions.UnableToDownload(
             f"{req.url} (retries: {self.retries} | status code: {req.status_code})"
         )

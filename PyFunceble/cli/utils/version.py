@@ -59,6 +59,7 @@ from box import Box
 
 import PyFunceble.cli.storage
 import PyFunceble.facility
+import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.converter.internal_url import InternalUrlConverter
@@ -77,7 +78,8 @@ def get_upstream_version() -> Box:
             DownloadHelper(
                 InternalUrlConverter(
                     PyFunceble.cli.storage.VERSION_DUMP_LINK
-                ).get_converted()
+                ).get_converted(),
+                session=PyFunceble.factory.Requester,
             ).download_text()
         ),
         frozen_box=True,

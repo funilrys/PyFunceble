@@ -54,6 +54,7 @@ import concurrent.futures
 from typing import Optional
 
 import PyFunceble.facility
+import PyFunceble.factory
 from PyFunceble.converter.wildcard2subject import Wildcard2Subject
 from PyFunceble.dataset.public_suffix import PublicSuffixDataset
 from PyFunceble.helpers.dict import DictHelper
@@ -165,7 +166,11 @@ class PublicSuffixGenerator:
         Starts the generation of the dataset file.
         """
 
-        raw_data = DownloadHelper(self.UPSTREAM_LINK).download_text().split("\n")
+        raw_data = (
+            DownloadHelper(self.UPSTREAM_LINK, session=PyFunceble.factory.Requester)
+            .download_text()
+            .split("\n")
+        )
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             for result in executor.map(self.parse_line, raw_data):

@@ -73,6 +73,7 @@ import PyFunceble.cli.utils.ascii_logo
 import PyFunceble.cli.utils.sort
 import PyFunceble.cli.utils.stdout
 import PyFunceble.facility
+import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
@@ -436,7 +437,9 @@ class SystemLauncher(SystemBase):
             """
 
             if URLSyntaxChecker(file).is_valid():
-                DownloadHelper(file).download_text(destination=destination)
+                DownloadHelper(
+                    file, session=PyFunceble.factory.Requester
+                ).download_text(destination=destination)
                 return True
             return False
 
