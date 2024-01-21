@@ -282,8 +282,8 @@ class DownloaderBase:
             if not hasattr(self, "download_link") or not self.download_link:
                 raise PyFunceble.downloader.exceptions.NoDownloadLinkGiven()
 
-            if DownloadHelper(self.download_link, session=PyFunceble.factory.Requester).download_text(
-                destination=self.destination
-            ):
+            if DownloadHelper(
+                self.download_link, session=PyFunceble.factory.Requester
+            ).download_text(destination=self.destination):
                 self.set_current_downtime()
                 self.save_all_downtimes()
