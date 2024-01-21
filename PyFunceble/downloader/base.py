@@ -53,6 +53,7 @@ License:
 import datetime
 import os
 from typing import Optional
+import importlib
 
 import PyFunceble.downloader.exceptions
 import PyFunceble.exceptions
@@ -71,6 +72,7 @@ class DownloaderBase:
     download time inside a JSON file, so this class provides the base around
     the download mechanism but also the generation or update of that JSON file.
     """
+
 
     DOWNTIME_INDEX: Optional[str] = None
     """
@@ -275,12 +277,15 @@ class DownloaderBase:
         Starts the download process.
         """
 
+
         if self.authorized and self.is_last_download_expired():
             if not hasattr(self, "destination") or not self.destination:
                 raise PyFunceble.downloader.exceptions.NoDownloadDestinationGiven()
 
             if not hasattr(self, "download_link") or not self.download_link:
                 raise PyFunceble.downloader.exceptions.NoDownloadLinkGiven()
+
+            importlib.import_module("PyFunceble.factory")
 
             if DownloadHelper(
                 self.download_link, session=PyFunceble.factory.Requester

@@ -53,7 +53,6 @@ import warnings
 from typing import List
 
 import PyFunceble.storage
-import PyFunceble.facility
 from PyFunceble.checker.availability.domain import DomainAvailabilityChecker
 from PyFunceble.checker.availability.domain_and_ip import DomainAndIPAvailabilityChecker
 from PyFunceble.checker.availability.ip import IPAvailabilityChecker
