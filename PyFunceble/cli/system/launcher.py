@@ -407,6 +407,7 @@ class SystemLauncher(SystemBase):
                     "Added to the protocol:\n%r", to_append
                 )
 
+        # pylint: disable=line-too-long
         if (
             PyFunceble.storage.CONFIGURATION.cli_testing.testing_mode.platform_contribution
         ):
