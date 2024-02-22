@@ -172,6 +172,16 @@ class ConfigLoader:
             # If timeout is set to a negative digit, switch to the default one.
             config["lookup"]["timeout"] = 5
 
+        if (
+            "cli_testing" in config
+            and "testing_mode" in config["cli_testing"]
+            and "platform_contribution" in config["cli_testing"]["testing_mode"]
+            and config["cli_testing"]["testing_mode"]["platform_contribution"]
+        ):
+            # If we are under a special testing mode. We shouldn't generate
+            # any files
+            config["cli_testing"]["file_generation"]["no_file"] = True
+
         return config
 
     @staticmethod

@@ -318,8 +318,10 @@ class WorkerBase(multiprocessing.Process):
 
                 try:
                     worker_name, destination_worker, consumed = self.input_queue.get()
-                except EOFError:
-                    PyFunceble.facility.Logger.info("Got EOFError. Stopping worker.")
+                except (EOFError, KeyboardInterrupt):
+                    PyFunceble.facility.Logger.info(
+                        "Got EOFError/KeyboardInterrupt. Stopping worker."
+                    )
                     self.global_exit_event.set()
                     break
 
@@ -370,7 +372,14 @@ class WorkerBase(multiprocessing.Process):
                     self.share_waiting_message(apply_breakoff=wait_for_stop)
                     continue
 
-                result = self.target(consumed)
+                try:
+                    result = self.target(consumed)
+                except (EOFError, KeyboardInterrupt):
+                    PyFunceble.facility.Logger.info(
+                        "Got EOFError/KeyboardInterrupt. Stopping worker."
+                    )
+                    self.global_exit_event.set()
+                    break
 
                 if result is not None:
                     self.add_to_output_queue(result)

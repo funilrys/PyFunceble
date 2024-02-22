@@ -51,7 +51,7 @@ License:
 """
 
 import json
-from typing import List, Optional, Union
+from typing import Generator, List, Optional, Union
 
 import requests
 import requests.exceptions
@@ -380,7 +380,7 @@ class CollectionQueryTool:
 
         return self
 
-    def ensure_is_modern_api_is_set(func):  # pylint: disable=no-self-argument
+    def ensure_modern_api(func):  # pylint: disable=no-self-argument
         """
         Ensures that the :code:`is_modern_api` attribute is set before running
         the decorated method.
@@ -394,7 +394,7 @@ class CollectionQueryTool:
 
         return wrapper
 
-    @ensure_is_modern_api_is_set
+    @ensure_modern_api
     def pull(self, subject: str) -> Optional[dict]:
         """
         Pulls all data related to the subject or :py:class:`None`
@@ -452,7 +452,111 @@ class CollectionQueryTool:
 
         return None
 
-    @ensure_is_modern_api_is_set
+    @ensure_modern_api
+    def pull_contract(self, amount: int = 1) -> Generator[dict, None, None]:
+        """
+        Pulls the next amount of contracts.
+
+        :param int amount:
+            The amount of data to pull.
+
+        :return:
+            The response of the query.
+        """
+
+        PyFunceble.facility.Logger.info("Starting to pull next contract")
+
+        url = f"{self.url_base}/v1/contracts/next"
+        params = {
+            "limit": amount,
+            "shuffle": True,
+        }
+
+        try:
+            response = self.session.get(
+                url,
+                params=params,
+            )
+
+            response_json = response.json()
+
+            if response.status_code == 200:
+                PyFunceble.facility.Logger.debug(
+                    "Successfully pulled next %r contracts. Response: %r", response_json
+                )
+
+                PyFunceble.facility.Logger.info("Finished to pull next contract")
+
+                yield response_json
+        except (requests.RequestException, json.decoder.JSONDecodeError):
+            response_json = [{"subject": {}}]
+
+        PyFunceble.facility.Logger.debug(
+            "Failed to pull next contract. Response: %r", response_json
+        )
+        PyFunceble.facility.Logger.info("Finished to pull next contracts")
+
+        yield response_json
+
+    @ensure_modern_api
+    def deliver_contract(self, contract: dict, contract_data: dict) -> Optional[dict]:
+        """
+        Delivers the given contract data.
+
+        :param contract:
+            The contract to deliver.
+        :param contract_data:
+            The data to deliver.
+
+        :return:
+            The response of the query.
+        """
+
+        PyFunceble.facility.Logger.info(
+            "Starting to deliver contract data: %r", contract
+        )
+
+        contract_id = contract["id"]
+        contract_data = (
+            contract_data.to_json()
+            if not isinstance(contract_data, dict)
+            else contract_data
+        )
+        url = f"{self.url_base}/v1/contracts/{contract_id}/delivery"
+
+        try:
+            response = self.session.post(
+                url,
+                data=contract_data.encode("utf-8"),
+            )
+
+            response_json = response.json()
+
+            if response.status_code == 200:
+                PyFunceble.facility.Logger.debug(
+                    "Successfully delivered contract: %r. Response: %r",
+                    contract_data,
+                    response_json,
+                )
+
+                PyFunceble.facility.Logger.info(
+                    "Finished to deliver contract: %r", contract_data
+                )
+
+                return response_json
+        except (requests.RequestException, json.decoder.JSONDecodeError):
+            response_json = {}
+
+        PyFunceble.facility.Logger.debug(
+            "Failed to deliver contract: %r. Response: %r", contract_data, response_json
+        )
+        PyFunceble.facility.Logger.info(
+            "Finished to deliver contract: %r", contract_data
+        )
+
+        return None
+
+    @ensure_modern_api
     def push(
         self,
         checker_status: Union[

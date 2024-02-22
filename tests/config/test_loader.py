@@ -510,6 +510,26 @@ class TestConfigLoader(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_conditional_switch_platform_testing_mode(self) -> None:
+        """
+        Tests the method which let us switch some of our values based on
+        some assumption.
+
+        In this test, we check that no files is being generated if we
+        are under such testing mode.
+        """
+
+        given = copy.deepcopy(self.our_config)
+        given["cli_testing"]["testing_mode"]["platform_contribution"] = True
+        given["cli_testing"]["file_generation"]["no_file"] = False
+
+        expected = copy.deepcopy(given)
+        expected["cli_testing"]["file_generation"]["no_file"] = True
+
+        actual = self.config_loader.conditional_switch(given)
+
+        self.assertEqual(expected, actual)
+
     def test_overwite_file_found(self) -> None:
         """
         Tests the loading of the configuration file for the case the an
