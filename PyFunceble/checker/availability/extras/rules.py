@@ -78,7 +78,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
     def __init__(self, status: Optional[AvailabilityCheckerStatus] = None) -> None:
         self.regex_active2inactive = {
             r"\.000webhostapp\.com": [
-                (self.switch_to_down_if_status_code, 410),
+                (self.switch_to_down_if_status_code, {410, 424}),
             ],
             r"\.24\.eu$": [(self.switch_to_down_if_status_code, 503)],
             r"\.altervista\.org$": [(self.switch_to_down_if_status_code, 403)],
