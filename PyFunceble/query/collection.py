@@ -310,6 +310,7 @@ class CollectionQueryTool:
         try:
             response = self.session.get(
                 f"{self.url_base}/v1/stats/subject",
+                timeout=PyFunceble.storage.CONFIGURATION.lookup.timeout,
             )
 
             response.raise_for_status()
@@ -426,6 +427,7 @@ class CollectionQueryTool:
             response = self.session.post(
                 url,
                 json={"subject": subject},
+                timeout=PyFunceble.storage.CONFIGURATION.lookup.timeout,
             )
 
             response_json = response.json()
@@ -476,6 +478,7 @@ class CollectionQueryTool:
             response = self.session.get(
                 url,
                 params=params,
+                timeout=PyFunceble.storage.CONFIGURATION.lookup.timeout,
             )
 
             response_json = response.json()
@@ -528,6 +531,7 @@ class CollectionQueryTool:
             response = self.session.post(
                 url,
                 data=contract_data.encode("utf-8"),
+                timeout=PyFunceble.storage.CONFIGURATION.lookup.timeout,
             )
 
             response_json = response.json()
@@ -678,11 +682,13 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     json=data,
+                    timeout=PyFunceble.storage.CONFIGURATION.lookup.timeout,
                 )
             else:
                 response = self.session.post(
                     url,
                     data=data,
+                    timeout=PyFunceble.storage.CONFIGURATION.lookup.timeout,
                 )
 
             response_json = response.json()
@@ -737,6 +743,7 @@ class CollectionQueryTool:
             response = self.session.post(
                 url,
                 json=data,
+                timeout=PyFunceble.storage.CONFIGURATION.lookup.timeout,
             )
 
             response_json = response.json()
