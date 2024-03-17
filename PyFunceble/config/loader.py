@@ -65,13 +65,11 @@ from yaml.error import MarkedYAMLError
 import PyFunceble.cli.storage
 import PyFunceble.storage
 from PyFunceble.config.compare import ConfigComparison
-from PyFunceble.downloader.iana import IANADownloader
-from PyFunceble.downloader.public_suffix import PublicSuffixDownloader
-from PyFunceble.downloader.user_agents import UserAgentsDownloader
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 from PyFunceble.helpers.file import FileHelper
 from PyFunceble.helpers.merge import Merge
+from PyFunceble.utils.system import LateImport
 
 
 class ConfigLoader:
@@ -294,12 +292,16 @@ class ConfigLoader:
 
         return self
 
-    @classmethod
+    @LateImport(
+        "PyFunceble.downloader.iana<-IANADownloader",
+        "PyFunceble.downloader.public_suffix<-PublicSuffixDownloader",
+        "PyFunceble.downloader.user_agents<-UserAgentsDownloader",
+    )
     def download_dynamic_infrastructure_files(
-        cls,
+        self,
     ) -> "ConfigLoader":
         """
-        Downloads all the dynamicly (generated) infrastructure files.
+        Downloads all the dynamically (generated) infrastructure files.
 
         .. note::
             Downloaded if missing:
@@ -309,7 +311,8 @@ class ConfigLoader:
 
         ## pragma: no cover ## Underlying download methods already tested.
 
-        if not cls.is_already_loaded():
+        if not self.is_already_loaded():
+            # pylint: disable=undefined-variable # LateImport
             IANADownloader().start()
             PublicSuffixDownloader().start()
             UserAgentsDownloader().start()

@@ -96,7 +96,7 @@ class DNSQueryTool:
         x.name: x.value for x in dns.rdatatype.RdataType
     }
 
-    nameservers: Nameservers = Nameservers()
+    nameservers: Optional[Nameservers] = None
     _query_record_type: int = dns.rdatatype.RdataType.ANY
 
     _subject: Optional[str] = None
@@ -120,6 +120,8 @@ class DNSQueryTool:
         trust_server: Optional[bool] = None,
         delay: Optional[bool] = None,
     ) -> None:
+        self.nameservers = Nameservers()
+
         if nameservers is not None:
             self.nameservers.set_nameservers(nameservers)
         else:  # pragma: no cover ## I'm not playing with system resolver.

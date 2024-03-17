@@ -61,10 +61,10 @@ import urllib3.exceptions
 
 import PyFunceble.facility
 import PyFunceble.storage
-from PyFunceble.dataset.user_agent import UserAgentDataset
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 from PyFunceble.query.requests.adapter.http import RequestHTTPAdapter
 from PyFunceble.query.requests.adapter.https import RequestHTTPSAdapter
+from PyFunceble.utils.system import LateImport
 
 
 class Requester:
@@ -523,6 +523,7 @@ class Requester:
 
         return self.timeout
 
+    @LateImport("PyFunceble.dataset.user_agent<-UserAgentDataset")
     def get_session(self) -> requests.Session:
         """
         Provides a new session.
@@ -551,6 +552,7 @@ class Requester:
             ),
         )
 
+        # pylint: disable=undefined-variable # LateImport
         custom_headers = {"User-Agent": UserAgentDataset().get_latest()}
 
         session.headers.update(custom_headers)

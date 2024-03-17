@@ -58,7 +58,6 @@ import dns.resolver
 import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
-from PyFunceble.checker.syntax.url import URLSyntaxChecker
 from PyFunceble.converter.url2netloc import Url2Netloc
 
 
@@ -79,13 +78,13 @@ class Nameservers:
 
     protocol: Optional[str] = None
 
-    domain_syntax_checker: DomainSyntaxChecker = DomainSyntaxChecker()
-    url_syntax_checker: URLSyntaxChecker = URLSyntaxChecker()
+    domain_syntax_checker: Optional[DomainSyntaxChecker] = None
     url2netloc: Url2Netloc = Url2Netloc()
 
     def __init__(
         self, nameserver: Optional[List[str]] = None, protocol: str = "TCP"
     ) -> None:
+        self.domain_syntax_checker = DomainSyntaxChecker()
         self.protocol = protocol
 
         if nameserver is not None:
@@ -125,8 +124,7 @@ class Nameservers:
             return ":".join(splitted[:-1]), default_port
         return nameserver, default_port
 
-    @classmethod
-    def get_ip_from_nameserver(cls, nameserver: str) -> List[str]:
+    def get_ip_from_nameserver(self, nameserver: str) -> List[str]:
         """
         Given a nameserver, this method resolve it in order to get the
         IP to contact.
@@ -141,7 +139,7 @@ class Nameservers:
 
         result = []
 
-        if cls.domain_syntax_checker.set_subject(nameserver).is_valid():
+        if self.domain_syntax_checker.set_subject(nameserver).is_valid():
             try:
                 result.extend(
                     [
