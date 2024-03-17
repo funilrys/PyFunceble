@@ -14,6 +14,7 @@ omit =
     PyFunceble/dataset/*/mariadb.py
     PyFunceble/dataset/*/mysql.py
     PyFunceble/checker/availability/extra_rules.py
+    PyFunceble/utils/system.py
     PyFunceble/__init__.py
     PyFunceble/logger.py
 
