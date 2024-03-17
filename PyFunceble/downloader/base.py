@@ -56,7 +56,6 @@ from typing import Optional
 
 import PyFunceble.downloader.exceptions
 import PyFunceble.exceptions
-import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.download import DownloadHelper
@@ -270,6 +269,7 @@ class DownloaderBase:
             return True
 
         return False
+
 
     def start(self) -> None:
         """

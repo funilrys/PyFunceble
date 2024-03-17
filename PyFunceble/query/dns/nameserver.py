@@ -55,9 +55,9 @@ from typing import List, Optional, Tuple
 import dns.exception
 import dns.resolver
 
+from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 import PyFunceble.facility
 import PyFunceble.storage
-from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.converter.url2netloc import Url2Netloc
 
 
@@ -78,13 +78,13 @@ class Nameservers:
 
     protocol: Optional[str] = None
 
-    domain_syntax_checker: Optional[DomainSyntaxChecker] = None
+    ip_syntax_checker: Optional[IPSyntaxChecker] = None
     url2netloc: Url2Netloc = Url2Netloc()
 
     def __init__(
         self, nameserver: Optional[List[str]] = None, protocol: str = "TCP"
     ) -> None:
-        self.domain_syntax_checker = DomainSyntaxChecker()
+        self.ip_syntax_checker = IPSyntaxChecker()
         self.protocol = protocol
 
         if nameserver is not None:
@@ -139,7 +139,9 @@ class Nameservers:
 
         result = []
 
-        if self.domain_syntax_checker.set_subject(nameserver).is_valid():
+        if self.ip_syntax_checker.set_subject(nameserver).is_valid():
+            result.append(nameserver)
+        else:
             try:
                 result.extend(
                     [
@@ -159,8 +161,6 @@ class Nameservers:
                 )
             except dns.exception.DNSException:
                 pass
-        else:
-            result.append(nameserver)
 
         PyFunceble.facility.Logger.debug(
             "IP from nameserver (%r):\n%r", nameserver, result

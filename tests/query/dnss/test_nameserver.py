@@ -259,7 +259,7 @@ class TestNameserver(unittest.TestCase):
 
         given = "example.funilrys"
 
-        expected = ["example.funilrys"]
+        expected = []
         actual = self.nameserver_provider.get_ip_from_nameserver(given)
 
         self.assertEqual(expected, actual)
