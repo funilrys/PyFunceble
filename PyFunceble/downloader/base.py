@@ -57,6 +57,7 @@ from typing import Optional
 import PyFunceble.downloader.exceptions
 import PyFunceble.exceptions
 import PyFunceble.storage
+import PyFunceble.factory
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.download import DownloadHelper
 from PyFunceble.helpers.file import FileHelper
