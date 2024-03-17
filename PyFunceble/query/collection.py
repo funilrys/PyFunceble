@@ -62,6 +62,7 @@ from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.reputation.status import ReputationCheckerStatus
 from PyFunceble.checker.syntax.status import SyntaxCheckerStatus
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
+from PyFunceble.utils.system import LateImport
 
 
 class CollectionQueryTool:
@@ -109,7 +110,7 @@ class CollectionQueryTool:
     Whether we are working with the modern or legacy API.
     """
 
-    session: Optional[requests.Session] = None
+    _session: Optional[requests.Session] = None
 
     def __init__(
         self,
@@ -135,15 +136,6 @@ class CollectionQueryTool:
         else:
             self.guess_and_set_preferred_status_origin()
 
-        self.session = requests.Session()
-        self.session.headers.update(
-            {
-                "Authorization": f"Bearer {self.token}" if self.token else None,
-                "X-Pyfunceble-Version": PyFunceble.storage.PROJECT_VERSION,
-                "Content-Type": "application/json",
-            }
-        )
-
     def __contains__(self, value: str) -> bool:
         """
         Checks if the given value is in the collection.
@@ -163,6 +155,25 @@ class CollectionQueryTool:
         """
 
         return self.pull(value)
+
+    @property
+    @LateImport("from PyFunceble.factory import Requester")
+    def session(self) -> requests.Session:
+        """
+        Provides the session to use.
+        """
+
+        if not self._session:
+            self._session = Requester
+            self._session.headers.update(
+                {
+                    "Authorization": f"Bearer {self.token}" if self.token else None,
+                    "X-Pyfunceble-Version": PyFunceble.storage.PROJECT_VERSION,
+                    "Content-Type": "application/json",
+                }
+            )
+
+        return self._session
 
     @property
     def token(self) -> Optional[str]:

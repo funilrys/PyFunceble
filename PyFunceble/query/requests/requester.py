@@ -229,6 +229,14 @@ class Requester:
         return request_method
 
     @property
+    def headers(self) -> dict:
+        """
+        Provides the current state of the :code:`_headers` attribute.
+        """
+
+        return self.session.headers
+
+    @property
     def max_retries(self) -> int:
         """
         Provides the current state of the :code:`_max_retries` attribute.
