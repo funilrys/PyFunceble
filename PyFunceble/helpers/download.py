@@ -96,6 +96,14 @@ class DownloadHelper:
         if session:
             self._session = session
             self._session_given = True
+
+            if hasattr(self._session, "guess_all_settings"):
+                # Ensure that PyFunceble's configuration is reloaded by the
+                # session object.
+                self._session.guess_all_settings()
+
+            if hasattr(self._session, "verify_certificate"):
+                self.certificate_validation = self._session.verify_certificate
         else:
             self._session, self._session_adapter = self.__get_session()
 
