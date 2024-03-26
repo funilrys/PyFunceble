@@ -575,6 +575,18 @@ class CollectionQueryTool:
                     url,
                     json=data,
                 )
+            elif isinstance(
+                data,
+                (
+                    AvailabilityCheckerStatus,
+                    SyntaxCheckerStatus,
+                    ReputationCheckerStatus,
+                ),
+            ):
+                response = self.session.post(
+                    url,
+                    json=data.to_dict(),
+                )
             else:
                 response = self.session.post(
                     url,
@@ -621,6 +633,12 @@ class CollectionQueryTool:
 
         if not self.token:
             return None
+
+        if isinstance(
+            data,
+            (AvailabilityCheckerStatus, SyntaxCheckerStatus, ReputationCheckerStatus),
+        ):
+            data = data.to_dict()
 
         if not isinstance(data, dict):  # pragma: no cover ## Should never happen
             raise TypeError(f"<data> should be {dict}, {type(data)} given.")
