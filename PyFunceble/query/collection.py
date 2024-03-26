@@ -88,6 +88,7 @@ class CollectionQueryTool:
 
     STD_URL_BASE: str = "http://localhost:8001"
     STD_PREFERRED_STATUS_ORIGIN: str = "frequent"
+    STD_TIMEOUT: float = 5.0
 
     _token: Optional[str] = None
     """
@@ -109,6 +110,11 @@ class CollectionQueryTool:
     Whether we are working with the modern or legacy API.
     """
 
+    _timeout: float = 5.0
+    """
+    The timeout to use while communicating with the API.
+    """
+
     session: Optional[requests.Session] = None
 
     def __init__(
@@ -117,6 +123,7 @@ class CollectionQueryTool:
         token: Optional[str] = None,
         url_base: Optional[str] = None,
         preferred_status_origin: Optional[str] = None,
+        timeout: Optional[float] = None,
     ) -> None:
         if token is not None:
             self.token = token
@@ -134,6 +141,11 @@ class CollectionQueryTool:
             self.preferred_status_origin = preferred_status_origin
         else:
             self.guess_and_set_preferred_status_origin()
+
+        if timeout is not None:
+            self.timeout = timeout
+        else:
+            self.guess_and_set_timeout()
 
         self.session = requests.Session()
         self.session.headers.update(
@@ -283,6 +295,43 @@ class CollectionQueryTool:
 
         return self
 
+    @property
+    def timeout(self) -> float:
+        """
+        Provides the value of the :code:`_timeout` attribute.
+        """
+
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, value: float) -> None:
+        """
+        Sets the value of the :code:`_timeout` attribute.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`float`.
+        """
+
+        if not isinstance(value, (int, float)):
+            raise TypeError(f"<value> should be {float}, {type(value)} given.")
+
+        self._timeout = value
+
+    def set_timeout(self, value: float) -> "CollectionQueryTool":
+        """
+        Sets the value of the :code:`_timeout` attribute.
+
+        :param value:
+            The value to set.
+        """
+
+        self.timeout = value
+
+        return self
+
     def guess_and_set_url_base(self) -> "CollectionQueryTool":
         """
         Try to guess the URL base to work with.
@@ -307,16 +356,22 @@ class CollectionQueryTool:
         Try to guess if we are working with a legacy version.
         """
 
-        try:
-            response = self.session.get(
-                f"{self.url_base}/v1/stats/subject",
-            )
+        if self.token:
+            try:
+                response = self.session.get(
+                    f"{self.url_base}/v1/stats/subject",
+                    timeout=self.timeout,
+                )
 
-            response.raise_for_status()
+                response.raise_for_status()
 
+                self.is_modern_api = False
+            except (requests.RequestException, json.decoder.JSONDecodeError):
+                self.is_modern_api = True
+        else:
             self.is_modern_api = False
-        except (requests.RequestException, json.decoder.JSONDecodeError):
-            self.is_modern_api = True
+
+        return self
 
     @property
     def preferred_status_origin(self) -> Optional[str]:
@@ -380,6 +435,18 @@ class CollectionQueryTool:
 
         return self
 
+    def guess_and_set_timeout(self) -> "CollectionQueryTool":
+        """
+        Try to guess the timeout to use.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            self.timeout = PyFunceble.storage.CONFIGURATION.lookup.timeout
+        else:
+            self.timeout = self.STD_TIMEOUT
+
+        return self
+
     def ensure_is_modern_api_is_set(func):  # pylint: disable=no-self-argument
         """
         Ensures that the :code:`is_modern_api` attribute is set before running
@@ -426,6 +493,7 @@ class CollectionQueryTool:
             response = self.session.post(
                 url,
                 json={"subject": subject},
+                timeout=self.timeout,
             )
 
             response_json = response.json()
@@ -574,6 +642,7 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     json=data,
+                    timeout=self.timeout,
                 )
             elif isinstance(
                 data,
@@ -586,11 +655,13 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     json=data.to_dict(),
+                    timeout=self.timeout,
                 )
             else:
                 response = self.session.post(
                     url,
                     data=data,
+                    timeout=self.timeout,
                 )
 
             response_json = response.json()
@@ -651,6 +722,7 @@ class CollectionQueryTool:
             response = self.session.post(
                 url,
                 json=data,
+                timeout=self.timeout,
             )
 
             response_json = response.json()
