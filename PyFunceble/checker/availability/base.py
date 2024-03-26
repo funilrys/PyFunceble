@@ -1043,7 +1043,13 @@ class AvailabilityCheckerBase(CheckerBase):
                 self.collection_query_tool.preferred_status_origin == "latest"
                 and data["status"]["availability"]["latest"]
             ):
-                self.status.status = data["status"]["availability"]["latest"]["status"]
+                try:
+                    # legacy
+                    self.status.status = data["status"]["availability"]["latest"][
+                        "status"
+                    ]
+                except KeyError:
+                    self.status.status = data["status"]["availability"]["latest"]
                 self.status.status_source = "COLLECTION"
             elif (
                 self.collection_query_tool.preferred_status_origin == "recommended"
