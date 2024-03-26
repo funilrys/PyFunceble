@@ -919,16 +919,7 @@ class AvailabilityCheckerBase(CheckerBase):
         if from_domain_test and self.status.url_syntax:
             return self
 
-        if not self.status.url_syntax and not RegexHelper("[^a-z0-9._]").match(
-            self.idna_subject, return_match=False
-        ):
-            # The regex is there because while testing for domain, sometime we
-            # may see something like mailto:xxx@yyy.de
-
-            self.http_status_code_query_tool.set_subject(
-                f"http://{self.idna_subject}:80"
-            )
-        elif not self.idna_subject.startswith("http"):
+        if not self.status.url_syntax and not self.idna_subject.startswith("http"):
             self.http_status_code_query_tool.set_subject(
                 f"http://{self.idna_subject}:80"
             )
