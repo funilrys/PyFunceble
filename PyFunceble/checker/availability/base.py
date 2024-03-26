@@ -76,7 +76,6 @@ from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
 from PyFunceble.converter.url2netloc import Url2Netloc
-from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 from PyFunceble.query.http_status_code import HTTPStatusCode
 from PyFunceble.query.netinfo.address import AddressInfo
