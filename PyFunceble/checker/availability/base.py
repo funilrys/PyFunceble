@@ -928,6 +928,10 @@ class AvailabilityCheckerBase(CheckerBase):
             self.http_status_code_query_tool.set_subject(
                 f"http://{self.idna_subject}:80"
             )
+        elif not self.idna_subject.startswith("http"):
+            self.http_status_code_query_tool.set_subject(
+                f"http://{self.idna_subject}:80"
+            )
 
         lookup_result = self.http_status_code_query_tool.get_status_code()
 
