@@ -422,7 +422,7 @@ class ExtraRuleHandlerBase:
         of the given one.
         """
 
-        if not isinstance(status_code, (list, tuple)):
+        if not isinstance(status_code, (list, tuple, set)):
             status_code = [status_code]
 
         if any(self.status.http_status_code == x for x in status_code):
