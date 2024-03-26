@@ -232,9 +232,7 @@ def get_subjects_from_line(
     if cidr2subject is None:
         cidr2subject = CIDR2Subject()
 
-    adblock_inputline2subject.aggressive = (
-        wildcard2subject.aggressive
-    ) = (
+    adblock_inputline2subject.aggressive = wildcard2subject.aggressive = (
         rpz_inputline2subject.aggressive
     ) = inputline2subject.aggressive = url2netloc.aggressive = bool(
         PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive

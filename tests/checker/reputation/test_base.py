@@ -362,8 +362,7 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
             self.checker.status.status = "INVALID"
             self.checker.status.status_source = "SYNTAX"
 
-        def fake_try_to_query_status_from_dns_lookup():
-            ...
+        def fake_try_to_query_status_from_dns_lookup(): ...
 
         self.checker.do_syntax_check_first = True
         self.checker.subject = pyf_test_dataset.NOT_VALID_DOMAINS[0]
@@ -392,8 +391,7 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
         Tests the method which let us query the status of the given subject.
         """
 
-        def fake_try_to_query_status_from_syntax_lookup():
-            ...
+        def fake_try_to_query_status_from_syntax_lookup(): ...
 
         def fake_try_to_query_status_from_dns_lookup():
             self.checker.status.status = "MALICIOUS"
@@ -426,11 +424,9 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
         Tests the method which let us query the status of the given subject.
         """
 
-        def fake_try_to_query_status_from_syntax_lookup():
-            ...
+        def fake_try_to_query_status_from_syntax_lookup(): ...
 
-        def fake_try_to_query_status_from_dns_lookup():
-            ...
+        def fake_try_to_query_status_from_dns_lookup(): ...
 
         self.checker.do_syntax_check_first = True
         self.checker.subject = pyf_test_dataset.NOT_VALID_DOMAINS[0]

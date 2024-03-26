@@ -61,7 +61,7 @@ from dotenv import load_dotenv
 from PyFunceble.storage_facility import get_config_directory
 
 PROJECT_NAME: str = "PyFunceble"
-PROJECT_VERSION: str = "4.2.7.dev (Blue Duckling: Ixora)"
+PROJECT_VERSION: str = "4.2.8.dev (Blue Duckling: Ixora)"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
 DISTRIBUTED_DIR_STRUCTURE_FILENAME: str = "dir_structure_production.json"
@@ -79,7 +79,9 @@ IPV4_REPUTATION_FILENAME: str = "ipv4_reputation.data"
 IANA_DUMP_LINK: str = (
     "https://raw.githubusercontent.com/PyFunceble/iana/master/iana-domains-db.json"
 )
-PUBLIC_SUFFIX_DUMP_LINK: str = "https://raw.githubusercontent.com/PyFunceble/public-suffix/master/public-suffix.json"
+PUBLIC_SUFFIX_DUMP_LINK: str = (
+    "https://raw.githubusercontent.com/PyFunceble/public-suffix/master/public-suffix.json"
+)
 USER_AGENT_DUMP_LINK: str = (
     "https://raw.githubusercontent.com/PyFunceble/user_agents/master/user_agents.json"
 )

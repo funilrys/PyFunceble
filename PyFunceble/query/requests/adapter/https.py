@@ -113,12 +113,12 @@ class RequestHTTPSAdapter(RequestAdapterBase):
                 )
 
             if parsed_url.scheme == "https":
-                self.poolmanager.connection_pool_kw[
-                    "server_hostname"
-                ] = parsed_url.hostname
-                self.poolmanager.connection_pool_kw[
-                    "assert_hostname"
-                ] = parsed_url.hostname
+                self.poolmanager.connection_pool_kw["server_hostname"] = (
+                    parsed_url.hostname
+                )
+                self.poolmanager.connection_pool_kw["assert_hostname"] = (
+                    parsed_url.hostname
+                )
 
             # Ensure that the Hosts header is present. Otherwise, connection might
             # not work.

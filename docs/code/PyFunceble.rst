@@ -22,6 +22,14 @@ Subpackages
 Submodules
 ----------
 
+PyFunceble.checkers module
+--------------------------
+
+.. automodule:: PyFunceble.checkers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.exceptions module
 ----------------------------
 

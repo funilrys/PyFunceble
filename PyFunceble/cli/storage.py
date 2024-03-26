@@ -253,9 +253,11 @@ UNIVERSAL_OUTPUTS: dict = {
 }
 
 OUTPUTS: Optional[Box] = Box(
-    Merge(UNIX_OUTPUTS).into(UNIVERSAL_OUTPUTS)
-    if PlatformUtility.is_unix()
-    else Merge(WIN_OUTPUTS).into(UNIVERSAL_OUTPUTS),
+    (
+        Merge(UNIX_OUTPUTS).into(UNIVERSAL_OUTPUTS)
+        if PlatformUtility.is_unix()
+        else Merge(WIN_OUTPUTS).into(UNIVERSAL_OUTPUTS)
+    ),
     frozen_box=True,
 )
 
