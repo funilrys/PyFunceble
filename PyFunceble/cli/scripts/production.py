@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-
 import copy
 import functools
 import os
@@ -516,9 +515,9 @@ class ProductionPrep:
             if to_append not in self.version_file_content["deprecated"]:
                 self.version_file_content["deprecated"].append(to_append)
 
-        self.version_file_content[
-            "current_version"
-        ] = PyFunceble.storage.PROJECT_VERSION
+        self.version_file_content["current_version"] = (
+            PyFunceble.storage.PROJECT_VERSION
+        )
 
         self.dict_helper.set_subject(self.version_file_content).to_yaml_file(
             self.VERSION_FILE_PATH

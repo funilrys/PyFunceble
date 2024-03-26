@@ -271,8 +271,7 @@ class TestDBDatasetBase(unittest.TestCase):
                 {"user": "bar.foo", "state": "coding"},
             ]
 
-            for data in dataset:
-                yield data
+            yield from dataset
 
         self.dataset.authorized = True
 

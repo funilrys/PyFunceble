@@ -1,7 +1,7 @@
 alembic
 colorama
-cryptography<3.4
-dnspython[DOH]~=2.0.0
+cryptography~=42.0
+dnspython[DOH]~=2.6.0
 domain2idna~=1.12.0
 inflection
 packaging
@@ -12,4 +12,4 @@ PyYAML
 requests<3
 setuptools>=65.5.1
 shtab
-SQLAlchemy~=1.4
+SQLAlchemy~=2.0

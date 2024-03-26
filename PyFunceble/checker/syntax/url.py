@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-
 import urllib.parse
 from typing import Optional
 

@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage

@@ -115,9 +115,9 @@ class WorkerBase(multiprocessing.Process):
         self.input_queue = self._params["input_queue"] = input_queue
         self.output_queue = self._params["output_queue"] = output_queue
 
-        self.continuous_integration = self._params[
-            "continuous_integration"
-        ] = continuous_integration
+        self.continuous_integration = self._params["continuous_integration"] = (
+            continuous_integration
+        )
 
         self.global_exit_event = self._params["global_exit_event"] = global_exit_event
         self.exit_it = multiprocessing.Event()

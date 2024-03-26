@@ -1182,7 +1182,7 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
 
         self.checker.try_to_query_status_from_http_status_code()
 
-        expected_subject = "mailto:hello@world.de"
+        expected_subject = "http://mailto:hello@world.de:80"
         actual_subject = self.checker.http_status_code_query_tool.subject
 
         self.assertEqual(expected_subject, actual_subject)

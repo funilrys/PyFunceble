@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-
 import unittest
 
 from PyFunceble.converter.rpz_policy2subject import RPZPolicy2Subject

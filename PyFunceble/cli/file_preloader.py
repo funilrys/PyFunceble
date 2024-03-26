@@ -481,9 +481,9 @@ class FilePreloader:
                 raise exception
 
         if not broken:
-            self.__description[self.__matching_index][
-                "previous_hash"
-            ] = self.__description[self.__matching_index]["hash"]
+            self.__description[self.__matching_index]["previous_hash"] = (
+                self.__description[self.__matching_index]["hash"]
+            )
 
         self.__save_description()
 
