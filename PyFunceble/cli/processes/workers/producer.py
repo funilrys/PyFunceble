@@ -399,6 +399,11 @@ class ProducerWorker(WorkerBase):
             )
             return None
 
+        if test_dataset["type"] == "platform-contribution":
+            self.collection_query_tool.deliver_contract(
+                test_dataset["contract"], test_result
+            )
+
         if (
             PyFunceble.storage.CONFIGURATION.collection.push
             and test_result.status_source != "COLLECTION"
