@@ -1234,6 +1234,7 @@ def platform_parser(
     add_arguments_to_parser(platform, args)
     add_arguments_to_parser(platform, get_default_group_data())
 
+
 def ask_authorization_to_merge_config(missing_key: Optional[str] = None) -> bool:
     """
     Asks the end-user for the authorization to merge the upstream
