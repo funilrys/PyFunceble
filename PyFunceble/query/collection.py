@@ -811,25 +811,36 @@ class CollectionQueryTool:
         if not self.token:
             return None
 
-        if isinstance(
-            data,
-            (AvailabilityCheckerStatus, SyntaxCheckerStatus, ReputationCheckerStatus),
-        ):
-            data = data.to_dict()
-
-        if not isinstance(data, dict):  # pragma: no cover ## Should never happen
-            raise TypeError(f"<data> should be {dict}, {type(data)} given.")
-
         PyFunceble.facility.Logger.info("Starting to submit WHOIS: %r", data)
 
         url = f"{self.url_base}/v1/status/whois"
 
         try:
-            response = self.session.post(
-                url,
-                json=data,
-                timeout=self.timeout,
-            )
+            if isinstance(data, dict):
+                response = self.session.post(
+                    url,
+                    json=data,
+                    timeout=self.timeout,
+                )
+            elif isinstance(
+                data,
+                (
+                    AvailabilityCheckerStatus,
+                    SyntaxCheckerStatus,
+                    ReputationCheckerStatus,
+                ),
+            ):
+                response = self.session.post(
+                    url,
+                    data=data.to_json(),
+                    timeout=self.timeout,
+                )
+            else:
+                response = self.session.post(
+                    url,
+                    data=data,
+                    timeout=self.timeout,
+                )
 
             response_json = response.json()
 
