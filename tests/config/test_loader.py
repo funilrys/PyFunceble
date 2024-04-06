@@ -522,9 +522,24 @@ class TestConfigLoader(unittest.TestCase):
         given = copy.deepcopy(self.our_config)
         given["cli_testing"]["testing_mode"]["platform_contribution"] = True
         given["cli_testing"]["file_generation"]["no_file"] = False
+        given["cli_testing"]["display_mode"]["dots"] = False
+        given["cli_testing"]["autocontinue"] = True
+        given["cli_testing"]["inactive_db"] = True
+        given["cli_testing"]["mining"] = True
+        given["cli_testing"]["local_network"] = True
+        given["cli_testing"]["preload_file"] = True
+        given["cli_testing"]["display_mode"]["percentage"] = True
 
         expected = copy.deepcopy(given)
         expected["cli_testing"]["file_generation"]["no_file"] = True
+        expected["cli_testing"]["file_generation"]["no_file"] = True
+        expected["cli_testing"]["display_mode"]["dots"] = True
+        expected["cli_testing"]["autocontinue"] = False
+        expected["cli_testing"]["inactive_db"] = False
+        expected["cli_testing"]["mining"] = False
+        expected["cli_testing"]["local_network"] = False
+        expected["cli_testing"]["preload_file"] = False
+        expected["cli_testing"]["display_mode"]["percentage"] = False
 
         actual = self.config_loader.conditional_switch(given)
 
