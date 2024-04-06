@@ -181,6 +181,14 @@ class ConfigLoader:
             # If we are under a special testing mode. We shouldn't generate
             # any files
             config["cli_testing"]["file_generation"]["no_file"] = True
+            config["cli_testing"]["display_mode"]["dots"] = True
+            config["cli_testing"]["autocontinue"] = False
+            config["cli_testing"]["inactive_db"] = False
+            config["cli_testing"]["mining"] = False
+            config["cli_testing"]["local_network"] = False
+            config["cli_testing"]["preload_file"] = False
+            config["cli_testing"]["display_mode"]["percentage"] = False
+
 
         return config
 
