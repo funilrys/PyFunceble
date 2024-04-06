@@ -337,15 +337,15 @@ class CollectionQueryTool:
         Try to guess the URL base to work with.
         """
 
-        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+        if EnvironmentVariableHelper("PYFUNCEBLE_COLLECTION_API_URL").exists():
+            self.url_base = EnvironmentVariableHelper(
+                "PYFUNCEBLE_COLLECTION_API_URL"
+            ).get_value()
+        elif PyFunceble.facility.ConfigLoader.is_already_loaded():
             if isinstance(PyFunceble.storage.CONFIGURATION.collection.url_base, str):
                 self.url_base = PyFunceble.storage.CONFIGURATION.collection.url_base
             else:
                 self.url_base = self.STD_URL_BASE
-        elif EnvironmentVariableHelper("PYFUNCEBLE_COLLECTION_API_URL").exists():
-            self.url_base = EnvironmentVariableHelper(
-                "PYFUNCEBLE_COLLECTION_API_URL"
-            ).get_value()
         else:
             self.url_base = self.STD_URL_BASE
 
