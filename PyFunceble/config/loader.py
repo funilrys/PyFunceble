@@ -189,7 +189,6 @@ class ConfigLoader:
             config["cli_testing"]["preload_file"] = False
             config["cli_testing"]["display_mode"]["percentage"] = False
 
-
         return config
 
     @staticmethod
