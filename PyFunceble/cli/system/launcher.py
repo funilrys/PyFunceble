@@ -696,7 +696,7 @@ class SystemLauncher(SystemBase):
 
                     self.ci_stop_in_the_middle_if_time_exceeded()
 
-                    if PyFunceble.storage.CONFIGURATION.display_mode.dots:
+                    if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots:
                         PyFunceble.cli.utils.stdout.print_single_line()
         return self
 
