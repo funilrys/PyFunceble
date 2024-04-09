@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -76,7 +76,6 @@ from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
 from PyFunceble.converter.url2netloc import Url2Netloc
-from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 from PyFunceble.query.http_status_code import HTTPStatusCode
 from PyFunceble.query.netinfo.address import AddressInfo
@@ -793,8 +792,21 @@ class AvailabilityCheckerBase(CheckerBase):
                         }
                     )
             else:
-                self.status.expiration_date = known_record["expiration_date"]
-                self.status.registrar = known_record["registrar"]
+                # We pass the known record to the lookup record - so that other
+                # methods can use it.
+                self.whois_query_tool.lookup_record.record = known_record.get(
+                    "record", None
+                )
+                self.whois_query_tool.lookup_record.expiration_date = known_record.get(
+                    "expiration_date", None
+                )
+                self.whois_query_tool.lookup_record.registrar = known_record.get(
+                    "registrar", None
+                )
+                self.status.whois_lookup_record = self.whois_query_tool.lookup_record
+
+                self.status.expiration_date = known_record.get("expiration_date", None)
+                self.status.registrar = known_record.get("registrar", None)
                 self.status.whois_record = None
         else:
             self.status.expiration_date = self.whois_query_tool.expiration_date
@@ -906,12 +918,7 @@ class AvailabilityCheckerBase(CheckerBase):
         if from_domain_test and self.status.url_syntax:
             return self
 
-        if not self.status.url_syntax and not RegexHelper("[^a-z0-9._]").match(
-            self.idna_subject, return_match=False
-        ):
-            # The regex is there because while testing for domain, sometime we
-            # may see something like mailto:xxx@yyy.de
-
+        if not self.status.url_syntax and not self.idna_subject.startswith("http"):
             self.http_status_code_query_tool.set_subject(
                 f"http://{self.idna_subject}:80"
             )
@@ -1036,7 +1043,13 @@ class AvailabilityCheckerBase(CheckerBase):
                 self.collection_query_tool.preferred_status_origin == "latest"
                 and data["status"]["availability"]["latest"]
             ):
-                self.status.status = data["status"]["availability"]["latest"]["status"]
+                try:
+                    # legacy
+                    self.status.status = data["status"]["availability"]["latest"][
+                        "status"
+                    ]
+                except KeyError:
+                    self.status.status = data["status"]["availability"]["latest"]
                 self.status.status_source = "COLLECTION"
             elif (
                 self.collection_query_tool.preferred_status_origin == "recommended"

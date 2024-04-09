@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,9 +51,7 @@ License:
 """
 
 import json
-import logging
-from datetime import datetime
-from typing import List, Optional, Union
+from typing import Generator, List, Optional, Union
 
 import requests
 import requests.exceptions
@@ -90,6 +88,7 @@ class CollectionQueryTool:
 
     STD_URL_BASE: str = "http://localhost:8001"
     STD_PREFERRED_STATUS_ORIGIN: str = "frequent"
+    STD_TIMEOUT: float = 5.0
 
     _token: Optional[str] = None
     """
@@ -106,6 +105,16 @@ class CollectionQueryTool:
     The preferred data origin
     """
 
+    _is_modern_api: Optional[bool] = None
+    """
+    Whether we are working with the modern or legacy API.
+    """
+
+    _timeout: float = 5.0
+    """
+    The timeout to use while communicating with the API.
+    """
+
     session: Optional[requests.Session] = None
 
     def __init__(
@@ -114,6 +123,7 @@ class CollectionQueryTool:
         token: Optional[str] = None,
         url_base: Optional[str] = None,
         preferred_status_origin: Optional[str] = None,
+        timeout: Optional[float] = None,
     ) -> None:
         if token is not None:
             self.token = token
@@ -132,10 +142,16 @@ class CollectionQueryTool:
         else:
             self.guess_and_set_preferred_status_origin()
 
+        if timeout is not None:
+            self.timeout = timeout
+        else:
+            self.guess_and_set_timeout()
+
         self.session = requests.Session()
         self.session.headers.update(
             {
                 "Authorization": f"Bearer {self.token}" if self.token else None,
+                "X-Pyfunceble-Version": PyFunceble.storage.PROJECT_VERSION,
                 "Content-Type": "application/json",
             }
         )
@@ -242,18 +258,118 @@ class CollectionQueryTool:
 
         return self
 
+    @property
+    def is_modern_api(self) -> bool:
+        """
+        Provides the value of the :code:`_is_modern_api` attribute.
+        """
+
+        return self._is_modern_api
+
+    @is_modern_api.setter
+    def is_modern_api(self, value: bool) -> None:
+        """
+        Sets the value of the :code:`_is_modern_api` attribute.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`bool`.
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._is_modern_api = value
+
+    def set_is_modern_api(self, value: bool) -> "CollectionQueryTool":
+        """
+        Sets the value of the :code:`_is_modern_api` attribute.
+
+        :param value:
+            The value to set.
+        """
+
+        self.is_modern_api = value
+
+        return self
+
+    @property
+    def timeout(self) -> float:
+        """
+        Provides the value of the :code:`_timeout` attribute.
+        """
+
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, value: float) -> None:
+        """
+        Sets the value of the :code:`_timeout` attribute.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`float`.
+        """
+
+        if not isinstance(value, (int, float)):
+            raise TypeError(f"<value> should be {float}, {type(value)} given.")
+
+        self._timeout = value
+
+    def set_timeout(self, value: float) -> "CollectionQueryTool":
+        """
+        Sets the value of the :code:`_timeout` attribute.
+
+        :param value:
+            The value to set.
+        """
+
+        self.timeout = value
+
+        return self
+
     def guess_and_set_url_base(self) -> "CollectionQueryTool":
         """
         Try to guess the URL base to work with.
         """
 
-        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+        if EnvironmentVariableHelper("PYFUNCEBLE_COLLECTION_API_URL").exists():
+            self.url_base = EnvironmentVariableHelper(
+                "PYFUNCEBLE_COLLECTION_API_URL"
+            ).get_value()
+        elif PyFunceble.facility.ConfigLoader.is_already_loaded():
             if isinstance(PyFunceble.storage.CONFIGURATION.collection.url_base, str):
                 self.url_base = PyFunceble.storage.CONFIGURATION.collection.url_base
             else:
                 self.url_base = self.STD_URL_BASE
         else:
             self.url_base = self.STD_URL_BASE
+
+        return self
+
+    def guess_and_set_is_modern_api(self) -> "CollectionQueryTool":
+        """
+        Try to guess if we are working with a legacy version.
+        """
+
+        if self.token:
+            try:
+                response = self.session.get(
+                    f"{self.url_base}/v1/stats/subject",
+                    timeout=self.timeout,
+                )
+
+                response.raise_for_status()
+
+                self.is_modern_api = False
+            except (requests.RequestException, json.decoder.JSONDecodeError):
+                self.is_modern_api = True
+        else:
+            self.is_modern_api = False
 
         return self
 
@@ -319,6 +435,33 @@ class CollectionQueryTool:
 
         return self
 
+    def guess_and_set_timeout(self) -> "CollectionQueryTool":
+        """
+        Try to guess the timeout to use.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            self.timeout = PyFunceble.storage.CONFIGURATION.lookup.timeout
+        else:
+            self.timeout = self.STD_TIMEOUT
+
+        return self
+
+    def ensure_modern_api(func):  # pylint: disable=no-self-argument
+        """
+        Ensures that the :code:`is_modern_api` attribute is set before running
+        the decorated method.
+        """
+
+        def wrapper(self, *args, **kwargs):
+            if self.is_modern_api is None:
+                self.guess_and_set_is_modern_api()
+
+            return func(self, *args, **kwargs)  # pylint: disable=not-callable
+
+        return wrapper
+
+    @ensure_modern_api
     def pull(self, subject: str) -> Optional[dict]:
         """
         Pulls all data related to the subject or :py:class:`None`
@@ -333,41 +476,157 @@ class CollectionQueryTool:
             The response of the search.
         """
 
-        logging.info("Starting to search subject: %r", subject)
+        PyFunceble.facility.Logger.info("Starting to search subject: %r", subject)
 
         if not isinstance(subject, str):
             raise TypeError(f"<subject> should be {str}, {type(subject)} given.")
 
-        url = f"{self.url_base}/v1/subject/search"
+        if self.is_modern_api:
+            if self.token:
+                url = f"{self.url_base}/v1/aggregation/subject/search"
+            else:
+                url = f"{self.url_base}/v1/hub/aggregation/subject/search"
+        else:
+            url = f"{self.url_base}/v1/subject/search"
 
         try:
             response = self.session.post(
                 url,
                 json={"subject": subject},
+                timeout=self.timeout,
             )
 
             response_json = response.json()
 
             if response.status_code == 200:
-                logging.debug(
+                PyFunceble.facility.Logger.debug(
                     "Successfully search subject: %r. Response: %r",
                     subject,
                     response_json,
                 )
 
-                logging.info("Finished to search subject: %r", subject)
+                PyFunceble.facility.Logger.info(
+                    "Finished to search subject: %r", subject
+                )
 
                 return response_json
         except (requests.RequestException, json.decoder.JSONDecodeError):
             response_json = {}
 
-        logging.debug(
+        PyFunceble.facility.Logger.debug(
             "Failed to search subject: %r. Response: %r", subject, response_json
         )
-        logging.info("Finished to search subject: %r", subject)
+        PyFunceble.facility.Logger.info("Finished to search subject: %r", subject)
 
         return None
 
+    @ensure_modern_api
+    def pull_contract(self, amount: int = 1) -> Generator[dict, None, None]:
+        """
+        Pulls the next amount of contracts.
+
+        :param int amount:
+            The amount of data to pull.
+
+        :return:
+            The response of the query.
+        """
+
+        PyFunceble.facility.Logger.info("Starting to pull next contract")
+
+        url = f"{self.url_base}/v1/contracts/next"
+        params = {
+            "limit": amount,
+            "shuffle": True,
+        }
+
+        try:
+            response = self.session.get(
+                url,
+                params=params,
+                timeout=self.timeout,
+            )
+
+            response_json = response.json()
+
+            if response.status_code == 200:
+                PyFunceble.facility.Logger.debug(
+                    "Successfully pulled next %r contracts. Response: %r", response_json
+                )
+
+                PyFunceble.facility.Logger.info("Finished to pull next contract")
+
+                yield response_json
+        except (requests.RequestException, json.decoder.JSONDecodeError):
+            response_json = [{"subject": {}}]
+
+        PyFunceble.facility.Logger.debug(
+            "Failed to pull next contract. Response: %r", response_json
+        )
+        PyFunceble.facility.Logger.info("Finished to pull next contracts")
+
+        yield response_json
+
+    @ensure_modern_api
+    def deliver_contract(self, contract: dict, contract_data: dict) -> Optional[dict]:
+        """
+        Delivers the given contract data.
+
+        :param contract:
+            The contract to deliver.
+        :param contract_data:
+            The data to deliver.
+
+        :return:
+            The response of the query.
+        """
+
+        PyFunceble.facility.Logger.info(
+            "Starting to deliver contract data: %r", contract
+        )
+
+        contract_id = contract["id"]
+        contract_data = (
+            contract_data.to_json()
+            if not isinstance(contract_data, dict)
+            else contract_data
+        )
+        url = f"{self.url_base}/v1/contracts/{contract_id}/delivery"
+
+        try:
+            response = self.session.post(
+                url,
+                data=contract_data.encode("utf-8"),
+                timeout=self.timeout,
+            )
+
+            response_json = response.json()
+
+            if response.status_code == 200:
+                PyFunceble.facility.Logger.debug(
+                    "Successfully delivered contract: %r. Response: %r",
+                    contract_data,
+                    response_json,
+                )
+
+                PyFunceble.facility.Logger.info(
+                    "Finished to deliver contract: %r", contract_data
+                )
+
+                return response_json
+        except (requests.RequestException, json.decoder.JSONDecodeError):
+            response_json = {}
+
+        PyFunceble.facility.Logger.debug(
+            "Failed to deliver contract: %r. Response: %r", contract_data, response_json
+        )
+        PyFunceble.facility.Logger.info(
+            "Finished to deliver contract: %r", contract_data
+        )
+
+        return None
+
+    @ensure_modern_api
     def push(
         self,
         checker_status: Union[
@@ -418,29 +677,15 @@ class CollectionQueryTool:
         if checker_status.subject == "":
             raise ValueError("<checker_status.subject> cannot be empty.")
 
-        status_to_subject = {
-            "status": checker_status.status,
-            "status_source": checker_status.status_source,
-            "tested_at": checker_status.tested_at.isoformat(),
-            "subject": checker_status.idna_subject,
-        }
-
         if (
-            hasattr(checker_status, "expiration_date")
+            not self.is_modern_api
+            and hasattr(checker_status, "expiration_date")
             and checker_status.expiration_date
         ):
-            self.__push_whois(
-                {
-                    "subject": checker_status.idna_subject,
-                    "expiration_date": datetime.strptime(
-                        checker_status.expiration_date, "%d-%b-%Y"
-                    ).isoformat(),
-                    "registrar": checker_status.registrar,
-                }
-            )
+            self.__push_whois(checker_status)
 
         data = self.__push_status(
-            checker_status.checker_type.lower(), status_to_subject
+            checker_status.checker_type.lower(), checker_status.to_json()
         )
 
         return data
@@ -462,7 +707,9 @@ class CollectionQueryTool:
 
         return self
 
-    def __push_status(self, checker_type: str, data: dict) -> Optional[dict]:
+    def __push_status(
+        self, checker_type: str, data: Union[dict, str]
+    ) -> Optional[dict]:
         """
         Submits the given status to the collection.
 
@@ -486,31 +733,60 @@ class CollectionQueryTool:
         if checker_type not in self.SUPPORTED_CHECKERS:
             raise ValueError(f"<checker_type> ({checker_type}) is not supported.")
 
-        logging.info("Starting to submit status: %r", data)
+        PyFunceble.facility.Logger.info("Starting to submit status: %r", data)
 
-        url = f"{self.url_base}/v1/status/{checker_type}"
+        if self.is_modern_api:
+            if not self.token:
+                url = f"{self.url_base}/v1/hub/status/{checker_type}"
+            else:
+                url = f"{self.url_base}/v1/contracts/self-delivery"
+        else:
+            url = f"{self.url_base}/v1/status/{checker_type}"
 
         try:
-            response = self.session.post(
-                url,
-                json=data,
-            )
+            if isinstance(data, dict):
+                response = self.session.post(
+                    url,
+                    json=data,
+                    timeout=self.timeout,
+                )
+            elif isinstance(
+                data,
+                (
+                    AvailabilityCheckerStatus,
+                    SyntaxCheckerStatus,
+                    ReputationCheckerStatus,
+                ),
+            ):
+                response = self.session.post(
+                    url,
+                    json=data.to_dict(),
+                    timeout=self.timeout,
+                )
+            else:
+                response = self.session.post(
+                    url,
+                    data=data,
+                    timeout=self.timeout,
+                )
 
             response_json = response.json()
 
             if response.status_code == 200:
-                logging.debug("Successfully submitted data: %r to %s", data, url)
+                PyFunceble.facility.Logger.debug(
+                    "Successfully submitted data: %r to %s", data, url
+                )
 
-                logging.info("Finished to submit status: %r", data)
+                PyFunceble.facility.Logger.info("Finished to submit status: %r", data)
                 return response_json
         except (requests.RequestException, json.decoder.JSONDecodeError):
             response_json = {}
 
-        logging.debug(
+        PyFunceble.facility.Logger.debug(
             "Failed to submit data: %r to %s. Response: %r", data, url, response_json
         )
 
-        logging.info("Finished to submit status: %r", data)
+        PyFunceble.facility.Logger.info("Finished to submit status: %r", data)
 
         return None
 
@@ -535,32 +811,52 @@ class CollectionQueryTool:
         if not self.token:
             return None
 
-        if not isinstance(data, dict):  # pragma: no cover ## Should never happen
-            raise TypeError(f"<data> should be {dict}, {type(data)} given.")
-
-        logging.info("Starting to submit WHOIS: %r", data)
+        PyFunceble.facility.Logger.info("Starting to submit WHOIS: %r", data)
 
         url = f"{self.url_base}/v1/status/whois"
 
         try:
-            response = self.session.post(
-                url,
-                json=data,
-            )
+            if isinstance(data, dict):
+                response = self.session.post(
+                    url,
+                    json=data,
+                    timeout=self.timeout,
+                )
+            elif isinstance(
+                data,
+                (
+                    AvailabilityCheckerStatus,
+                    SyntaxCheckerStatus,
+                    ReputationCheckerStatus,
+                ),
+            ):
+                response = self.session.post(
+                    url,
+                    data=data.to_json(),
+                    timeout=self.timeout,
+                )
+            else:
+                response = self.session.post(
+                    url,
+                    data=data,
+                    timeout=self.timeout,
+                )
 
             response_json = response.json()
 
             if response.status_code == 200:
-                logging.debug("Successfully submitted WHOIS data: %r to %s", data, url)
+                PyFunceble.facility.Logger.debug(
+                    "Successfully submitted WHOIS data: %r to %s", data, url
+                )
 
-                logging.info("Finished to submit WHOIS: %r", data)
+                PyFunceble.facility.Logger.info("Finished to submit WHOIS: %r", data)
                 return response_json
         except (requests.RequestException, json.decoder.JSONDecodeError):
             response_json = {}
 
-        logging.debug(
+        PyFunceble.facility.Logger.debug(
             "Failed to WHOIS data: %r to %s. Response: %r", data, url, response_json
         )
 
-        logging.info("Finished to submit WHOIS: %r", data)
+        PyFunceble.facility.Logger.info("Finished to submit WHOIS: %r", data)
         return None

@@ -5,6 +5,7 @@ Revises: ade87195b0a0
 Create Date: 2020-08-21 11:42:07.044762
 
 """
+
 from alembic import op
 from sqlalchemy.exc import OperationalError
 

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -65,8 +65,12 @@ class SecondLvlDomainSyntaxChecker(DomainSyntaxCheckerBase):
     """
 
     # pylint: disable=line-too-long
-    REGEX_VALID_DOMAIN: str = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9](?:\.)?|[a-z0-9](?:\.)?))$"
-    REGEX_VALID_RELAXED_DOMAIN: str = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9_-]{0,61}[a-z0-9_-]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9](?:\.)?|[a-z0-9](?:\.)?))$"
+    REGEX_VALID_DOMAIN: str = (
+        r"^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9](?:\.)?|[a-z0-9](?:\.)?))$"
+    )
+    REGEX_VALID_RELAXED_DOMAIN: str = (
+        r"^(?=.{0,253}$)(([a-z0-9][a-z0-9_-]{0,61}[a-z0-9_-]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9](?:\.)?|[a-z0-9](?:\.)?))$"
+    )
 
     last_point_index: Optional[int] = None
     """

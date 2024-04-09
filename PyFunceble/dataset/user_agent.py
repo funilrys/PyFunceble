@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,7 +51,9 @@ License:
 """
 
 import os
+import secrets
 from typing import Any
+from warnings import warn
 
 import PyFunceble.storage
 from PyFunceble.dataset.base import DatasetBase
@@ -66,8 +68,8 @@ class UserAgentDataset(DatasetBase):
     STORAGE_INDEX: str = "USER_AGENTS"
     DOWNLOADER: UserAgentsDownloader = UserAgentsDownloader()
 
-    prefered_browser: str = "chrome"
-    prefered_platform: str = "linux"
+    preferred_browser: str = "chrome"
+    preferred_platform: str = "linux"
 
     def __init__(self) -> None:
         self.source_file = os.path.join(
@@ -76,10 +78,18 @@ class UserAgentDataset(DatasetBase):
         )
 
     def __contains__(self, value: Any) -> bool:
+        content = self.get_content()
+
+        if "@modern" in content:
+            return value in self.get_content()["@modern"]
         return value in self.get_content()
 
     def __getattr__(self, value: Any) -> dict:
         if value in self:
+            content = self.get_content()
+
+            if "@modern" in content:
+                return self.get_content()["@modern"][value]
             return self.get_content()[value]
 
         return dict()  # pylint: disable=use-dict-literal
@@ -87,11 +97,11 @@ class UserAgentDataset(DatasetBase):
     def __getitem__(self, value: Any) -> dict:
         return self.__getattr__(value)
 
-    def set_prefered(
+    def set_preferred(
         self, browser_short_name: str, platform: str
     ) -> "UserAgentDataset":
         """
-        Sets the prefered browser to work with.
+        Sets the preferred browser to work with.
 
         :param browser_short_name:
             The name of the browser to select.
@@ -110,10 +120,37 @@ class UserAgentDataset(DatasetBase):
                 f"({platform!r}) is not supported."
             )
 
-        self.prefered_browser = browser_short_name.lower()
-        self.prefered_platform = platform.lower()
+        self.preferred_browser = browser_short_name.lower()
+        self.preferred_platform = platform.lower()
 
         return self
+
+    # @deprecated("TODO: Soon we should be able to do this...")
+    def set_prefered(
+        self, browser_short_name: str, platform: str
+    ) -> "UserAgentDataset":
+        """
+        Sets the preferred browser to work with.
+
+        :param browser_short_name:
+            The name of the browser to select.
+        :pram platform:
+            The name of the platform to select.
+
+        :raise TypeError:
+            When the given :code:`name` is not a :py:class:`str`.
+        :raise ValueError:
+            When the given :code:`value` is not supported.
+        """
+
+        warn(
+            "The set_prefered() method is deprecated and will be removed in future "
+            " releases. Please consider using the set_preferred() method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        return self.set_preferred(browser_short_name, platform)
 
     def is_supported_browser(self, browser_short_name: str) -> bool:
         """
@@ -178,9 +215,14 @@ class UserAgentDataset(DatasetBase):
             ):
                 return PyFunceble.storage.CONFIGURATION.user_agent.custom
 
-            self.set_prefered(
+            self.set_preferred(
                 PyFunceble.storage.CONFIGURATION.user_agent.browser,
                 PyFunceble.storage.CONFIGURATION.user_agent.platform,
             )
 
-        return self[self.prefered_browser][self.prefered_platform]
+        result = self[self.preferred_browser][self.preferred_platform]
+
+        if isinstance(result, (list, tuple)):
+            return secrets.choice(result)
+
+        return result

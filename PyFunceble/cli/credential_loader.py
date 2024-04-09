@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -266,9 +266,9 @@ class CredentialLoader:
             # We directly share the credential object into the DBSession object.
             # This will let us use the DBSession without having to think about
             # any other headache.
-            self.credential = (
-                PyFunceble.cli.factory.DBSession.credential
-            ) = self.DB_TYPE2OBJ[self.db_type]()
+            self.credential = PyFunceble.cli.factory.DBSession.credential = (
+                self.DB_TYPE2OBJ[self.db_type]()
+            )
 
             env_var_helper = EnvironmentVariableHelper(
                 env_file_path=self.credential.get_dot_env_file()

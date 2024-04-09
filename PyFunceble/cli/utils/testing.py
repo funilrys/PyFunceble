@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -232,9 +232,7 @@ def get_subjects_from_line(
     if cidr2subject is None:
         cidr2subject = CIDR2Subject()
 
-    adblock_inputline2subject.aggressive = (
-        wildcard2subject.aggressive
-    ) = (
+    adblock_inputline2subject.aggressive = wildcard2subject.aggressive = (
         rpz_inputline2subject.aggressive
     ) = inputline2subject.aggressive = url2netloc.aggressive = bool(
         PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive

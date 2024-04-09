@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -113,12 +113,12 @@ class RequestHTTPSAdapter(RequestAdapterBase):
                 )
 
             if parsed_url.scheme == "https":
-                self.poolmanager.connection_pool_kw[
-                    "server_hostname"
-                ] = parsed_url.hostname
-                self.poolmanager.connection_pool_kw[
-                    "assert_hostname"
-                ] = parsed_url.hostname
+                self.poolmanager.connection_pool_kw["server_hostname"] = (
+                    parsed_url.hostname
+                )
+                self.poolmanager.connection_pool_kw["assert_hostname"] = (
+                    parsed_url.hostname
+                )
 
             # Ensure that the Hosts header is present. Otherwise, connection might
             # not work.

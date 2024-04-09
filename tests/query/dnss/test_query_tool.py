@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-
 import dataclasses
 import secrets
 import socket

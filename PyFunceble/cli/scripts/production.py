@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,7 +49,6 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
 
 import copy
 import functools
@@ -516,9 +515,9 @@ class ProductionPrep:
             if to_append not in self.version_file_content["deprecated"]:
                 self.version_file_content["deprecated"].append(to_append)
 
-        self.version_file_content[
-            "current_version"
-        ] = PyFunceble.storage.PROJECT_VERSION
+        self.version_file_content["current_version"] = (
+            PyFunceble.storage.PROJECT_VERSION
+        )
 
         self.dict_helper.set_subject(self.version_file_content).to_yaml_file(
             self.VERSION_FILE_PATH

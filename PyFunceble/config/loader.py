@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -171,6 +171,23 @@ class ConfigLoader:
         ):
             # If timeout is set to a negative digit, switch to the default one.
             config["lookup"]["timeout"] = 5
+
+        if (
+            "cli_testing" in config
+            and "testing_mode" in config["cli_testing"]
+            and "platform_contribution" in config["cli_testing"]["testing_mode"]
+            and config["cli_testing"]["testing_mode"]["platform_contribution"]
+        ):
+            # If we are under a special testing mode. We shouldn't generate
+            # any files
+            config["cli_testing"]["file_generation"]["no_file"] = True
+            config["cli_testing"]["display_mode"]["dots"] = True
+            config["cli_testing"]["autocontinue"] = False
+            config["cli_testing"]["inactive_db"] = False
+            config["cli_testing"]["mining"] = False
+            config["cli_testing"]["local_network"] = False
+            config["cli_testing"]["preload_file"] = False
+            config["cli_testing"]["display_mode"]["percentage"] = False
 
         return config
 

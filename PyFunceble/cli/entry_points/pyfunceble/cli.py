@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -69,7 +69,9 @@ from PyFunceble.cli.system.launcher import SystemLauncher
 from PyFunceble.helpers.regex import RegexHelper
 
 
-def get_configured_value(entry: str, *, negate=False) -> Any:
+def get_configured_value(
+    entry: str, *, negate: bool = False, value_only: bool = False
+) -> Any:
     """
     Provides the currently configured value.
 
@@ -80,6 +82,9 @@ def get_configured_value(entry: str, *, negate=False) -> Any:
 
     :param negate:
         Allows us to negate the result from the configuration.
+
+    :param value_only:
+        Whether we should only return the value or the full message.
 
     :raise ValueError:
         When the given :code:`entry` is not found.
@@ -102,10 +107,14 @@ def get_configured_value(entry: str, *, negate=False) -> Any:
         result = not result
 
     return (
-        f"\n{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
-        f"Configured value: {colorama.Fore.BLUE}"
-        f"{result!r}"
-        f"{colorama.Style.RESET_ALL}"
+        (
+            f"\n{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
+            f"Configured value: {colorama.Fore.BLUE}"
+            f"{result!r}"
+            f"{colorama.Style.RESET_ALL}"
+        )
+        if not value_only
+        else result
     )
 
 
@@ -121,6 +130,12 @@ def add_arguments_to_parser(
     for pos_args, opt_args in arguments:
         if "dest" in opt_args:
             opt_args["dest"] = opt_args["dest"].replace(".", "__")
+
+        for index, value in enumerate(pos_args):
+            if value.startswith("-") and "." not in value:
+                continue
+
+            pos_args[index] = value.replace(".", "__")
 
         parser.add_argument(*pos_args, **opt_args)
 
@@ -1184,6 +1199,42 @@ def get_default_group_data() -> List[Tuple[List[str], dict]]:
     ]
 
 
+def platform_parser(
+    parser: Union[argparse.ArgumentParser, argparse._SubParsersAction]
+) -> None:
+    """
+    Adds the platform group to the given parser.
+    """
+
+    platform = parser.add_parser(
+        "platform",
+        add_help=False,
+        epilog=PyFunceble.cli.storage.STD_EPILOG,
+    )
+
+    args = [
+        (
+            ["cli_testing.testing_mode.platform_contribution"],
+            {
+                "default": get_configured_value(
+                    "cli_testing.testing_mode.platform_contribution", value_only=True
+                ),
+                "action": "store_%s"
+                % str(
+                    not get_configured_value(
+                        "cli_testing.testing_mode.platform_contribution",
+                        value_only=True,
+                    )
+                ).lower(),
+                "help": argparse.SUPPRESS,
+            },
+        )
+    ]
+
+    add_arguments_to_parser(platform, args)
+    add_arguments_to_parser(platform, get_default_group_data())
+
+
 def ask_authorization_to_merge_config(missing_key: Optional[str] = None) -> bool:
     """
     Asks the end-user for the authorization to merge the upstream
@@ -1292,6 +1343,8 @@ def tool() -> None:
 
     # pylint:  disable=possibly-unused-variable
 
+    command_sub = parser.add_subparsers(dest="command", help=argparse.SUPPRESS)
+
     shtab.add_argument_to(
         parser,
         option_string=["--show-completion"],
@@ -1321,6 +1374,8 @@ def tool() -> None:
         get_ci_group_data,
     ]
 
+    parse_funcs = [platform_parser]
+
     for func in funcs:
         parser_name = func.__name__.replace("get_", "").replace("_data", "")
 
@@ -1348,10 +1403,21 @@ def tool() -> None:
                 )
                 sys.exit(1)
 
+    for func in parse_funcs:
+        func(command_sub)
+
     add_arguments_to_parser(parser, get_default_group_data())
 
     args = parser.parse_args()
 
-    if any(getattr(args, x) for x in ["domains", "urls", "files", "url_files"]):
+    if any(
+        getattr(args, x)
+        for x in [
+            "domains",
+            "urls",
+            "files",
+            "url_files",
+        ]
+    ) or bool(args.command):
         SystemIntegrator(args).start()
         SystemLauncher(args).start()

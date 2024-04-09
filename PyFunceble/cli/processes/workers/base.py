@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -115,9 +115,9 @@ class WorkerBase(multiprocessing.Process):
         self.input_queue = self._params["input_queue"] = input_queue
         self.output_queue = self._params["output_queue"] = output_queue
 
-        self.continuous_integration = self._params[
-            "continuous_integration"
-        ] = continuous_integration
+        self.continuous_integration = self._params["continuous_integration"] = (
+            continuous_integration
+        )
 
         self.global_exit_event = self._params["global_exit_event"] = global_exit_event
         self.exit_it = multiprocessing.Event()
@@ -318,8 +318,10 @@ class WorkerBase(multiprocessing.Process):
 
                 try:
                     worker_name, destination_worker, consumed = self.input_queue.get()
-                except EOFError:
-                    PyFunceble.facility.Logger.info("Got EOFError. Stopping worker.")
+                except (EOFError, KeyboardInterrupt):
+                    PyFunceble.facility.Logger.info(
+                        "Got EOFError/KeyboardInterrupt. Stopping worker."
+                    )
                     self.global_exit_event.set()
                     break
 
@@ -370,7 +372,14 @@ class WorkerBase(multiprocessing.Process):
                     self.share_waiting_message(apply_breakoff=wait_for_stop)
                     continue
 
-                result = self.target(consumed)
+                try:
+                    result = self.target(consumed)
+                except (EOFError, KeyboardInterrupt):
+                    PyFunceble.facility.Logger.info(
+                        "Got EOFError/KeyboardInterrupt. Stopping worker."
+                    )
+                    self.global_exit_event.set()
+                    break
 
                 if result is not None:
                     self.add_to_output_queue(result)

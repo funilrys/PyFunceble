@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,7 +49,6 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
 
 import functools
 import socket
@@ -423,7 +422,7 @@ class ExtraRuleHandlerBase:
         of the given one.
         """
 
-        if not isinstance(status_code, (list, tuple)):
+        if not isinstance(status_code, (list, tuple, set)):
             status_code = [status_code]
 
         if any(self.status.http_status_code == x for x in status_code):

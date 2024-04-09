@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -119,6 +119,7 @@ from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.helpers.download import DownloadHelper
 from PyFunceble.helpers.file import FileHelper
+from PyFunceble.query.collection import CollectionQueryTool
 
 
 class SystemLauncher(SystemBase):
@@ -222,7 +223,7 @@ class SystemLauncher(SystemBase):
             )
             self.producer_process_manager = ChancyProducerProcessesManager(
                 self.manager,
-                max_worker=1,
+                max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
                 continuous_integration=self.continuous_integration,
                 input_queue=self.tester_process_manager.output_queue[0],
                 daemon=True,
@@ -405,6 +406,21 @@ class SystemLauncher(SystemBase):
                 PyFunceble.facility.Logger.debug(
                     "Added to the protocol:\n%r", to_append
                 )
+
+        # pylint: disable=line-too-long
+        if (
+            PyFunceble.storage.CONFIGURATION.cli_testing.testing_mode.platform_contribution
+        ):
+            self.testing_protocol.append(
+                {
+                    "type": "platform-contribution",
+                    "subject_type": "any",
+                    "destination": None,
+                    "checker_type": None,
+                    "output_dir": None,
+                    "session_id": None,
+                }
+            )
 
     def ci_stop_in_the_middle_if_time_exceeded(self) -> "SystemLauncher":
         """
@@ -648,7 +664,40 @@ class SystemLauncher(SystemBase):
                     )
             elif protocol["type"] == "file":
                 handle_file(protocol)
+            elif protocol["type"] == "platform-contribution":
+                query_tool = CollectionQueryTool()
 
+                while True:
+                    for next_contract in next(
+                        query_tool.pull_contract(
+                            PyFunceble.storage.CONFIGURATION.cli_testing.max_workers
+                        )
+                    ):
+                        if (
+                            "subject" not in next_contract
+                            or not next_contract["subject"]
+                        ):
+                            continue
+
+                        protocol_data = copy.deepcopy(protocol)
+
+                        protocol_data["checker_type"] = next_contract[
+                            "checker_type"
+                        ].upper()
+                        protocol_data["subject_type"] = next_contract["subject_type"]
+                        protocol_data["subject"] = protocol_data["idna_subject"] = (
+                            next_contract["subject"]["subject"]
+                        )
+                        protocol_data["contract"] = copy.deepcopy(next_contract)
+
+                        self.tester_process_manager.add_to_input_queue(
+                            protocol_data, worker_name="main"
+                        )
+
+                    self.ci_stop_in_the_middle_if_time_exceeded()
+
+                    if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots:
+                        PyFunceble.cli.utils.stdout.print_single_line()
         return self
 
     def generate_waiting_files(self) -> "SystemLauncher":

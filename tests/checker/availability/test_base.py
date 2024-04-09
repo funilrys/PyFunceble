@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -1182,7 +1182,7 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
 
         self.checker.try_to_query_status_from_http_status_code()
 
-        expected_subject = "mailto:hello@world.de"
+        expected_subject = "http://mailto:hello@world.de:80"
         actual_subject = self.checker.http_status_code_query_tool.subject
 
         self.assertEqual(expected_subject, actual_subject)

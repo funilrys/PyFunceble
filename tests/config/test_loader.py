@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -505,6 +505,41 @@ class TestConfigLoader(unittest.TestCase):
 
         expected = copy.deepcopy(given)
         expected["lookup"]["timeout"] = 5
+
+        actual = self.config_loader.conditional_switch(given)
+
+        self.assertEqual(expected, actual)
+
+    def test_conditional_switch_platform_testing_mode(self) -> None:
+        """
+        Tests the method which let us switch some of our values based on
+        some assumption.
+
+        In this test, we check that no files is being generated if we
+        are under such testing mode.
+        """
+
+        given = copy.deepcopy(self.our_config)
+        given["cli_testing"]["testing_mode"]["platform_contribution"] = True
+        given["cli_testing"]["file_generation"]["no_file"] = False
+        given["cli_testing"]["display_mode"]["dots"] = False
+        given["cli_testing"]["autocontinue"] = True
+        given["cli_testing"]["inactive_db"] = True
+        given["cli_testing"]["mining"] = True
+        given["cli_testing"]["local_network"] = True
+        given["cli_testing"]["preload_file"] = True
+        given["cli_testing"]["display_mode"]["percentage"] = True
+
+        expected = copy.deepcopy(given)
+        expected["cli_testing"]["file_generation"]["no_file"] = True
+        expected["cli_testing"]["file_generation"]["no_file"] = True
+        expected["cli_testing"]["display_mode"]["dots"] = True
+        expected["cli_testing"]["autocontinue"] = False
+        expected["cli_testing"]["inactive_db"] = False
+        expected["cli_testing"]["mining"] = False
+        expected["cli_testing"]["local_network"] = False
+        expected["cli_testing"]["preload_file"] = False
+        expected["cli_testing"]["display_mode"]["percentage"] = False
 
         actual = self.config_loader.conditional_switch(given)
 
