@@ -81,7 +81,7 @@ jobs:
 
   test:
     needs: [lint, deps_safety_check]
-    name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Test PyFunceble with Python ${{ matrix.python_version }}"
+    name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Test PyFunceble"
 
     runs-on: "${{ matrix.os }}"
 
@@ -149,7 +149,7 @@ jobs:
 
   run_cli:
     needs: test
-    name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Run PyFunceble with Python ${{ matrix.python_version }}"
+    name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Run PyFunceble"
 
     runs-on: "${{ matrix.os }}"
 
@@ -187,7 +187,7 @@ jobs:
 
   run_cli_mariadb:
     needs: test
-    name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Run PyFunceble (with mariadb) with Python ${{ matrix.python_version }}"
+    name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Run PyFunceble (with mariadb)"
 
     runs-on: "${{ matrix.os }}"
 
@@ -243,7 +243,7 @@ jobs:
 
   run_cli_postgresql:
     needs: test
-    name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Run PyFunceble (with postgresql) with Python ${{ matrix.python_version }}"
+    name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Run PyFunceble (with postgresql)"
 
     runs-on: "${{ matrix.os }}"
 
