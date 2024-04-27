@@ -77,7 +77,7 @@ jobs:
 
   test:
     needs: [lint, deps_safety_check]
-    name: "[${{ matrix.os }}] Test PyFunceble with Python ${{ matrix.python_version }}"
+    name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Test PyFunceble"
 
     runs-on: "${{ matrix.os }}"
 
