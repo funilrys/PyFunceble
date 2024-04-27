@@ -85,7 +85,6 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.2"
           - "3.9"
           - "3.10"
           - "3.11"

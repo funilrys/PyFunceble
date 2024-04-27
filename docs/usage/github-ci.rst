@@ -34,7 +34,7 @@ Example of how you can run PyFunceble inside Github Actions.
         fail-fast: false
         matrix:
             python_version:
-            - "3.9.1"
+            - "3.11"
             os:
             - ubuntu-latest
 
@@ -69,7 +69,7 @@ Example of how you can run PyFunceble inside Github Actions.
         fail-fast: false
         matrix:
             python_version:
-            - "3.9.1"
+            - "3.11"
             os:
             - ubuntu-latest
 
