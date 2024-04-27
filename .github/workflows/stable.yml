@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.11"
+          - "3.12"
         os:
           - ubuntu-latest
 
@@ -53,7 +53,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.11"
+          - "3.12"
         os:
           - ubuntu-latest
 
@@ -85,10 +85,10 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
         os:
           - ubuntu-latest
           - macos-latest
@@ -131,7 +131,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.11"
+          - "3.12"
         os:
           - ubuntu-latest
 
@@ -154,7 +154,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.11"
+          - "3.12"
         os:
           - ubuntu-latest
 
@@ -198,13 +198,13 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.11"
+          - "3.12"
         os:
           - ubuntu-latest
 
     env:
       DOCKER_PYTHON_VERSION: "3.11"
-      BUILDER_CLONE_DIRNAME: pyfunceble_docker
+      BUILDER_CLONE_DIRNAM2: pyfunceble_docker
       OUR_DOCKER_USERNAME: ${{ secrets.OUR_DOCKER_USERNAME }}
       OUR_DOCKER_PASSWORD: ${{ secrets.OUR_DOCKER_PASSWORD }}
       OUR_DOCKER_EMAIL: ${{ secrets.OUR_DOCKER_EMAIL }}
