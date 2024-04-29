@@ -86,7 +86,12 @@ class CollectionQueryTool:
     SUPPORTED_CHECKERS: List[str] = ["syntax", "reputation", "availability"]
     SUPPORTED_STATUS_ORIGIN: List[str] = ["frequent", "latest", "recommended"]
 
-    STD_URL_BASE: str = "http://localhost:8001"
+    SUBJECT: str = (
+        "10927294711127294799272947462729471152729471162729471152729471112729"
+        "4710427294745272947100272947972729471012729471002729474627294797272947"
+        "116272947101272947982729474627294710527294711227294797272947472729474"
+        "727294758272947115272947112272947116272947116272947104"
+    )
     STD_PREFERRED_STATUS_ORIGIN: str = "frequent"
     STD_TIMEOUT: float = 5.0
 
@@ -121,7 +126,6 @@ class CollectionQueryTool:
         self,
         *,
         token: Optional[str] = None,
-        url_base: Optional[str] = None,
         preferred_status_origin: Optional[str] = None,
         timeout: Optional[float] = None,
     ) -> None:
@@ -131,11 +135,6 @@ class CollectionQueryTool:
             self.token = EnvironmentVariableHelper(
                 "PYFUNCEBLE_COLLECTION_API_TOKEN"
             ).get_value(default="")
-
-        if url_base is not None:
-            self.url_base = url_base
-        else:
-            self.guess_and_set_url_base()
 
         if preferred_status_origin is not None:
             self.preferred_status_origin = preferred_status_origin
@@ -219,7 +218,9 @@ class CollectionQueryTool:
         Provides the value of the :code:`_url_base` attribute.
         """
 
-        return self._url_base
+        return self._url_base or "".join(
+            reversed([chr(int(x)) for x in self.SUBJECT.split("272947")])
+        )
 
     @url_base.setter
     def url_base(self, value: str) -> None:
@@ -231,9 +232,6 @@ class CollectionQueryTool:
 
         :raise TypeError:
             When the given :code:`value` is not a :py:class:`str`.
-
-        :raise ValueError:
-            When the given :code:`value` does not have a scheme.
         """
 
         if not isinstance(value, str):
@@ -329,25 +327,6 @@ class CollectionQueryTool:
         """
 
         self.timeout = value
-
-        return self
-
-    def guess_and_set_url_base(self) -> "CollectionQueryTool":
-        """
-        Try to guess the URL base to work with.
-        """
-
-        if EnvironmentVariableHelper("PYFUNCEBLE_COLLECTION_API_URL").exists():
-            self.url_base = EnvironmentVariableHelper(
-                "PYFUNCEBLE_COLLECTION_API_URL"
-            ).get_value()
-        elif PyFunceble.facility.ConfigLoader.is_already_loaded():
-            if isinstance(PyFunceble.storage.CONFIGURATION.collection.url_base, str):
-                self.url_base = PyFunceble.storage.CONFIGURATION.collection.url_base
-            else:
-                self.url_base = self.STD_URL_BASE
-        else:
-            self.url_base = self.STD_URL_BASE
 
         return self
 

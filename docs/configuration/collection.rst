@@ -6,15 +6,6 @@
     **Description:** Configures everything related to the interaction with the
     collection API.
 
-:code:`collection[url_base]`
-""""""""""""""""""""""""""""
-
-    **Type:** :code:`str`
-
-    **Default value:** :code:`http://localhost:8080`
-
-    **Description:** Sets the base URL of the collection API.
-
 :code:`collection[push]`
 """"""""""""""""""""""""
 
