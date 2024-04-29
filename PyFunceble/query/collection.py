@@ -544,7 +544,7 @@ class CollectionQueryTool:
             response = self.session.get(
                 url,
                 params=params,
-                timeout=self.timeout,
+                timeout=self.timeout * 10,
             )
 
             response_json = response.json()
@@ -597,7 +597,7 @@ class CollectionQueryTool:
             response = self.session.post(
                 url,
                 data=contract_data.encode("utf-8"),
-                timeout=self.timeout,
+                timeout=self.timeout * 10,
             )
 
             response_json = response.json()
@@ -748,7 +748,7 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     json=data,
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
             elif isinstance(
                 data,
@@ -761,13 +761,13 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     json=data.to_dict(),
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
             else:
                 response = self.session.post(
                     url,
                     data=data,
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
 
             response_json = response.json()
@@ -820,7 +820,7 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     json=data,
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
             elif isinstance(
                 data,
@@ -833,13 +833,13 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     data=data.to_json(),
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
             else:
                 response = self.session.post(
                     url,
                     data=data,
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
 
             response_json = response.json()
