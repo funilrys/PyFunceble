@@ -1040,8 +1040,8 @@ def get_multiprocessing_group_data() -> List[Tuple[List[str], dict]]:
 
     available_cpu = os.cpu_count()
 
-    if available_cpu:
-        default_max_workers = available_cpu * 5
+    if available_cpu is not None and available_cpu > 2:
+        default_max_workers = available_cpu - 2
     else:
         default_max_workers = 1
 
@@ -1054,6 +1054,7 @@ def get_multiprocessing_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.max_workers",
                 "type": int,
+                "default": default_max_workers,
                 "help": "Sets the number of maximal workers to use.\n"
                 f"If not given, {default_max_workers} "
                 "(based on the current machine) will be applied. %s"
