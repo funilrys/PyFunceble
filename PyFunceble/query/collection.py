@@ -146,6 +146,10 @@ class CollectionQueryTool:
         else:
             self.guess_and_set_timeout()
 
+        self._url_base = EnvironmentVariableHelper(
+            "PYFUNCEBLE_COLLECTION_API_URL"
+        ).get_value(default=None)
+
         self.session = requests.Session()
         self.session.headers.update(
             {
