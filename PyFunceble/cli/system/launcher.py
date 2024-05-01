@@ -60,6 +60,7 @@ import multiprocessing
 import os
 import secrets
 import sys
+import time
 import traceback
 from typing import List, Optional, Union
 
@@ -636,6 +637,59 @@ class SystemLauncher(SystemBase):
                 {"directory": protocol["output_dir"]}
             )
 
+        def handle_platform_contribution() -> None:
+            """
+            Assuming that we are testing a platform contribution, proceed with the
+            testing.
+            """
+
+            query_tool = CollectionQueryTool()
+
+            max_breakoff = 120.0
+            breakoff_multiplier = 0.5
+
+            initial_breakoff = (
+                PyFunceble.storage.CONFIGURATION.cli_testing.max_workers
+                * breakoff_multiplier
+            )
+            breakoff = initial_breakoff
+
+            while True:
+                for next_contract in next(
+                    query_tool.pull_contract(
+                        PyFunceble.storage.CONFIGURATION.cli_testing.max_workers
+                    )
+                ):
+                    if "subject" not in next_contract or not next_contract["subject"]:
+                        continue
+
+                    protocol_data = copy.deepcopy(protocol)
+
+                    protocol_data["checker_type"] = next_contract[
+                        "checker_type"
+                    ].upper()
+                    protocol_data["subject_type"] = next_contract["subject_type"]
+                    protocol_data["subject"] = protocol_data["idna_subject"] = (
+                        next_contract["subject"]["subject"]
+                    )
+                    protocol_data["contract"] = copy.deepcopy(next_contract)
+
+                    self.tester_process_manager.add_to_input_queue(
+                        protocol_data, worker_name="main"
+                    )
+
+                self.ci_stop_in_the_middle_if_time_exceeded()
+
+                if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots:
+                    PyFunceble.cli.utils.stdout.print_single_line("S")
+
+                time.sleep(breakoff)
+
+                if breakoff < max_breakoff:
+                    breakoff += 0.02
+                else:
+                    breakoff = initial_breakoff
+
         for protocol in self.testing_protocol:
             self.ci_stop_in_the_middle_if_time_exceeded()
 
@@ -665,39 +719,7 @@ class SystemLauncher(SystemBase):
             elif protocol["type"] == "file":
                 handle_file(protocol)
             elif protocol["type"] == "platform-contribution":
-                query_tool = CollectionQueryTool()
-
-                while True:
-                    for next_contract in next(
-                        query_tool.pull_contract(
-                            PyFunceble.storage.CONFIGURATION.cli_testing.max_workers
-                        )
-                    ):
-                        if (
-                            "subject" not in next_contract
-                            or not next_contract["subject"]
-                        ):
-                            continue
-
-                        protocol_data = copy.deepcopy(protocol)
-
-                        protocol_data["checker_type"] = next_contract[
-                            "checker_type"
-                        ].upper()
-                        protocol_data["subject_type"] = next_contract["subject_type"]
-                        protocol_data["subject"] = protocol_data["idna_subject"] = (
-                            next_contract["subject"]["subject"]
-                        )
-                        protocol_data["contract"] = copy.deepcopy(next_contract)
-
-                        self.tester_process_manager.add_to_input_queue(
-                            protocol_data, worker_name="main"
-                        )
-
-                    self.ci_stop_in_the_middle_if_time_exceeded()
-
-                    if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots:
-                        PyFunceble.cli.utils.stdout.print_single_line()
+                handle_platform_contribution()
         return self
 
     def generate_waiting_files(self) -> "SystemLauncher":

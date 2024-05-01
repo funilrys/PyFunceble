@@ -517,6 +517,9 @@ class CollectionQueryTool:
 
         PyFunceble.facility.Logger.info("Starting to pull next contract")
 
+        if not isinstance(amount, int) or amount < 1:
+            amount = 1
+
         url = f"{self.url_base}/v1/contracts/next"
         params = {
             "limit": amount,
