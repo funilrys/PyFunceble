@@ -144,7 +144,7 @@ def get_requirements(*, mode="standard"):
     }
 
     if is_win_platform():
-        for mode, files in mode2files.items():
+        for known_mode, files in mode2files.items():
             new_files = set()
 
             for file in files:
@@ -155,7 +155,7 @@ def get_requirements(*, mode="standard"):
                 else:
                     new_files.add(file)
 
-            mode2files[mode] = list(new_files)
+            mode2files[known_mode] = list(new_files)
 
     mode2files["full"] = [y for x in mode2files.values() for y in x]
 
@@ -222,7 +222,7 @@ def get_console_scripts():  # pragma: no cover
         "clean-pyfunceble=PyFunceble.cli.entry_points.clean:cleaner",
     ]
 
-    dev_console_vars = [
+    dev_console_vars: List[str] = [
         "PYFUNCEBLE_INSTALL_DEVTOOLS",
         "PYFUNCEBLE_DEVTOOLS",
     ]
@@ -237,7 +237,7 @@ def get_console_scripts():  # pragma: no cover
             "production-pyfunceble=PyFunceble.cli.entry_points.production:producer"
         )
 
-    if any(x in os.environ for x in helper_console_vars):
+    if any(x in os.environ for x in helper_console_vars + dev_console_vars):
         result.extend(
             [
                 "public-suffix-pyfunceble=PyFunceble.cli.entry_points.public_suffix:generator",

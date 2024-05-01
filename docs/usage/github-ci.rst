@@ -34,12 +34,12 @@ Example of how you can run PyFunceble inside Github Actions.
         fail-fast: false
         matrix:
             python_version:
-            - "3.9.1"
+            - "3.11"
             os:
             - ubuntu-latest
 
         steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
             name: Clone repository
             with:
             token: "${{ secrets.BOT_REPO_PAT }}"
@@ -69,12 +69,12 @@ Example of how you can run PyFunceble inside Github Actions.
         fail-fast: false
         matrix:
             python_version:
-            - "3.9.1"
+            - "3.11"
             os:
             - ubuntu-latest
 
         steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
             name: Clone repository
             with:
             token: "${{ secrets.BOT_REPO_PAT }}"

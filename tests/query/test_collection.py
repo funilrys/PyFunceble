@@ -291,74 +291,6 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         self.assertRaises(TypeError, lambda: self.query_tool.set_token(given))
 
-    def test_set_url_base_return(self) -> None:
-        """
-        Tests the response from the method which let us set the URL to work
-        from.
-        """
-
-        given = "https://example.org"
-
-        actual = self.query_tool.set_url_base(given)
-
-        self.assertIsInstance(actual, CollectionQueryTool)
-
-    def test_set_url_base_method(self) -> None:
-        """
-        Tests the method which let us set the URL to work from.
-        """
-
-        given = "https://example.org"
-        expected = given
-
-        self.query_tool.set_url_base(given)
-        actual = self.query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
-    def test_set_url_base_attribute(self) -> None:
-        """
-        Tests the overwritting of the url_base attribute.
-        """
-
-        given = "https://example.org"
-        expected = given
-
-        self.query_tool.url_base = given
-        actual = self.query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
-    def test_set_url_base_through_init(self) -> None:
-        """
-        Tests the overwritting of the URL to work from through the class
-        constructor.
-        """
-
-        given = "https://example.net"
-        expected = given
-
-        query_tool = CollectionQueryTool(url_base=given)
-        actual = query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
-    def test_set_url_base_through_init_none_given(self) -> None:
-        """
-        Tests the overwritting of the URL to work from through the class
-        constructor.
-
-        In this test, we test the case that the URL base is not given.
-        """
-
-        given = None
-        expected = "http://localhost:8001"
-
-        query_tool = CollectionQueryTool(url_base=given)
-        actual = query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
     def test_set_url_base_not_str(self) -> None:
         """
         Tests the method which let us set the URL to work from for the case
@@ -392,42 +324,6 @@ class TestCollectionQueryTool(unittest.TestCase):
         actual = self.query_tool.url_base
 
         self.assertEqual(expected, actual)
-
-    def test_guess_and_set_url_base(self) -> None:
-        """
-        Tests the method which let us guess and set the URL base.
-        """
-
-        config_loader = ConfigLoader()
-        config_loader.set_custom_config(
-            {"collection": {"url_base": "https://example.org:8443"}}
-        ).start()
-
-        self.query_tool.guess_and_set_url_base()
-
-        expected = "https://example.org:8443"
-        actual = self.query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
-        del config_loader
-
-    def test_guess_and_set_url_base_not_str(self) -> None:
-        """
-        Tests the method which let us guess and set the URL base.
-        """
-
-        config_loader = ConfigLoader()
-        config_loader.set_custom_config({"collection": {"url_base": False}}).start()
-
-        self.query_tool.guess_and_set_url_base()
-
-        expected = "http://localhost:8001"
-        actual = self.query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
-        del config_loader
 
     def test_set_preferred_status_origin_return(self) -> None:
         """

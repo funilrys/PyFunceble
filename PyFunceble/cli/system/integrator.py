@@ -190,6 +190,14 @@ class SystemIntegrator(SystemBase):
                 "both disabled."
             )
 
+        if "url_base" in PyFunceble.storage.CONFIGURATION.collection:
+            PyFunceble.cli.storage.EXTRA_MESSAGES.append(
+                f"{colorama.Style.BRIGHT}{colorama.Fore.MAGENTA}Your are still "
+                "defining the 'collection.url_base' configuration key which has "
+                "been deprecated and deleted. Please remove it from your "
+                "configuration file."
+            )
+
     @SystemBase.ensure_args_is_given
     def check_deprecated(self) -> "SystemIntegrator":
         """

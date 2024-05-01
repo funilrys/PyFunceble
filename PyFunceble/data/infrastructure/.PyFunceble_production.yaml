@@ -427,9 +427,6 @@ links:
 collection:
   # Provides everything related to the collection.
 
-  # Provides the base of the URL to access to communicate with the collection.
-  url_base: https://collection.dead-hosts.funilrys.com
-
   # Activates the push of dataset into the collection.
   # WARNING: This is useless, if you don't have an API Token set as the
   # COLLECTION_API_TOKEN environment variable.

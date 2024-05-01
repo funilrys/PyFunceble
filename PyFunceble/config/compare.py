@@ -143,6 +143,10 @@ class ConfigComparison:
         "split": "cli_testing.file_generation.unified_results",
     }
 
+    DELETE_FLATTEN: List[str] = [
+        "collection.url_base",
+    ]
+
     NEW_STATUS_CODES: dict = {
         "up": [102, 207, 208, 226, 429],
         "potentially_down": [451],
@@ -249,7 +253,7 @@ class ConfigComparison:
         Checks if the local configuration is identical to the upstream one.
         """
 
-        # pylint: disable=too-many-boolean-expressions
+        # pylint: disable=too-many-boolean-expressions,too-many-return-statements
         if (
             not self.dict_helper.set_subject(self.local_config).has_same_keys_as(
                 self.upstream_config
@@ -287,6 +291,12 @@ class ConfigComparison:
                     values
                 ):
                     return False
+
+        if (
+            "collection" in self.local_config
+            and "url_base" in self.local_config["collection"]
+        ):
+            return False
 
         return True
 
@@ -336,6 +346,10 @@ class ConfigComparison:
                 flatten_original[value] = not flatten_original[key]
 
             del flatten_original[key]
+
+        for key in self.DELETE_FLATTEN:
+            if key in flatten_original:
+                del flatten_original[key]
 
         original_local = self.dict_helper.set_subject(flatten_original).unflatten()
         del flatten_original

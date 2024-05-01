@@ -685,9 +685,9 @@ class SystemLauncher(SystemBase):
                             "checker_type"
                         ].upper()
                         protocol_data["subject_type"] = next_contract["subject_type"]
-                        protocol_data["subject"] = protocol_data[
-                            "idna_subject"
-                        ] = next_contract["subject"]["subject"]
+                        protocol_data["subject"] = protocol_data["idna_subject"] = (
+                            next_contract["subject"]["subject"]
+                        )
                         protocol_data["contract"] = copy.deepcopy(next_contract)
 
                         self.tester_process_manager.add_to_input_queue(
@@ -695,6 +695,9 @@ class SystemLauncher(SystemBase):
                         )
 
                     self.ci_stop_in_the_middle_if_time_exceeded()
+
+                    if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots:
+                        PyFunceble.cli.utils.stdout.print_single_line()
         return self
 
     def generate_waiting_files(self) -> "SystemLauncher":

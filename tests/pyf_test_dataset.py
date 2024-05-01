@@ -377,7 +377,6 @@ DEFAULT_CONFIG: dict = {
         "whois_db": True,
     },
     "collection": {
-        "url_base": "http://localhost:8080",
         "push": False,
         "preferred_data_origin": "frequent",
     },
