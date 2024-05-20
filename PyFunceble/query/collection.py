@@ -543,8 +543,10 @@ class CollectionQueryTool:
                 PyFunceble.facility.Logger.info("Finished to pull next contract")
 
                 yield response_json
+            else:
+                response_json = []
         except (requests.RequestException, json.decoder.JSONDecodeError):
-            response_json = [{"subject": {}}]
+            response_json = []
 
         PyFunceble.facility.Logger.debug(
             "Failed to pull next contract. Response: %r", response_json
