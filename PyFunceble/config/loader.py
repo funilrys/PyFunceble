@@ -188,6 +188,7 @@ class ConfigLoader:
             config["cli_testing"]["local_network"] = False
             config["cli_testing"]["preload_file"] = False
             config["cli_testing"]["display_mode"]["percentage"] = False
+            config["lookup"]["platform"] = False
 
         return config
 
