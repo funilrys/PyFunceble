@@ -499,7 +499,7 @@ class SystemLauncher(SystemBase):
                 cleanup_tool.clean_output_files()
                 running_file_helper.write(
                     f"{self.sessions_id[parent_dirname]} "
-                    f"{datetime.datetime.utcnow().isoformat()}",
+                    f"{datetime.datetime.now(datetime.timezone.utc).isoformat()}",
                     overwrite=True,
                 )
             else:

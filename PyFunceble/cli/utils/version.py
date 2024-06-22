@@ -292,7 +292,7 @@ def handle_messages(upstream_version: Box) -> None:
         authorized = True
 
     if authorized:
-        local_timezone = datetime.utcnow().astimezone().tzinfo
+        local_timezone = datetime.now(datetime.timezone.utc).astimezone().tzinfo
 
         for minimal_version, data in upstream_version.messages.items():
             if not version_utility.is_equal_to(

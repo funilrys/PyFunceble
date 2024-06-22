@@ -51,7 +51,7 @@ License:
 """
 
 import unittest
-from datetime import datetime
+from datetime import datetime, timezone
 
 from PyFunceble.checker.status_base import CheckerStatusBase
 
@@ -88,7 +88,7 @@ class TestCheckerStatusBase(unittest.TestCase):
         of the current status object.
         """
 
-        test_datetime = datetime.utcnow()
+        test_datetime = datetime.now(timezone.utc)
 
         self.status.status = "ACTIVE"
         self.status.status_source = "Funilrys"

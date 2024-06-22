@@ -799,7 +799,7 @@ class ContinuousIntegrationBase:
         Sets the starting time to now.
         """
 
-        self.start_time = datetime.datetime.utcnow()
+        self.start_time = datetime.datetime.now(datetime.timezone.utc)
         self.expected_end_time = self.start_time + datetime.timedelta(
             minutes=self.max_exec_minutes
         )
@@ -1033,7 +1033,7 @@ class ContinuousIntegrationBase:
         Checks if we exceeded the allocated time we have.
         """
 
-        return self.expected_end_time < datetime.datetime.utcnow()
+        return self.expected_end_time < datetime.datetime.now(datetime.timezone.utc)
 
     @execute_if_authorized(None)
     @ensure_token_is_given

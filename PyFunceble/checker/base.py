@@ -185,7 +185,7 @@ class CheckerBase:
         def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
             result = func(self, *args, **kwargs)  # pylint: disable=not-callable
 
-            self.status.tested_at = datetime.datetime.utcnow()
+            self.status.tested_at = datetime.datetime.now(datetime.timezone.utc)
 
             return result
 

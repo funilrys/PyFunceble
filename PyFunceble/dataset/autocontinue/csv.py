@@ -52,7 +52,7 @@ License:
 
 import functools
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Generator, Optional, Tuple
 
 import PyFunceble.cli.storage
@@ -179,7 +179,7 @@ class CSVContinueDataset(CSVDatasetBase, ContinueDatasetBase):
         min_days = 365.25 * 20
 
         for data in self.get_filtered_content({"session_id": session_id}):
-            if (datetime.utcnow() - data["tested_at"]).days < min_days:
+            if (datetime.now(timezone.utc) - data["tested_at"]).days < min_days:
                 continue
 
             if not data["idna_subject"]:

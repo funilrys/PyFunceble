@@ -52,7 +52,7 @@ License:
 
 import unittest
 import unittest.mock
-from datetime import datetime
+from datetime import datetime, timezone
 
 from PyFunceble.checker.availability.domain import DomainAvailabilityChecker
 from PyFunceble.checker.reputation.domain import DomainReputationChecker
@@ -94,7 +94,7 @@ class TestDomainAvailabilityChecker(unittest.TestCase):
             idna_subject="example.com",
             status="SANE",
             status_source="REPUTATION",
-            tested_at=datetime.utcnow(),
+            tested_at=datetime.now(timezone.utc),
         )
 
         self.checker.try_to_query_status_from_reputation()
@@ -109,7 +109,7 @@ class TestDomainAvailabilityChecker(unittest.TestCase):
             idna_subject="example.com",
             status="MALICIOUS",
             status_source="REPUTATION",
-            tested_at=datetime.utcnow(),
+            tested_at=datetime.now(timezone.utc),
         )
 
         self.checker.try_to_query_status_from_reputation()

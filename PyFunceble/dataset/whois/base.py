@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Union
 
 from PyFunceble.database.sqlalchemy.all_schemas import WhoisRecord
@@ -85,7 +85,7 @@ class WhoisDatasetBase(DBDatasetBase):
         else:
             return True
 
-        return datetime.utcnow() > datetime.fromtimestamp(float(to_check))
+        return datetime.now(timezone.utc) > datetime.fromtimestamp(float(to_check))
 
     @DBDatasetBase.execute_if_authorized(None)
     def get_filtered_row(self, row: Union[dict, WhoisRecord]) -> dict:
