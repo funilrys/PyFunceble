@@ -137,7 +137,7 @@ jobs:
 
     steps:
       - name: Sending finish flag to coveralls.io
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
