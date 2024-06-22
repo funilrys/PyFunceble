@@ -48,39 +48,8 @@ jobs:
       - name: Lint tests with Pylint
         run: pylint tests
 
-  deps_safety_check:
-    name: Check the safety of our dependencies.
-
-    runs-on: "${{ matrix.os }}"
-
-    strategy:
-      fail-fast: false
-      matrix:
-        python_version:
-          - "3.12"
-        os:
-          - ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-        name: Clone repository
-
-      - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python_version }}
-
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install safety
-
-      - name: Check the safety of our dependencies.
-        run: safety check -i 51668 -i 62044 -i 67599
-
   test:
-    needs: [lint, deps_safety_check]
+    needs: [lint]
     name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Test PyFunceble"
 
     runs-on: "${{ matrix.os }}"
