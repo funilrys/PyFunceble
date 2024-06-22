@@ -456,6 +456,34 @@ platform:
   #      environment variable.
   #   3. When set to `none`, the platform will throw a random contract at us.
   #
+  # Example:
+  #   Prioritize availability checker until no contract is available, then
+  #   prioritize syntax checker until no contract is available, then prioritize
+  #   reputation checker until no contract is available.
+  #
+  #   - availability
+  #   - syntax
+  #   - reputation
+  #
   # Available: none | availability | reputation | syntax
   checker_priority:
+    - none
+
+  # Defines the checker type to exclude when trying to fullfil platform
+  # contracts.
+  #
+  # Notes:
+  #   1. This is a list.
+  #   2. One can overwrite this value, by settings a comma separated list of
+  #      checker type to exclude through the PYFUNCEBLE_PLATFORM_CHECKER_EXCLUDE
+  #      environment variable.
+  #   3. When set to `none`, no checker type will be excluded.
+  #
+  # Example:
+  #   Exclude the reputation checker from the list of checker to use to fullfil.
+  #
+  #   - reputation
+  #
+  # Available: none | availability | reputation | syntax
+  checker_exclude:
     - none

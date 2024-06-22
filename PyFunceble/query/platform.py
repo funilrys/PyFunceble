@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=too-many-lines
+
 import json
 import os
 from typing import Generator, List, Optional, Union
@@ -96,6 +98,7 @@ class PlatformQueryTool:
     )
     STD_PREFERRED_STATUS_ORIGIN: str = "frequent"
     STD_CHECKER_PRIORITY: str = ["none"]
+    STD_CHECKER_EXCLUDE: str = ["none"]
     STD_TIMEOUT: float = 5.0
 
     _token: Optional[str] = None
@@ -118,6 +121,11 @@ class PlatformQueryTool:
     The checker to prioritize.
     """
 
+    _checker_exclude: Optional[List[str]] = []
+    """
+    The checker to exclude.
+    """
+
     _is_modern_api: Optional[bool] = None
     """
     Whether we are working with the modern or legacy API.
@@ -137,6 +145,7 @@ class PlatformQueryTool:
         preferred_status_origin: Optional[str] = None,
         timeout: Optional[float] = None,
         checker_priority: Optional[List[str]] = None,
+        checker_exclude: Optional[List[str]] = None,
     ) -> None:
         if token is not None:
             self.token = token
@@ -158,6 +167,11 @@ class PlatformQueryTool:
             self.checker_priority = checker_priority
         else:
             self.guess_and_set_checker_priority()
+
+        if checker_exclude is not None:
+            self.checker_exclude = checker_exclude
+        else:
+            self.guess_and_set_checker_exclude()
 
         if timeout is not None:
             self.timeout = timeout
@@ -481,7 +495,7 @@ class PlatformQueryTool:
 
     def set_checker_priority(self, value: List[str]) -> "PlatformQueryTool":
         """
-        Sets the preferred status origin.
+        Sets the checker priority.
 
         :parma value:
             The value to set.
@@ -493,7 +507,7 @@ class PlatformQueryTool:
 
     def guess_and_set_checker_priority(self) -> "PlatformQueryTool":
         """
-        Try to guess the preferred status origin.
+        Try to guess the checker priority to use.
         """
 
         if "PYFUNCEBLE_PLATFORM_CHECKER_PRIORITY" in os.environ:
@@ -507,6 +521,76 @@ class PlatformQueryTool:
                 self.checker_priority = self.STD_CHECKER_PRIORITY
         else:
             self.checker_priority = self.STD_CHECKER_PRIORITY
+
+        return self
+
+    @property
+    def checker_exclude(self) -> Optional[List[str]]:
+        """
+        Provides the value of the :code:`_checker_exclude` attribute.
+        """
+
+        return self._checker_exclude
+
+    @checker_exclude.setter
+    def checker_exclude(self, value: List[str]) -> None:
+        """
+        Sets the checker exclude.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`str`.
+
+        :raise ValueError:
+            When the given :code:`value` is not supported.
+        """
+
+        accepted = []
+
+        for checker_type in value:
+            if not isinstance(checker_type, str):
+                raise TypeError(
+                    f"<checker_type> ({checker_type}) should be {str}, "
+                    "{type(checker_type)} given."
+                )
+
+            if checker_type.lower() not in self.SUPPORTED_CHECKERS + ["none"]:
+                raise ValueError(f"<checker_type> ({checker_type}) is not supported.")
+
+            accepted.append(checker_type.lower())
+
+        self._checker_exclude = accepted
+
+    def set_checker_exclude(self, value: List[str]) -> "PlatformQueryTool":
+        """
+        Sets the checker to exclude.
+
+        :parma value:
+            The value to set.
+        """
+
+        self.checker_exclude = value
+
+        return self
+
+    def guess_and_set_checker_exclude(self) -> "PlatformQueryTool":
+        """
+        Try to guess the checker to exclude.
+        """
+
+        if "PYFUNCEBLE_PLATFORM_CHECKER_EXCLUDE" in os.environ:
+            self.checker_exclude = os.environ[
+                "PYFUNCEBLE_PLATFORM_CHECKER_EXCLUDE"
+            ].split(",")
+        elif PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if isinstance(PyFunceble.storage.PLATFORM.checker_exclude, list):
+                self.checker_exclude = PyFunceble.storage.PLATFORM.checker_exclude
+            else:
+                self.checker_exclude = self.STD_CHECKER_EXCLUDE
+        else:
+            self.checker_exclude = self.STD_CHECKER_EXCLUDE
 
         return self
 
@@ -622,6 +706,9 @@ class PlatformQueryTool:
             params["shuffle"] = True
         else:
             params["checker_type_priority"] = ",".join(self.checker_priority)
+
+        if "none" not in self.checker_exclude:
+            params["checker_type_exclude"] = ",".join(self.checker_exclude)
 
         try:
             response = self.session.get(
