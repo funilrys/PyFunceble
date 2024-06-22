@@ -51,6 +51,7 @@ License:
 """
 
 import json
+import os
 from typing import Generator, List, Optional, Union
 
 import requests
@@ -94,6 +95,7 @@ class PlatformQueryTool:
         "727294758272947115272947112272947116272947116272947104"
     )
     STD_PREFERRED_STATUS_ORIGIN: str = "frequent"
+    STD_CHECKER_PRIORITY: str = ["none"]
     STD_TIMEOUT: float = 5.0
 
     _token: Optional[str] = None
@@ -109,6 +111,11 @@ class PlatformQueryTool:
     _preferred_status_origin: Optional[str] = None
     """
     The preferred data origin
+    """
+
+    _checker_priority: Optional[List[str]] = []
+    """
+    The checker to prioritize.
     """
 
     _is_modern_api: Optional[bool] = None
@@ -129,6 +136,7 @@ class PlatformQueryTool:
         token: Optional[str] = None,
         preferred_status_origin: Optional[str] = None,
         timeout: Optional[float] = None,
+        checker_priority: Optional[List[str]] = None,
     ) -> None:
         if token is not None:
             self.token = token
@@ -145,6 +153,11 @@ class PlatformQueryTool:
             self.preferred_status_origin = preferred_status_origin
         else:
             self.guess_and_set_preferred_status_origin()
+
+        if checker_priority is not None:
+            self.checker_priority = checker_priority
+        else:
+            self.guess_and_set_checker_priority()
 
         if timeout is not None:
             self.timeout = timeout
@@ -427,6 +440,76 @@ class PlatformQueryTool:
 
         return self
 
+    @property
+    def checker_priority(self) -> Optional[List[str]]:
+        """
+        Provides the value of the :code:`_checker_priority` attribute.
+        """
+
+        return self._checker_priority
+
+    @checker_priority.setter
+    def checker_priority(self, value: List[str]) -> None:
+        """
+        Sets the checker priority to set - order matters.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`str`.
+
+        :raise ValueError:
+            When the given :code:`value` is not supported.
+        """
+
+        accepted = []
+
+        for checker_type in value:
+            if not isinstance(checker_type, str):
+                raise TypeError(
+                    f"<checker_type> ({checker_type}) should be {str}, "
+                    "{type(checker_type)} given."
+                )
+
+            if checker_type.lower() not in self.SUPPORTED_CHECKERS + ["none"]:
+                raise ValueError(f"<checker_type> ({checker_type}) is not supported.")
+
+            accepted.append(checker_type.lower())
+
+        self._checker_priority = accepted
+
+    def set_checker_priority(self, value: List[str]) -> "PlatformQueryTool":
+        """
+        Sets the preferred status origin.
+
+        :parma value:
+            The value to set.
+        """
+
+        self.checker_priority = value
+
+        return self
+
+    def guess_and_set_checker_priority(self) -> "PlatformQueryTool":
+        """
+        Try to guess the preferred status origin.
+        """
+
+        if "PYFUNCEBLE_PLATFORM_CHECKER_PRIORITY" in os.environ:
+            self.checker_priority = os.environ[
+                "PYFUNCEBLE_PLATFORM_CHECKER_PRIORITY"
+            ].split(",")
+        elif PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if isinstance(PyFunceble.storage.PLATFORM.checker_priority, list):
+                self.checker_priority = PyFunceble.storage.PLATFORM.checker_priority
+            else:
+                self.checker_priority = self.STD_CHECKER_PRIORITY
+        else:
+            self.checker_priority = self.STD_CHECKER_PRIORITY
+
+        return self
+
     def guess_and_set_timeout(self) -> "PlatformQueryTool":
         """
         Try to guess the timeout to use.
@@ -534,6 +617,11 @@ class PlatformQueryTool:
             "limit": amount,
             "shuffle": True,
         }
+
+        if "none" in self.checker_priority:
+            params["shuffle"] = True
+        else:
+            params["checker_type_priority"] = ",".join(self.checker_priority)
 
         try:
             response = self.session.get(

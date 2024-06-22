@@ -445,3 +445,17 @@ platform:
   #
   # Available: frequent | latest | recommended
   preferred_status_origin: recommended
+
+  # Defines the checker type to prioritize when trying to fullfil platform
+  # contracts.
+  #
+  # Notes:
+  #   1. This is a list. The order matters.
+  #   2. One can overwrite this value, by settings a comma separated list of
+  #      checker type to prioritize through the PYFUNCEBLE_PLATFORM_CHECKER_PRIORITY
+  #      environment variable.
+  #   3. When set to `none`, the platform will throw a random contract at us.
+  #
+  # Available: none | availability | reputation | syntax
+  checker_priority:
+    - none

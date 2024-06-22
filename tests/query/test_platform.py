@@ -461,6 +461,136 @@ class TestPlatformQueryTool(unittest.TestCase):
 
         del config_loader
 
+    def test_set_checker_priority_return(self) -> None:
+        """
+        Tests the response from the method which let us set the checker priority
+        to use.
+        """
+
+        given = ["reputation", "syntax", "availability"]
+
+        actual = self.query_tool.set_checker_priority(given)
+
+        self.assertIsInstance(actual, PlatformQueryTool)
+
+    def test_set_checker_priority_method(self) -> None:
+        """
+        Tests the method which let us set the checker priority to use.
+        """
+
+        given = ["availability", "syntax", "reputation"]
+        expected = given
+
+        self.query_tool.set_checker_priority(given)
+        actual = self.query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+    def test_set_checker_priority_attribute(self) -> None:
+        """
+        Tests the overwritting of the the checker priority.
+        """
+
+        given = ["syntax", "availability", "reputation"]
+        expected = given
+
+        self.query_tool.checker_priority = given
+        actual = self.query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+    def test_checker_priority_through_init(self) -> None:
+        """
+        Tests the overwritting of the checker priority through the class
+        constructor.
+        """
+
+        given = ["reputation", "syntax", "availability"]
+        expected = given
+
+        query_tool = PlatformQueryTool(checker_priority=given)
+        actual = query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+    def test_set_checker_priority_init_none_given(self) -> None:
+        """
+        Tests the overwritting of the checker through the class
+        constructor.
+
+        In this test, we test the case that nothing is given.
+        """
+
+        given = None
+        expected = ["none"]
+
+        query_tool = PlatformQueryTool(checker_priority=given)
+        actual = query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+    def test_set_checker_priority_not_str(self) -> None:
+        """
+        Tests the method which let us set the checker priority for the case
+        that a given value is not a :py:class:`str`.
+        """
+
+        given = ["reputation", "syntax", 123]
+
+        self.assertRaises(
+            TypeError, lambda: self.query_tool.set_checker_priority(given)
+        )
+
+    def test_set_checker_priority_not_supported(self) -> None:
+        """
+        Tests the method which let us set the checker priority to work from
+        for the case that the given checker is not supported.
+        """
+
+        given = ["reputation", "syntax", "hello"]
+
+        self.assertRaises(
+            ValueError, lambda: self.query_tool.set_checker_priority(given)
+        )
+
+    def test_guess_and_set_checker_priority(self) -> None:
+        """
+        Tests the method which let us guess and set the checker type.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config(
+            {"platform": {"checker_priority": ["reputation", "syntax", "availability"]}}
+        ).start()
+
+        self.query_tool.guess_and_set_checker_priority()
+
+        expected = ["reputation", "syntax", "availability"]
+        actual = self.query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
+
+    def test_guess_and_set_checker_priority_not_str(self) -> None:
+        """
+        Tests the method which let us guess and set the checker priority.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config(
+            {"platform": {"checker_priority": None}}
+        ).start()
+
+        self.query_tool.guess_and_set_checker_priority()
+
+        expected = ["none"]
+        actual = self.query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
+
     @unittest.mock.patch.object(requests.Session, "post")
     def test_platform_contain(self, request_mock) -> None:
         """
