@@ -646,11 +646,9 @@ class SystemLauncher(SystemBase):
             query_tool = PlatformQueryTool()
 
             max_breakoff = 120.0
-            breakoff_multiplier = 0.5
 
             initial_breakoff = (
-                PyFunceble.storage.CONFIGURATION.cli_testing.max_workers
-                * breakoff_multiplier
+                max_breakoff / PyFunceble.storage.CONFIGURATION.cli_testing.max_workers
             )
             breakoff = initial_breakoff
 
