@@ -52,7 +52,7 @@ License:
 
 import unittest
 import unittest.mock
-from datetime import datetime
+from datetime import datetime, timezone
 
 from PyFunceble.checker.availability.ip import IPAvailabilityChecker
 from PyFunceble.checker.reputation.ip import IPReputationChecker
@@ -94,7 +94,7 @@ class TestIPAvailabilityChecker(unittest.TestCase):
             idna_subject="192.168.1.1",
             status="SANE",
             status_source="REPUTATION",
-            tested_at=datetime.utcnow(),
+            tested_at=datetime.now(timezone.utc),
         )
 
         self.checker.try_to_query_status_from_reputation()
@@ -109,7 +109,7 @@ class TestIPAvailabilityChecker(unittest.TestCase):
             idna_subject="192.168.1.1",
             status="MALICIOUS",
             status_source="REPUTATION",
-            tested_at=datetime.utcnow(),
+            tested_at=datetime.now(timezone.utc),
         )
 
         self.checker.try_to_query_status_from_reputation()

@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Generator, Optional, Tuple
 
 from PyFunceble.database.sqlalchemy.all_schemas import Inactive
@@ -71,7 +71,7 @@ class SQLDBInactiveDataset(SQLDBDatasetBase, InactiveDatasetBase):
     def get_to_retest(
         self, destination: str, checker_type: str, *, min_days: Optional[int]
     ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
-        days_ago = datetime.utcnow() - timedelta(days=min_days)
+        days_ago = datetime.now(timezone.utc) - timedelta(days=min_days)
 
         result = (
             self.db_session.query(self.ORM_OBJ)

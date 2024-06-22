@@ -51,7 +51,7 @@ License:
 """
 
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Generator, Optional, Tuple
 
 import PyFunceble.cli.storage
@@ -77,7 +77,7 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
     def get_to_retest(
         self, destination: str, checker_type: str, *, min_days: Optional[int]
     ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
-        days_ago = datetime.utcnow() - timedelta(days=min_days)
+        days_ago = datetime.now(timezone.utc) - timedelta(days=min_days)
 
         for dataset in self.get_filtered_content(
             {"destination": destination, "checker_type": checker_type}
@@ -86,7 +86,7 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
                 try:
                     date_of_inclusion = datetime.fromisoformat(dataset["tested_at"])
                 except (TypeError, ValueError):
-                    date_of_inclusion = datetime.utcnow() - timedelta(days=365)
+                    date_of_inclusion = datetime.now(timezone.utc) - timedelta(days=365)
             else:
                 date_of_inclusion = dataset["tested_at"]
 

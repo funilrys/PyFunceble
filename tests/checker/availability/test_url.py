@@ -52,7 +52,7 @@ License:
 
 import unittest
 import unittest.mock
-from datetime import datetime
+from datetime import datetime, timezone
 
 from PyFunceble.checker.availability.url import URLAvailabilityChecker
 from PyFunceble.checker.reputation.status import ReputationCheckerStatus
@@ -176,7 +176,7 @@ class TestURLAvailabilityChecker(unittest.TestCase):
             idna_subject="http://example.com",
             status="SANE",
             status_source="REPUTATION",
-            tested_at=datetime.utcnow(),
+            tested_at=datetime.now(timezone.utc),
         )
 
         self.checker.try_to_query_status_from_reputation()
@@ -191,7 +191,7 @@ class TestURLAvailabilityChecker(unittest.TestCase):
             idna_subject="http://example.com",
             status="MALICIOUS",
             status_source="REPUTATION",
-            tested_at=datetime.utcnow(),
+            tested_at=datetime.now(timezone.utc),
         )
 
         self.checker.try_to_query_status_from_reputation()

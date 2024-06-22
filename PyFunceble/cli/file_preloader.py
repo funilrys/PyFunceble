@@ -53,7 +53,7 @@ License:
 import copy
 import functools
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 from domain2idna import domain2idna
@@ -455,9 +455,9 @@ class FilePreloader:
                             to_send = copy.deepcopy(self.protocol)
                             to_send["subject"] = subject
                             to_send["idna_subject"] = domain2idna(subject)
-                            to_send["tested_at"] = datetime.utcnow() - timedelta(
-                                days=365.25 * 20
-                            )
+                            to_send["tested_at"] = datetime.now(
+                                timezone.utc
+                            ) - timedelta(days=365.25 * 20)
 
                             if self.inactive_dataset.exists(to_send):
                                 print_single_line("I")

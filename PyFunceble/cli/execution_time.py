@@ -181,7 +181,7 @@ class ExecutionTime:
         Sets the starting time to now.
         """
 
-        self.start_time = datetime.datetime.utcnow()
+        self.start_time = datetime.datetime.now(datetime.timezone.utc)
 
         return self
 
@@ -191,7 +191,7 @@ class ExecutionTime:
         Sets the starting time to now.
         """
 
-        self.end_time = datetime.datetime.utcnow()
+        self.end_time = datetime.datetime.now(datetime.timezone.utc)
 
         return self
 

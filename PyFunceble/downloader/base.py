@@ -226,7 +226,7 @@ class DownloaderBase:
         Sets the current datetime into our registry.
         """
 
-        current_datetime = datetime.datetime.utcnow()
+        current_datetime = datetime.datetime.now(datetime.timezone.utc)
 
         self.all_downtimes[self.DOWNTIME_INDEX] = {
             "iso": current_datetime.isoformat(),
@@ -253,19 +253,21 @@ class DownloaderBase:
             return True
 
         last_downloaded_time = datetime.datetime.fromtimestamp(
-            self.get_current_downtime()["timestamp"]
+            self.get_current_downtime()["timestamp"], datetime.timezone.utc
         )
 
         if (
             self.DOWNLOAD_FREQUENCY <= 0
-            and (datetime.datetime.utcnow() - last_downloaded_time).seconds < 3600
+            and (
+                datetime.datetime.now(datetime.timezone.utc) - last_downloaded_time
+            ).seconds
+            < 3600
         ):
             return False
 
-        if (
-            last_downloaded_time + datetime.timedelta(days=self.DOWNLOAD_FREQUENCY)
-            <= datetime.datetime.utcnow()
-        ):
+        if last_downloaded_time + datetime.timedelta(
+            days=self.DOWNLOAD_FREQUENCY
+        ) <= datetime.datetime.now(datetime.timezone.utc):
             return True
 
         return False

@@ -51,7 +51,7 @@ License:
 """
 
 import functools
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Optional
 
 import PyFunceble.facility
@@ -171,7 +171,7 @@ class FilePrinter(PrinterBase):
         Provides the line which informs of the date a file was generated.
         """
 
-        return f"# Date of generation: {datetime.utcnow().isoformat()}"
+        return f"# Date of generation: {datetime.now(timezone.utc).isoformat()}"
 
     @ensure_destination_is_given
     def print_interpolated_line(self) -> None:
