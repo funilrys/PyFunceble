@@ -385,8 +385,21 @@ jobs:
         run: |
           pyfunceble-docker-builder --version
 
+      - name: Read package name
+        run: |
+          python setup.py --name
+
+      - name: Read package version
+        run: |
+          python setup.py --version
+
+      - name: Read commit ID
+        run: |
+          git log -1 --format=format:'%H'
+
       - name: Build, Check and Publish 📦
         run: >
+          set -x ;
           pyfunceble-docker-builder -b ${{ env.BUILDER_CLONE_DIRNAME }}/builder
           -p "$(python setup.py --name)"
           --pyfunceble-version="$(python setup.py --version)"
