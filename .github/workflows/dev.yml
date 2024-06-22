@@ -379,6 +379,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
+          pip install setuptools wheel
           pip install ${{ env.BUILDER_CLONE_DIRNAME }}/.
 
       - name: Get version of builder
