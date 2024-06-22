@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Tests of the Collection query tool.
+Tests of the Platform query tool.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -64,12 +64,12 @@ import requests.models
 
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.config.loader import ConfigLoader
-from PyFunceble.query.collection import CollectionQueryTool
+from PyFunceble.query.platform import PlatformQueryTool
 
 
-class TestCollectionQueryTool(unittest.TestCase):
+class TestPlatformQueryTool(unittest.TestCase):
     """
-    Tests the Collection query tool.
+    Tests the Platform query tool.
     """
 
     def setUp(self) -> None:
@@ -77,7 +77,7 @@ class TestCollectionQueryTool(unittest.TestCase):
         Sets everything needed by the tests.
         """
 
-        self.query_tool = CollectionQueryTool()
+        self.query_tool = PlatformQueryTool()
 
         self.response_dataset = {
             "subject": "example.net",
@@ -203,7 +203,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         actual = self.query_tool.set_token(given)
 
-        self.assertIsInstance(actual, CollectionQueryTool)
+        self.assertIsInstance(actual, PlatformQueryTool)
 
     def test_set_token_method(self) -> None:
         """
@@ -240,7 +240,7 @@ class TestCollectionQueryTool(unittest.TestCase):
         given = secrets.token_urlsafe(6)
         expected = given
 
-        query_tool = CollectionQueryTool(token=given)
+        query_tool = PlatformQueryTool(token=given)
         actual = query_tool.token
 
         self.assertEqual(expected, actual)
@@ -256,9 +256,12 @@ class TestCollectionQueryTool(unittest.TestCase):
         if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
 
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+            del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
+
         expected = ""
 
-        query_tool = CollectionQueryTool(token=None)
+        query_tool = PlatformQueryTool(token=None)
         actual = query_tool.token
 
         self.assertEqual(expected, actual)
@@ -274,9 +277,12 @@ class TestCollectionQueryTool(unittest.TestCase):
         given = secrets.token_urlsafe(6)
         expected = given
 
-        os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"] = given
+        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
+            del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
 
-        query_tool = CollectionQueryTool(token=None)
+        os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"] = given
+
+        query_tool = PlatformQueryTool(token=None)
         actual = query_tool.token
 
         self.assertEqual(expected, actual)
@@ -335,7 +341,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         actual = self.query_tool.set_preferred_status_origin(given)
 
-        self.assertIsInstance(actual, CollectionQueryTool)
+        self.assertIsInstance(actual, PlatformQueryTool)
 
     def test_set_preferred_status_origin_method(self) -> None:
         """
@@ -372,7 +378,7 @@ class TestCollectionQueryTool(unittest.TestCase):
         given = "frequent"
         expected = given
 
-        query_tool = CollectionQueryTool(preferred_status_origin=given)
+        query_tool = PlatformQueryTool(preferred_status_origin=given)
         actual = query_tool.preferred_status_origin
 
         self.assertEqual(expected, actual)
@@ -388,7 +394,7 @@ class TestCollectionQueryTool(unittest.TestCase):
         given = None
         expected = "frequent"
 
-        query_tool = CollectionQueryTool(preferred_status_origin=given)
+        query_tool = PlatformQueryTool(preferred_status_origin=given)
         actual = query_tool.preferred_status_origin
 
         self.assertEqual(expected, actual)
@@ -424,7 +430,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         config_loader = ConfigLoader()
         config_loader.set_custom_config(
-            {"collection": {"preferred_status_origin": "latest"}}
+            {"platform": {"preferred_status_origin": "latest"}}
         ).start()
 
         self.query_tool.guess_and_set_preferred_status_origin()
@@ -443,7 +449,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         config_loader = ConfigLoader()
         config_loader.set_custom_config(
-            {"collection": {"preferred_status_origin": None}}
+            {"platform": {"preferred_status_origin": None}}
         ).start()
 
         self.query_tool.guess_and_set_preferred_status_origin()
@@ -456,9 +462,9 @@ class TestCollectionQueryTool(unittest.TestCase):
         del config_loader
 
     @unittest.mock.patch.object(requests.Session, "post")
-    def test_collection_contain(self, request_mock) -> None:
+    def test_platform_contain(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
         """
 
         response_dict = self.response_dataset
@@ -487,9 +493,9 @@ class TestCollectionQueryTool(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     @unittest.mock.patch.object(requests.Session, "post")
-    def test_collection_not_contain(self, request_mock) -> None:
+    def test_platform_not_contain(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
         """
 
         response_dict = {"detail": "Invalid subject."}
@@ -519,7 +525,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_getitem(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
         """
 
         response_dict = self.response_dataset
@@ -550,7 +556,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_getitem_not_found(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
         """
 
         response_dict = {"detail": "Invalid subject."}
@@ -580,7 +586,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_pull(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
         """
 
         response_dict = self.response_dataset
@@ -611,7 +617,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_pull_subject_not_found(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
 
         In this test case we check what happens when a subject is not found.
         """
@@ -643,7 +649,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_pull_subject_no_json_response(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
 
         In this test case we check what happens when no JSON response is given.
         """
@@ -672,7 +678,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_pull_subject_not_str(self) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
 
         In this test we test the case that the given subject is not a
         :py:class:`str`.
@@ -685,7 +691,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_push(self, request_mock) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
         """
 
         response_dict = self.response_dataset
@@ -720,7 +726,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_push_no_json_response(self, request_mock) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test case, we test the case that the response is not JSON
         encoded.
@@ -756,7 +762,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_push_with_whois(self, request_mock) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
         """
 
         response_dict = self.response_dataset
@@ -791,7 +797,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_push_with_whois_no_json_response(self, request_mock) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
         """
 
         response_dict = self.response_dataset
@@ -825,7 +831,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_with_whois_token_not_given(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that no token is given.
         """
@@ -836,6 +842,9 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
+
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+            del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
 
         self.query_tool.token = ""
 
@@ -848,7 +857,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_subject_not_str(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that the given subject is not a string.
         """
@@ -864,7 +873,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_checker_status_not_correct(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that the given checker status is not
         correct.
@@ -879,7 +888,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_subject_empty_str(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that the given subject is an empty string.
         """
@@ -895,7 +904,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_checker_type_not_str(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that the given subject is not a string.
         """
@@ -911,7 +920,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_checker_type_not_supported(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that the given subject is not a string.
         """
@@ -928,13 +937,16 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_token_not_given(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that no token is given.
         """
 
         if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
+
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+            del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
 
         self.query_tool.token = ""
 

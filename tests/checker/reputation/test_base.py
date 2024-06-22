@@ -509,55 +509,55 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
 
         return None
 
-    def test_try_to_query_status_from_collection(self) -> None:
+    def test_try_to_query_status_from_platform(self) -> None:
         """
-        Tests the method that tries to define the status from the collection lookup.
+        Tests the method that tries to define the status from the platform lookup.
         """
 
         # Let's check the case that the subject is known.
         self.checker.subject = "example.com"
-        self.checker.collection_query_tool.preferred_status_origin = "frequent"
-        self.checker.collection_query_tool.pull = self.fake_pull_response
+        self.checker.platform_query_tool.preferred_status_origin = "frequent"
+        self.checker.platform_query_tool.pull = self.fake_pull_response
 
-        self.checker.try_to_query_status_from_collection()
+        self.checker.try_to_query_status_from_platform()
 
         expected_status = "MALICIOUS"
         actual_status = self.checker.status.status
         self.assertEqual(expected_status, actual_status)
 
-        expected_status_source = "COLLECTION"
+        expected_status_source = "PLATFORM"
         actual_status_source = self.checker.status.status_source
         self.assertEqual(expected_status_source, actual_status_source)
 
-        self.checker.collection_query_tool.preferred_status_origin = "latest"
+        self.checker.platform_query_tool.preferred_status_origin = "latest"
 
-        self.checker.try_to_query_status_from_collection()
+        self.checker.try_to_query_status_from_platform()
 
         expected_status = "SANE"
         actual_status = self.checker.status.status
         self.assertEqual(expected_status, actual_status)
 
-        expected_status_source = "COLLECTION"
-        actual_status_source = self.checker.status.status_source
+        expected_status_source = "PLATFORM"
+        actual_status_source: str | None = self.checker.status.status_source
         self.assertEqual(expected_status_source, actual_status_source)
 
-        self.checker.collection_query_tool.preferred_status_origin = "recommended"
+        self.checker.platform_query_tool.preferred_status_origin = "recommended"
 
-        self.checker.try_to_query_status_from_collection()
+        self.checker.try_to_query_status_from_platform()
 
         expected_status = "MALICIOUS"
         actual_status = self.checker.status.status
         self.assertEqual(expected_status, actual_status)
 
-        expected_status_source = "COLLECTION"
+        expected_status_source = "PLATFORM"
         actual_status_source = self.checker.status.status_source
         self.assertEqual(expected_status_source, actual_status_source)
 
         # Let's check the case that the subject is unknown.
         self.checker.subject = "102117110105108114121115"
-        self.checker.collection_query_tool.pull = self.fake_response_no_data
+        self.checker.platform_query_tool.pull = self.fake_response_no_data
 
-        self.checker.try_to_query_status_from_collection()
+        self.checker.try_to_query_status_from_platform()
 
         expected_status = None
         actual_status = self.checker.status.status

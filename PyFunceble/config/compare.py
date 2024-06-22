@@ -135,6 +135,9 @@ class ConfigComparison:
         "whois_database": "cli_testing.whois_db",
         "wildcard": "cli_decoding.wildcard",
         "cli_decoding.adblock_aggressive": "cli_decoding.aggressive",
+        "lookup.collection": "lookup.platform",
+        "collection.push": "platform.push",
+        "collection.preferred_status_origin": "platform.preferred_status_origin",
     }
 
     OLD_TO_NEW_NEGATE: dict = {
@@ -144,7 +147,7 @@ class ConfigComparison:
     }
 
     DELETE_FLATTEN: List[str] = [
-        "collection.url_base",
+        "platform.url_base",
     ]
 
     NEW_STATUS_CODES: dict = {
@@ -267,8 +270,8 @@ class ConfigComparison:
             or "proxy" not in self.local_config
             or "follow_server_order" not in self.local_config["dns"]
             or "trust_server" not in self.local_config["dns"]
-            or "collection" not in self.local_config
-            or "collection" not in self.local_config["lookup"]
+            or "platform" not in self.local_config
+            or "platform" not in self.local_config["lookup"]
         ):
             return False
 
@@ -293,8 +296,8 @@ class ConfigComparison:
                     return False
 
         if (
-            "collection" in self.local_config
-            and "url_base" in self.local_config["collection"]
+            "platform" in self.local_config
+            and "url_base" in self.local_config["platform"]
         ):
             return False
 

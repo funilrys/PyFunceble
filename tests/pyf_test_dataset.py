@@ -376,7 +376,7 @@ DEFAULT_CONFIG: dict = {
         "testing_mode": {"availability": True, "reputation": False, "syntax": False},
         "whois_db": True,
     },
-    "collection": {
+    "platform": {
         "push": False,
         "preferred_data_origin": "frequent",
     },
@@ -458,7 +458,7 @@ DEFAULT_CONFIG: dict = {
         "special": True,
         "timeout": 5,
         "whois": True,
-        "collection": False,
+        "platform": False,
     },
     "proxy": {"global": {"http": None, "https": None}, "rules": []},
     "share_logs": False,

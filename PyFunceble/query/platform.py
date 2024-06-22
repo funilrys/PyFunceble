@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides ans interface which let us interact with the Collection API.
+Provides ans interface which let us interact with the platform API.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -64,16 +64,17 @@ from PyFunceble.checker.syntax.status import SyntaxCheckerStatus
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 
 
-class CollectionQueryTool:
+class PlatformQueryTool:
     """
-    Provides the interface to the collection dataset.
+    Provides the interface to interact with the platform.
 
     :param token:
         The token to use to communicate with the API.
 
         .. warning::
             If :code:`None` is given, the class constructor will try to load the
-            PYFUNCEBLE_COLLECTION_API_TOKEN environment variable.
+            :code:`PYFUNCEBLE_COLLECTION_API_TOKEN` or
+            :code:`PYFUNCEBLE_PLATFORM_API_TOKEN` environment variable.
 
     :param url_base:
         The base of the URL to communicate with.
@@ -97,7 +98,7 @@ class CollectionQueryTool:
 
     _token: Optional[str] = None
     """
-    The token to use while communicating with the collection API.
+    The token to use while communicating with the platform API.
     """
 
     _url_base: Optional[str] = None
@@ -134,7 +135,11 @@ class CollectionQueryTool:
         else:
             self.token = EnvironmentVariableHelper(
                 "PYFUNCEBLE_COLLECTION_API_TOKEN"
-            ).get_value(default="")
+            ).get_value(default="") or EnvironmentVariableHelper(
+                "PYFUNCEBLE_PLATFORM_API_TOKEN"
+            ).get_value(
+                default=""
+            )
 
         if preferred_status_origin is not None:
             self.preferred_status_origin = preferred_status_origin
@@ -148,7 +153,11 @@ class CollectionQueryTool:
 
         self._url_base = EnvironmentVariableHelper(
             "PYFUNCEBLE_COLLECTION_API_URL"
-        ).get_value(default=None)
+        ).get_value(default=None) or EnvironmentVariableHelper(
+            "PYFUNCEBLE_PLATFORM_API_URL"
+        ).get_value(
+            default=None
+        )
 
         self.session = requests.Session()
         self.session.headers.update(
@@ -161,7 +170,7 @@ class CollectionQueryTool:
 
     def __contains__(self, value: str) -> bool:
         """
-        Checks if the given value is in the collection.
+        Checks if the given value is in the platform.
 
         :param value:
             The value to check.
@@ -204,7 +213,7 @@ class CollectionQueryTool:
 
         self._token = value
 
-    def set_token(self, value: str) -> "CollectionQueryTool":
+    def set_token(self, value: str) -> "PlatformQueryTool":
         """
         Sets the value of the :code:`_token` attribute.
 
@@ -248,7 +257,7 @@ class CollectionQueryTool:
 
         self._url_base = value.rstrip("/")
 
-    def set_url_base(self, value: str) -> "CollectionQueryTool":
+    def set_url_base(self, value: str) -> "PlatformQueryTool":
         """
         Sets the base of the URL to work with.
 
@@ -285,7 +294,7 @@ class CollectionQueryTool:
 
         self._is_modern_api = value
 
-    def set_is_modern_api(self, value: bool) -> "CollectionQueryTool":
+    def set_is_modern_api(self, value: bool) -> "PlatformQueryTool":
         """
         Sets the value of the :code:`_is_modern_api` attribute.
 
@@ -322,7 +331,7 @@ class CollectionQueryTool:
 
         self._timeout = value
 
-    def set_timeout(self, value: float) -> "CollectionQueryTool":
+    def set_timeout(self, value: float) -> "PlatformQueryTool":
         """
         Sets the value of the :code:`_timeout` attribute.
 
@@ -334,7 +343,7 @@ class CollectionQueryTool:
 
         return self
 
-    def guess_and_set_is_modern_api(self) -> "CollectionQueryTool":
+    def guess_and_set_is_modern_api(self) -> "PlatformQueryTool":
         """
         Try to guess if we are working with a legacy version.
         """
@@ -387,7 +396,7 @@ class CollectionQueryTool:
 
         self._preferred_status_origin = value
 
-    def set_preferred_status_origin(self, value: str) -> "CollectionQueryTool":
+    def set_preferred_status_origin(self, value: str) -> "PlatformQueryTool":
         """
         Sets the preferred status origin.
 
@@ -399,17 +408,17 @@ class CollectionQueryTool:
 
         return self
 
-    def guess_and_set_preferred_status_origin(self) -> "CollectionQueryTool":
+    def guess_and_set_preferred_status_origin(self) -> "PlatformQueryTool":
         """
         Try to guess the preferred status origin.
         """
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
             if isinstance(
-                PyFunceble.storage.CONFIGURATION.collection.preferred_status_origin, str
+                PyFunceble.storage.CONFIGURATION.platform.preferred_status_origin, str
             ):
                 self.preferred_status_origin = (
-                    PyFunceble.storage.CONFIGURATION.collection.preferred_status_origin
+                    PyFunceble.storage.CONFIGURATION.platform.preferred_status_origin
                 )
             else:
                 self.preferred_status_origin = self.STD_PREFERRED_STATUS_ORIGIN
@@ -418,7 +427,7 @@ class CollectionQueryTool:
 
         return self
 
-    def guess_and_set_timeout(self) -> "CollectionQueryTool":
+    def guess_and_set_timeout(self) -> "PlatformQueryTool":
         """
         Try to guess the timeout to use.
         """
@@ -622,7 +631,7 @@ class CollectionQueryTool:
         ],
     ) -> Optional[dict]:
         """
-        Push the given status to the collection.
+        Push the given status to the platform.
 
         :param checker_status:
             The status to push.
@@ -680,7 +689,7 @@ class CollectionQueryTool:
 
     def guess_all_settings(
         self,
-    ) -> "CollectionQueryTool":  # pragma: no cover ## Underlying tested
+    ) -> "PlatformQueryTool":  # pragma: no cover ## Underlying tested
         """
         Try to guess all settings.
         """
@@ -699,7 +708,7 @@ class CollectionQueryTool:
         self, checker_type: str, data: Union[dict, str]
     ) -> Optional[dict]:
         """
-        Submits the given status to the collection.
+        Submits the given status to the platform.
 
         :param checker_type:
             The type of the checker.

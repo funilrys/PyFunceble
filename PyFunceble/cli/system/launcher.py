@@ -120,7 +120,7 @@ from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.helpers.download import DownloadHelper
 from PyFunceble.helpers.file import FileHelper
-from PyFunceble.query.collection import CollectionQueryTool
+from PyFunceble.query.platform import PlatformQueryTool
 
 
 class SystemLauncher(SystemBase):
@@ -643,7 +643,7 @@ class SystemLauncher(SystemBase):
             testing.
             """
 
-            query_tool = CollectionQueryTool()
+            query_tool = PlatformQueryTool()
 
             max_breakoff = 120.0
             breakoff_multiplier = 0.5

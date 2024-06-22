@@ -386,30 +386,30 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
-            ["--collection-preferred-origin"],
+            ["--platform-preferred-origin"],
             {
-                "dest": "collection.preferred_status_origin",
+                "dest": "platform.preferred_status_origin",
                 "type": str,
                 "choices": ["frequent", "latest", "recommended"],
                 "help": "Sets the preferred status origin. %s"
-                % get_configured_value("collection.preferred_status_origin"),
+                % get_configured_value("platform.preferred_status_origin"),
             },
         ),
         (
-            ["--collection-lookup"],
+            ["--platform-lookup"],
             {
-                "dest": "lookup.collection",
+                "dest": "lookup.platform",
                 "action": "store_true",
-                "help": "Activates or disables the usage of the Collection lookup\n"
-                "whether possible. %s" % get_configured_value("lookup.collection"),
+                "help": "Activates or disables the usage of the Platform lookup\n"
+                "whether possible. %s" % get_configured_value("lookup.platform"),
             },
         ),
         (
-            ["--collection-lookup-only"],
+            ["--platform-lookup-only"],
             {
-                "dest": "self_contained.lookup.collection",
+                "dest": "self_contained.lookup.platform",
                 "action": "store_true",
-                "help": "Only perform a Collection lookup.",
+                "help": "Only perform a Platform lookup.",
             },
         ),
         (
@@ -1009,13 +1009,13 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
         ),
         (
             [
-                "--push-collection",
+                "--push-platform",
             ],
             {
-                "dest": "collection.push",
+                "dest": "platform.push",
                 "action": "store_true",
                 "help": "Activates or disables the push of test result into the\n"
-                "collection API. %s" % get_configured_value("collection.push"),
+                "Platform API. %s" % get_configured_value("platform.push"),
             },
         ),
         (

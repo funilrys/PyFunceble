@@ -83,7 +83,7 @@ class DomainAndIPSyntaxChecker(SyntaxCheckerBase):
         else:
             query_object = DomainSyntaxChecker(self.subject, db_session=self.db_session)
 
-        query_object.collection_query_tool = self.collection_query_tool
+        query_object.platform_query_tool = self.platform_query_tool
 
         result = query_object.query_status()
 

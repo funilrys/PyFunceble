@@ -64,7 +64,7 @@ class CheckerParamsBase:
     """
 
     do_syntax_check_first: Optional[bool] = None
-    use_collection: Optional[bool] = None
+    use_platform: Optional[bool] = None
 
     def to_dict(self) -> dict:
         """

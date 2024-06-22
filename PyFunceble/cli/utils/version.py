@@ -357,5 +357,7 @@ def print_central_messages(check_force_update: bool = False) -> None:
 
     handle_messages(upstream_version)
 
+    prefix = " - " if len(PyFunceble.cli.storage.EXTRA_MESSAGES) > 1 else ""
+
     for extra_message in PyFunceble.cli.storage.EXTRA_MESSAGES:
-        print_single_line(extra_message, force=True)
+        print_single_line(prefix + extra_message, force=True, end="\n")

@@ -240,8 +240,8 @@ lookup:
   # Activates the usage of the reputation data reputation.
   reputation: no
 
-  # Activate the usage of the collection.
-  collection: no
+  # Activate the usage of the platform to lookup status.
+  platform: no
 
   # Sets the timeout to apply to each of our lookup tools who support a timeout
   # option.
@@ -424,21 +424,24 @@ links:
   api_date_format: "https://pyfunceble.funilrys.com/api/date-format"
   api_no_referrer: "https://pyfunceble.funilrys.com/api/no-referrer"
 
-collection:
-  # Provides everything related to the collection.
+platform:
+  # Provides everything related to the platform.
 
-  # Activates the push of dataset into the collection.
+  # Activates the push of dataset into the platform.
   # WARNING: This is useless, if you don't have an API Token set as the
-  # COLLECTION_API_TOKEN environment variable.
+  # PYFUNCEBLE_PLATFORM_API_TOKEN environment variable.
   push: no
 
   # Sets the preferred pull origin.
   #
+  # When choosing `recommended`, the system will pull the recommended status
+  # that is provided and calculated by the platform.
+  #
   # When choosing, `frequent`, the system will pull the most frequent status
-  # that is provided and calculated by the collection.
+  # that is provided and calculated by the platform.
   #
   # When choosing, `latest`, the system will pull the latest status that is
-  # provided and available into the collection.
+  # provided and available into the platform.
   #
   # Available: frequent | latest | recommended
   preferred_status_origin: recommended

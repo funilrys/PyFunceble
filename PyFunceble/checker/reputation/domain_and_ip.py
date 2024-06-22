@@ -78,18 +78,18 @@ class DomainAndIPReputationChecker(ReputationCheckerBase):
                 self.subject,
                 do_syntax_check_first=self.do_syntax_check_first,
                 db_session=self.db_session,
-                use_collection=self.use_collection,
+                use_platform=self.use_platform,
             )
         else:
             query_object = DomainReputationChecker(
                 self.subject,
                 do_syntax_check_first=self.do_syntax_check_first,
                 db_session=self.db_session,
-                use_collection=self.use_collection,
+                use_platform=self.use_platform,
             )
 
         query_object.ipv4_reputation_query_tool = self.ipv4_reputation_query_tool
-        query_object.collection_query_tool = self.collection_query_tool
+        query_object.platform_query_tool = self.platform_query_tool
         query_object.dns_query_tool = self.dns_query_tool
 
         result = query_object.query_status()
