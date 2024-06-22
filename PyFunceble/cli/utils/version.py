@@ -52,7 +52,7 @@ License:
 
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 
 import colorama
 from box import Box
@@ -292,7 +292,7 @@ def handle_messages(upstream_version: Box) -> None:
         authorized = True
 
     if authorized:
-        local_timezone = datetime.now(datetime.timezone.utc).astimezone().tzinfo
+        local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
 
         for minimal_version, data in upstream_version.messages.items():
             if not version_utility.is_equal_to(
