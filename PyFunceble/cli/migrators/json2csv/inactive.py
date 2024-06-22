@@ -133,7 +133,8 @@ class InactiveJSON2CSVMigrator(JSON2CSVMigratorBase):
                     if not value:
                         if index.isdigit():
                             dataset["tested_at"] = datetime.datetime.fromtimestamp(
-                                float(index)
+                                float(index),
+                                datetime.timezone.utc,
                             ).isoformat()
                         else:
                             dataset["source"] = os.path.abspath(index)

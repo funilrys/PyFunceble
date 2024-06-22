@@ -85,7 +85,9 @@ class WhoisDatasetBase(DBDatasetBase):
         else:
             return True
 
-        return datetime.now(timezone.utc) > datetime.fromtimestamp(float(to_check))
+        return datetime.now(timezone.utc) > datetime.fromtimestamp(
+            float(to_check), timezone.utc
+        )
 
     @DBDatasetBase.execute_if_authorized(None)
     def get_filtered_row(self, row: Union[dict, WhoisRecord]) -> dict:

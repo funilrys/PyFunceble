@@ -51,7 +51,7 @@ License:
 """
 
 import functools
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Generator, Optional
 
 import sqlalchemy.exc
@@ -306,7 +306,7 @@ class SQLDBDatasetBase(DBDatasetBase):
                 raise exception
 
             y2k38_limit = datetime(2037, 12, 31, 0, 0)
-            new_date = datetime.fromtimestamp(float(row["epoch"]))
+            new_date = datetime.fromtimestamp(float(row["epoch"]), timezone.utc)
             new_date -= new_date - y2k38_limit
 
             row["epoch"] = new_date.timestamp()
