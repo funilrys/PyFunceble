@@ -128,9 +128,6 @@ jobs:
     env:
       DOCKER_PYTHON_VERSION: "3.11"
       BUILDER_CLONE_DIRNAME: pyfunceble_docker
-      OUR_DOCKER_USERNAME: ${{ secrets.OUR_DOCKER_USERNAME }}
-      OUR_DOCKER_PASSWORD: ${{ secrets.OUR_DOCKER_PASSWORD }}
-      OUR_DOCKER_EMAIL: ${{ secrets.OUR_DOCKER_EMAIL }}
 
     steps:
       - uses: actions/checkout@v4
@@ -169,7 +166,7 @@ jobs:
         run: |
           git log -1 --format=format:'%H'
 
-      - name: Build, Check and Publish 📦
+      - name: Build, Check and Publish 📦 to Docker Hub
         run: >
           set -x ;
           pyfunceble-docker-builder -b ${{ env.BUILDER_CLONE_DIRNAME }}/docs_builder
@@ -177,3 +174,20 @@ jobs:
           --pyfunceble-version="$(python setup.py --version)"
           --python-version="${DOCKER_PYTHON_VERSION}"
           --is-latest --publish --commit="$(git log -1 --format=format:'%H')"
+        env:
+          OUR_DOCKER_USERNAME: ${{ secrets.OUR_DOCKER_USERNAME }}
+          OUR_DOCKER_PASSWORD: ${{ secrets.OUR_DOCKER_PASSWORD }}
+          OUR_DOCKER_EMAIL: ${{ secrets.OUR_DOCKER_EMAIL }}
+
+      - name: Build, Check and Publish 📦 to Internal Hub
+        run: >
+          set -x ;
+          pyfunceble-docker-builder -b ${{ env.BUILDER_CLONE_DIRNAME }}/docs_builder
+          -p docs
+          --pyfunceble-version="$(python setup.py --version)"
+          --python-version="${DOCKER_PYTHON_VERSION}"
+          --is-latest --publish --commit="$(git log -1 --format=format:'%H')"
+        env:
+          OUR_DOCKER_USERNAME: ${{ secrets.INTERNAL_DOCKER_USERNAME }}
+          OUR_DOCKER_PASSWORD: ${{ secrets.INTERNAL_DOCKER_PASSWORD }}
+          OUR_DOCKER_REGISTRY: ${{ secrets.INTERNAL_DOCKER_REGISTRY }}
