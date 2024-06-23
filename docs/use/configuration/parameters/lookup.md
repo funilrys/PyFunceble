@@ -48,11 +48,11 @@ lookup:
   # Exclusive CLI Argument: --reputation-lookup
   reputation: no
 
-  # Enable/Disable the usage of the collection (API) to lookup the status.
+  # Enable/Disable the usage of the platform (API) to lookup the status.
   #
-  # CLI Argument: --collection-lookup
-  # Exclusive CLI Argument: --collection-lookup-only
-  collection: no
+  # CLI Argument: --platform-lookup
+  # Exclusive CLI Argument: --platform-lookup-only
+  platform: no
 
   # Set the timeout to apply to each of our lookup methods - when possible.
   #
@@ -147,9 +147,9 @@ Enable or disable the usage of reputation data to lookup the status.
 
 **Exclusive CLI Argument:** `--reputation-lookup-only`
 
-## `collection`
+## `platform`
 
-Enable or disable the usage of the collection (API) to lookup the status.
+Enable or disable the usage of the platform (API) to lookup the status.
 
 **Type:** boolean
 
@@ -157,9 +157,9 @@ Enable or disable the usage of the collection (API) to lookup the status.
 
 **Available Values:** `yes`, `no`
 
-**CLI Argument:** `--collection-lookup`
+**CLI Argument:** `--platform-lookup`
 
-**Exclusive CLI Argument:** `--collection-lookup-only`
+**Exclusive CLI Argument:** `--platform-lookup-only`
 
 ## `timeout`
 

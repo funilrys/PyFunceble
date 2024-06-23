@@ -761,35 +761,31 @@ links:
 
 platform:
   # Provides everything related to the platform.
+  # PyFunceble alone is a great tool. What if we could just test the subject that
+  # were not already tested by others ?
 
-  # Activates the push of dataset into the platform.
-  # WARNING: This is useless, if you don't have an API Token set as the
-  # PYFUNCEBLE_PLATFORM_API_TOKEN environment variable.
+  # Enable or disable the push of datasets (cf: test results) into the collection
+  # (API).
+  #
+  # NOTE:
+  #     This parameter is useless, unless you have a valid API Token defined
+  #     into the PYFUNCEBLE_PLATFORM_API_TOKEN environment variable.
+  #
+  # CLI Argument: --push-collection
   push: no
 
-  # Sets the preferred pull origin.
+  # Set the preferred pull "method".
   #
-  # When choosing `recommended`, the system will pull the recommended status
-  # that is provided and calculated by the platform.
-  #
-  # When choosing, `frequent`, the system will pull the most frequent status
-  # that is provided and calculated by the platform.
-  #
-  # When choosing, `latest`, the system will pull the latest status that is
-  # provided and available into the platform.
-  #
-  # Available: frequent | latest | recommended
-
-  # Set the prefered pull "method".
-  #
-  # The collection (API) is not only a collection of datasets but it also offer
-  # an aggregeation endpoints that let PyFunceble pull datasets.
-  # When pulling information about a subject that is already known by the collection,
+  # The platform (API) does not only provides datasets but it also offer an
+  # aggregation endpoint that let PyFunceble pull datasets.
+  # When pulling information about a subject that is already known by the platform,
   # it returns 3 group of results:
   #
   #   - `frequent`, which provides the status that was mostly been pushed.
-  #   - `latest`, which provides the status based on the lastest submitted datasets.
+  #   - `latest`, which provides the status based on the latest submitted datasets.
   #   - `recommended`, which provides the recommended status.
+  #
+  # CLI Argument: --platform-preferred-origin
   preferred_status_origin: recommended
 
   # Defines the checker type to prioritize when trying to fullfil platform
@@ -811,7 +807,9 @@ platform:
   #   - syntax
   #   - reputation
   #
-  # Available: none | availability | reputation | syntax
+  # Available Values: none | availability | reputation | syntax
+  #
+  # CLI Argument: none
   checker_priority:
     - none
 
@@ -830,6 +828,8 @@ platform:
   #
   #   - reputation
   #
-  # Available: none | availability | reputation | syntax
+  # Available Values: none | availability | reputation | syntax
+  #
+  # CLI Argument: none
   checker_exclude:
     - none

@@ -97,7 +97,7 @@ The subject describes the subject that you supplied to PyFunceble.
         "use_reputation_lookup": false,
         "use_whois_db": true,
         "use_whois_lookup": false,
-        "use_collection": false
+        "use_platform": false
     },
     "registrar": null,
     "second_level_domain_syntax": true,
@@ -155,7 +155,7 @@ The subject describes the subject that you supplied to PyFunceble.
     "ipv6_syntax": false,
     "params": {
         "do_syntax_check_first": false,
-        "use_collection": false
+        "use_platform": false
     },
     "second_level_domain_syntax": true,
     "status": "SANE",
