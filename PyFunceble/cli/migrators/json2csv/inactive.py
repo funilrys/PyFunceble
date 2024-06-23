@@ -133,7 +133,8 @@ class InactiveJSON2CSVMigrator(JSON2CSVMigratorBase):
                     if not value:
                         if index.isdigit():
                             dataset["tested_at"] = datetime.datetime.fromtimestamp(
-                                float(index)
+                                float(index),
+                                datetime.timezone.utc,
                             ).isoformat()
                         else:
                             dataset["source"] = os.path.abspath(index)
@@ -147,7 +148,9 @@ class InactiveJSON2CSVMigrator(JSON2CSVMigratorBase):
                     dataset["status"] = value
 
                     if not dataset["tested_at"]:
-                        dataset["tested_at"] = datetime.datetime.utcnow().isoformat()
+                        dataset["tested_at"] = datetime.datetime.now(
+                            datetime.timezone.utc
+                        ).isoformat()
 
                     PyFunceble.facility.Logger.debug("Decoded dataset:\n%r.", dataset)
 

@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Generator, Tuple
 
 import PyFunceble.cli.factory
@@ -94,7 +94,7 @@ class SQLDBContinueDataset(SQLDBDatasetBase, ContinueDatasetBase):
 
     @SQLDBDatasetBase.execute_if_authorized(None)
     def get_to_test(self, session_id: str) -> Generator[Tuple[str], str, None]:
-        twenty_years_ago = datetime.utcnow() - timedelta(days=365.25 * 20)
+        twenty_years_ago = datetime.now(timezone.utc) - timedelta(days=365.25 * 20)
 
         result = (
             self.db_session.query(self.ORM_OBJ)

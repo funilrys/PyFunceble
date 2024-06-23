@@ -55,7 +55,7 @@ License:
 import datetime
 import functools
 import secrets
-from typing import Any, Optional
+from typing import Any, List, Optional
 
 import PyFunceble.cli.continuous_integration.exceptions
 import PyFunceble.facility
@@ -104,6 +104,8 @@ class ContinuousIntegrationBase:
     STD_COMMIT_MESSAGE: str = "PyFunceble - AutoSave"
     STD_END_COMMIT_MESSAGE: str = "PyFunceble - Results"
     STD_MAX_EXEC_MINUTES: int = 15
+
+    COMMON_CI_SKIP_MARKER: List[str] = ["[skip ci]", "[ci skip]", "[no ci]"]
 
     end_commit_marker: str = "[ci skip]"
 
@@ -346,6 +348,17 @@ class ContinuousIntegrationBase:
             raise TypeError(f"<value> should be {bool}, {type(value)} given.")
 
         self._authorized = value
+
+    @property
+    def bypass_bypass(self) -> bool:
+        """
+        Provides the currently state of the :code:`_bypass_bypass` attribute.
+        """
+
+        return (
+            EnvironmentVariableHelper("PYFUNCEBLE_BYPASS_BYPASS").get_value()
+            is not None
+        )
 
     def set_authorized(self, value: bool) -> "ContinuousIntegrationBase":
         """
@@ -786,7 +799,7 @@ class ContinuousIntegrationBase:
         Sets the starting time to now.
         """
 
-        self.start_time = datetime.datetime.utcnow()
+        self.start_time = datetime.datetime.now(datetime.timezone.utc)
         self.expected_end_time = self.start_time + datetime.timedelta(
             minutes=self.max_exec_minutes
         )
@@ -1020,7 +1033,7 @@ class ContinuousIntegrationBase:
         Checks if we exceeded the allocated time we have.
         """
 
-        return self.expected_end_time < datetime.datetime.utcnow()
+        return self.expected_end_time < datetime.datetime.now(datetime.timezone.utc)
 
     @execute_if_authorized(None)
     @ensure_token_is_given
@@ -1136,12 +1149,15 @@ class ContinuousIntegrationBase:
             raise PyFunceble.cli.continuous_integration.exceptions.StopExecution()
 
     @execute_if_authorized(None)
-    def apply_end_commit(self) -> None:
+    def apply_end_commit(self, *, push: bool = True) -> None:
         """
         Apply the "end" commit and push.
 
         Side effect:
             It runs the declared command to execute.
+
+        :param push:
+            Whether we should push the changes or not.
         """
 
         PyFunceble.facility.Logger.info(
@@ -1189,18 +1205,19 @@ class ContinuousIntegrationBase:
             "Finished to prepare and apply final GIT commit."
         )
 
-        if self.git_distribution_branch != self.git_branch:
-            self.push_changes(branch_to_use)
-        else:
+        if push:
             self.push_changes(branch_to_use)
 
     @execute_if_authorized(None)
-    def apply_commit(self) -> None:
+    def apply_commit(self, *, push: bool = True) -> None:
         """
         Apply the commit and push.
 
         Side effect:
             It runs the declared command to execute.
+
+        :param push:
+            Whether we should push the changes or not.
         """
 
         PyFunceble.facility.Logger.info("Started to prepare and apply GIT commit.")
@@ -1234,7 +1251,8 @@ class ContinuousIntegrationBase:
 
         PyFunceble.facility.Logger.info("Finished to prepare and apply GIT commit.")
 
-        self.push_changes(self.git_branch)
+        if push:
+            self.push_changes(self.git_branch)
 
     @execute_if_authorized(None)
     def bypass(self) -> None:
@@ -1243,13 +1261,24 @@ class ContinuousIntegrationBase:
 
             - :code:`[PyFunceble skip]` (case insensitive)
             - :code:`[PyFunceble-skip]` (case insensitive)
+            - :code:`[skip-PyFunceble]` (case insensitive)
+            - :code:`[skip PyFunceble]` (case insensitive)
             - :attr:`~PyFunceble.cli.continuous_integration.base.end_commit_marker`
+            - :attr:`~PyFunceble.cli.continuous_integration.base.COMMON_CI_SKIP_MARKER`
         """
 
-        our_marker = ["[pyfunceble skip]", "[pyfunceble-skip]", self.end_commit_marker]
+        our_marker = self.COMMON_CI_SKIP_MARKER + [
+            "[pyfunceble skip]",
+            "[pyfunceble-skip]",
+            "[skip-pyfunceble]",
+            "[skip pyfunceble]",
+            self.end_commit_marker,
+        ]
         latest_commit = CommandHelper("git log -1").execute().lower()
 
-        if any(x.lower() in latest_commit for x in our_marker):
+        if not self.bypass_bypass and any(
+            x.lower() in latest_commit for x in our_marker
+        ):
             PyFunceble.facility.Logger.info(
                 "Bypass marker caught. Saving and stopping process."
             )

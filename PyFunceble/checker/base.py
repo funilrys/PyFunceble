@@ -62,7 +62,7 @@ import PyFunceble.storage
 from PyFunceble.checker.params_base import CheckerParamsBase
 from PyFunceble.checker.status_base import CheckerStatusBase
 from PyFunceble.converter.url2netloc import Url2Netloc
-from PyFunceble.query.collection import CollectionQueryTool
+from PyFunceble.query.platform import PlatformQueryTool
 
 
 class CheckerBase:
@@ -79,10 +79,10 @@ class CheckerBase:
     """
 
     STD_DO_SYNTAX_CHECK_FIRST: bool = False
-    STD_USE_COLLECTION: bool = False
+    STD_USE_PLATFORM: bool = False
 
     _do_syntax_check_first: bool = False
-    _use_collection: bool = False
+    _use_platform: bool = False
 
     _subject: Optional[str] = None
     _idna_subject: Optional[str] = None
@@ -90,7 +90,7 @@ class CheckerBase:
     url2netloc: Optional[Url2Netloc] = None
 
     db_session: Optional[Session] = None
-    collection_query_tool: Optional[CollectionQueryTool] = None
+    platform_query_tool: Optional[PlatformQueryTool] = None
 
     status: Optional[CheckerStatusBase] = None
     params: Optional[CheckerParamsBase] = None
@@ -101,9 +101,9 @@ class CheckerBase:
         *,
         do_syntax_check_first: Optional[bool] = None,
         db_session: Optional[Session] = None,
-        use_collection: Optional[bool] = None,
+        use_platform: Optional[bool] = None,
     ) -> None:
-        self.collection_query_tool = CollectionQueryTool()
+        self.platform_query_tool = PlatformQueryTool()
         self.url2netloc = Url2Netloc()
 
         if self.params is None:
@@ -120,10 +120,10 @@ class CheckerBase:
         else:
             self.do_syntax_check_first = self.STD_DO_SYNTAX_CHECK_FIRST
 
-        if use_collection is not None:
-            self.use_collection = use_collection
+        if use_platform is not None:
+            self.use_platform = use_platform
         else:
-            self.guess_and_set_use_collection()
+            self.guess_and_set_use_platform()
 
         self.db_session = db_session
 
@@ -185,7 +185,7 @@ class CheckerBase:
         def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
             result = func(self, *args, **kwargs)  # pylint: disable=not-callable
 
-            self.status.tested_at = datetime.datetime.utcnow()
+            self.status.tested_at = datetime.datetime.now(datetime.timezone.utc)
 
             return result
 
@@ -320,17 +320,17 @@ class CheckerBase:
         return self
 
     @property
-    def use_collection(self) -> bool:
+    def use_platform(self) -> bool:
         """
-        Provides the current value of the :code:`_use_collection` attribute.
+        Provides the current value of the :code:`_use_platform` attribute.
         """
 
-        return self._use_collection
+        return self._use_platform
 
-    @use_collection.setter
-    def use_collection(self, value: bool) -> None:
+    @use_platform.setter
+    def use_platform(self, value: bool) -> None:
         """
-        Sets the value which authorizes the usage of the Collection.
+        Sets the value which authorizes the usage of the platform.
 
         :param value:
             The value to set.
@@ -342,32 +342,32 @@ class CheckerBase:
         if not isinstance(value, bool):
             raise TypeError(f"<value> should be {bool}, {type(value)} given.")
 
-        self._use_collection = self.params.use_collection = value
+        self._use_platform = self.params.use_platform = value
 
-    def set_use_collection(self, value: bool) -> "CheckerBase":
+    def set_use_platform(self, value: bool) -> "CheckerBase":
         """
-        Sets the value which authorizes the usage of the Collection.
+        Sets the value which authorizes the usage of the platform.
 
         :param value:
             The value to set.
         """
 
-        self.use_collection = value
+        self.use_platform = value
 
         return self
 
-    def guess_and_set_use_collection(self) -> "CheckerBase":
+    def guess_and_set_use_platform(self) -> "CheckerBase":
         """
-        Try to guess and set the value of the :code:`use_collection` attribute.
+        Try to guess and set the value of the :code:`use_platform` attribute.
         """
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            if isinstance(PyFunceble.storage.CONFIGURATION.lookup.collection, bool):
-                self.use_collection = PyFunceble.storage.CONFIGURATION.lookup.collection
+            if isinstance(PyFunceble.storage.CONFIGURATION.lookup.platform, bool):
+                self.use_platform = PyFunceble.storage.CONFIGURATION.lookup.platform
             else:
-                self.use_collection = self.STD_USE_COLLECTION
+                self.use_platform = self.STD_USE_PLATFORM
         else:
-            self.use_collection = self.STD_USE_COLLECTION
+            self.use_platform = self.STD_USE_PLATFORM
 
     def subject_propagator(self) -> "CheckerBase":
         """

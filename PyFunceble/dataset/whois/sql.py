@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Generator, Optional, Union
 
 import sqlalchemy
@@ -161,7 +161,7 @@ class SQLDBWhoisDataset(SQLDBDatasetBase, WhoisDatasetBase):
         in the past.
         """
 
-        current_timestamp = int(datetime.utcnow().timestamp())
+        current_timestamp = int(datetime.now(timezone.utc).timestamp())
 
         try:
             self.db_session.query(self.ORM_OBJ).filter(

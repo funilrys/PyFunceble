@@ -190,6 +190,38 @@ class SystemIntegrator(SystemBase):
                 "both disabled."
             )
 
+        if "url_base" in PyFunceble.storage.CONFIGURATION.platform:
+            PyFunceble.cli.storage.EXTRA_MESSAGES.append(
+                f"{colorama.Style.BRIGHT}{colorama.Fore.MAGENTA}Your are still "
+                "defining the 'platform.url_base' configuration key which has "
+                "been deprecated and deleted. Please remove it from your "
+                "configuration file."
+            )
+
+        if (
+            "collection" in PyFunceble.storage.CONFIGURATION
+            or "collection" in PyFunceble.storage.CONFIGURATION.lookup
+        ):
+            PyFunceble.cli.storage.EXTRA_MESSAGES.append(
+                f"{colorama.Style.BRIGHT}{colorama.Fore.MAGENTA}The 'collection' "
+                "configuration key is not supported anymore. Please switch to "
+                "'platform'."
+            )
+
+        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
+            PyFunceble.cli.storage.EXTRA_MESSAGES.append(
+                f"{colorama.Style.BRIGHT}{colorama.Fore.MAGENTA}The "
+                "'PYFUNCEBLE_COLLECTION_API_TOKEN' environment variable is not "
+                "supported anymore. Please switch to 'PYFUNCEBLE_PLATFORM_API_TOKEN'."
+            )
+
+        if "PYFUNCEBLE_COLLECTION_API_URL" in os.environ:
+            PyFunceble.cli.storage.EXTRA_MESSAGES.append(
+                f"{colorama.Style.BRIGHT}{colorama.Fore.MAGENTA}The "
+                "'PYFUNCEBLE_COLLECTION_API_URL' environment variable is not "
+                "supported anymore. Please switch to 'PYFUNCEBLE_PLATFORM_API_URL'."
+            )
+
     @SystemBase.ensure_args_is_given
     def check_deprecated(self) -> "SystemIntegrator":
         """

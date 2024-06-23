@@ -75,7 +75,7 @@ from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
 from PyFunceble.dataset.autocontinue.csv import CSVContinueDataset
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.dataset.whois.base import WhoisDatasetBase
-from PyFunceble.query.collection import CollectionQueryTool
+from PyFunceble.query.platform import PlatformQueryTool
 
 
 class ProducerWorker(WorkerBase):
@@ -95,7 +95,7 @@ class ProducerWorker(WorkerBase):
     status_file_generator: Optional[StatusFileGenerator] = None
     counter: Optional[FilesystemCounter] = None
     registrar_counter: Optional[RegistrarCounter] = None
-    collection_query_tool: Optional[CollectionQueryTool] = None
+    platform_query_tool: Optional[PlatformQueryTool] = None
 
     header_already_printed: Optional[bool] = None
 
@@ -115,7 +115,7 @@ class ProducerWorker(WorkerBase):
         self.status_file_generator = StatusFileGenerator().guess_all_settings()
         self.counter = FilesystemCounter()
         self.registrar_counter = RegistrarCounter()
-        self.collection_query_tool = CollectionQueryTool()
+        self.platform_query_tool = PlatformQueryTool()
 
         self.header_already_printed = False
 
@@ -400,15 +400,15 @@ class ProducerWorker(WorkerBase):
             return None
 
         if test_dataset["type"] == "platform-contribution":
-            self.collection_query_tool.deliver_contract(
+            self.platform_query_tool.deliver_contract(
                 test_dataset["contract"], test_result
             )
 
         if (
-            PyFunceble.storage.CONFIGURATION.collection.push
-            and test_result.status_source != "COLLECTION"
+            PyFunceble.storage.CONFIGURATION.platform.push
+            and test_result.status_source != "PLATFORM"
         ):
-            self.collection_query_tool.push(test_result)
+            self.platform_query_tool.push(test_result)
 
         if not PyFunceble.storage.CONFIGURATION.cli_testing.chancy_tester:
             self.run_whois_backup(test_result)

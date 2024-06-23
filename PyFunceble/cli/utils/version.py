@@ -52,7 +52,7 @@ License:
 
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 
 import colorama
 from box import Box
@@ -292,7 +292,7 @@ def handle_messages(upstream_version: Box) -> None:
         authorized = True
 
     if authorized:
-        local_timezone = datetime.utcnow().astimezone().tzinfo
+        local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
 
         for minimal_version, data in upstream_version.messages.items():
             if not version_utility.is_equal_to(
@@ -357,5 +357,7 @@ def print_central_messages(check_force_update: bool = False) -> None:
 
     handle_messages(upstream_version)
 
+    prefix = " - " if len(PyFunceble.cli.storage.EXTRA_MESSAGES) > 1 else ""
+
     for extra_message in PyFunceble.cli.storage.EXTRA_MESSAGES:
-        print_single_line(extra_message, force=True)
+        print_single_line(prefix + extra_message, force=True, end="\n")

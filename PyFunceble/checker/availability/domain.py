@@ -129,8 +129,8 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
 
         status_post_syntax_checker = None
 
-        if not self.status.status and self.use_collection:
-            self.try_to_query_status_from_collection()
+        if not self.status.status and self.use_platform:
+            self.try_to_query_status_from_platform()
 
         if not self.status.status and self.do_syntax_check_first:
             self.try_to_query_status_from_syntax_lookup(from_domain_test=True)

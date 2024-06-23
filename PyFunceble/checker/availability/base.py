@@ -159,7 +159,7 @@ class AvailabilityCheckerBase(CheckerBase):
         do_syntax_check_first: Optional[bool] = None,
         db_session: Optional[Session] = None,
         use_whois_db: Optional[bool] = None,
-        use_collection: Optional[bool] = None,
+        use_platform: Optional[bool] = None,
     ) -> None:
         self.dns_query_tool = DNSQueryTool()
         self.whois_query_tool = WhoisQueryTool()
@@ -224,7 +224,7 @@ class AvailabilityCheckerBase(CheckerBase):
             subject,
             do_syntax_check_first=do_syntax_check_first,
             db_session=db_session,
-            use_collection=use_collection,
+            use_platform=use_platform,
         )
 
     @property
@@ -1020,27 +1020,27 @@ class AvailabilityCheckerBase(CheckerBase):
 
         raise NotImplementedError()
 
-    def try_to_query_status_from_collection(self) -> "AvailabilityCheckerBase":
+    def try_to_query_status_from_platform(self) -> "AvailabilityCheckerBase":
         """
-        Tries to get and set the status from the Collection API.
+        Tries to get and set the status from the platform API.
         """
 
         PyFunceble.facility.Logger.info(
-            "Started to try to query the status of %r from: Collection Lookup",
+            "Started to try to query the status of %r from: Platform Lookup",
             self.status.idna_subject,
         )
 
-        data = self.collection_query_tool.pull(self.idna_subject)
+        data = self.platform_query_tool.pull(self.idna_subject)
 
         if data and "status" in data:
             if (
-                self.collection_query_tool.preferred_status_origin == "frequent"
+                self.platform_query_tool.preferred_status_origin == "frequent"
                 and data["status"]["availability"]["frequent"]
             ):
                 self.status.status = data["status"]["availability"]["frequent"]
-                self.status.status_source = "COLLECTION"
+                self.status.status_source = "PLATFORM"
             elif (
-                self.collection_query_tool.preferred_status_origin == "latest"
+                self.platform_query_tool.preferred_status_origin == "latest"
                 and data["status"]["availability"]["latest"]
             ):
                 try:
@@ -1050,21 +1050,21 @@ class AvailabilityCheckerBase(CheckerBase):
                     ]
                 except KeyError:
                     self.status.status = data["status"]["availability"]["latest"]
-                self.status.status_source = "COLLECTION"
+                self.status.status_source = "PLATFORM"
             elif (
-                self.collection_query_tool.preferred_status_origin == "recommended"
+                self.platform_query_tool.preferred_status_origin == "recommended"
                 and data["status"]["availability"]["recommended"]
             ):
                 self.status.status = data["status"]["availability"]["recommended"]
-                self.status.status_source = "COLLECTION"
+                self.status.status_source = "PLATFORM"
 
             PyFunceble.facility.Logger.info(
-                "Could define the status of %r from: Collection Lookup",
+                "Could define the status of %r from: Platform Lookup",
                 self.status.idna_subject,
             )
 
         PyFunceble.facility.Logger.info(
-            "Finished to try to query the status of %r from: Collection Lookup",
+            "Finished to try to query the status of %r from: Platform Lookup",
             self.status.idna_subject,
         )
 

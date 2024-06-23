@@ -111,7 +111,7 @@ class DomainAndIPAvailabilityChecker(AvailabilityCheckerBase):
                 do_syntax_check_first=self.do_syntax_check_first,
                 db_session=self.db_session,
                 use_whois_db=self.use_whois_db,
-                use_collection=self.use_collection,
+                use_platform=self.use_platform,
             )
         else:
             query_object = DomainAvailabilityChecker(
@@ -125,12 +125,12 @@ class DomainAndIPAvailabilityChecker(AvailabilityCheckerBase):
                 do_syntax_check_first=self.do_syntax_check_first,
                 db_session=self.db_session,
                 use_whois_db=self.use_whois_db,
-                use_collection=self.use_collection,
+                use_platform=self.use_platform,
             )
 
         query_object.dns_query_tool = self.dns_query_tool
         query_object.whois_query_tool = self.whois_query_tool
-        query_object.collection_query_tool = self.collection_query_tool
+        query_object.platform_query_tool = self.platform_query_tool
         query_object.hostbyaddr_query_tool = self.hostbyaddr_query_tool
         query_object.addressinfo_query_tool = self.addressinfo_query_tool
         query_object.http_status_code_query_tool = self.http_status_code_query_tool

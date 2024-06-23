@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the domains and IP syntax checker.
+Provides the CI engine and detection tool for standalone instances.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,43 +50,55 @@ License:
     limitations under the License.
 """
 
-from typing import Union
+import PyFunceble.cli.continuous_integration.exceptions
+import PyFunceble.facility
+from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
+from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 
-from PyFunceble.checker.syntax.base import SyntaxCheckerBase
-from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
-from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 
-
-class DomainAndIPSyntaxChecker(SyntaxCheckerBase):
+class Standalone(ContinuousIntegrationBase):
     """
-    Provides the interface for checking the syntax of an IP or domain.
-
-    :param str subject:
-        Optional, The subject to work with.
+    Provides a standalone interface which let end-user run PyFunceble in a standalone
+    environment, without any GIT related CI/CD stuff.
     """
 
-    @SyntaxCheckerBase.ensure_subject_is_given
-    @SyntaxCheckerBase.update_status_date_after_query
-    def query_status(
-        self,
-    ) -> "DomainAndIPSyntaxChecker":  # pragma: no cover ## Just a switch.
+    def guess_and_set_authorized(self) -> "Standalone":
         """
-        Queries the result without anything more.
+        Tries to guess the authorization.
         """
 
-        query_object: Union[IPSyntaxChecker, DomainSyntaxChecker] = None
+        needed_environment_vars = ["PYFUNCEBLE_STANDALONE_CI"]
 
-        ip_checker = IPSyntaxChecker(self.subject)
-
-        if ip_checker.is_valid():
-            query_object = ip_checker
+        if all(EnvironmentVariableHelper(x).exists() for x in needed_environment_vars):
+            self.authorized = True
+        elif PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if bool(PyFunceble.storage.CONFIGURATION.cli_testing.ci.active):
+                self.authorized = all(
+                    EnvironmentVariableHelper(x).exists()
+                    for x in needed_environment_vars
+                )
+            else:
+                super().guess_and_set_authorized()
         else:
-            query_object = DomainSyntaxChecker(self.subject, db_session=self.db_session)
+            super().guess_and_set_authorized()
 
-        query_object.platform_query_tool = self.platform_query_tool
+        return self
 
-        result = query_object.query_status()
+    def guess_and_set_token(self) -> "Standalone":
+        return self
 
-        self.__dict__.update(query_object.__dict__)
+    @ContinuousIntegrationBase.execute_if_authorized(None)
+    def init_git(self) -> ContinuousIntegrationBase:
+        return self
 
-        return result
+    @ContinuousIntegrationBase.execute_if_authorized(None)
+    def bypass(self) -> None:
+        return None
+
+    @ContinuousIntegrationBase.execute_if_authorized(None)
+    def init_git_remote_with_token(self) -> "Standalone":
+        return self
+
+    @ContinuousIntegrationBase.execute_if_authorized(None)
+    def apply_commit(self, *, push: bool = True) -> None:
+        return super().apply_end_commit(push=push)

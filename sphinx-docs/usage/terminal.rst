@@ -391,39 +391,39 @@ by removing the usual limitation which do not apply to intranets.
 
 ------
 
-:code:`--collection-preferred-origin`
-"""""""""""""""""""""""""""""""""""""
+:code:`--platform-preferred-origin`
+"""""""""""""""""""""""""""""""""""
 
 .. versionadded:: 4.0.0
 
 Sets the preferred status origin.
 
-**Default value:** :code:`collection.preferred_status_origin: frequent`
+**Default value:** :code:`platform.preferred_status_origin: frequent`
 
 **Available values:** :code:`frequent`, :code:`latest`, :code:`recommended`
 
 
 ------
 
-:code:`--collection-lookup`
-"""""""""""""""""""""""""""
+:code:`--platform-lookup`
+"""""""""""""""""""""""""
 
 .. versionadded:: 4.0.0
 
-Activates or disables the usage of the collection lookup whether possible.
+Activates or disables the usage of the platform lookup whether possible.
 
-**Default value:** :code:`lookup.collection: False`
+**Default value:** :code:`lookup.platform: False`
 
-Want to take advantage of the collection API ? This argument is for you.
+Want to take advantage of the platform API ? This argument is for you.
 
 ------
 
-:code:`--collection-lookup-only`
+:code:`--platform-lookup-only`
 """"""""""""""""""""""""""""""""
 
 .. versionadded:: 4.1.0b10
 
-Activates or disables the exclusive usage of the collection lookup as test
+Activates or disables the exclusive usage of the platform lookup as test
 method.
 
 ------
@@ -1285,20 +1285,20 @@ Activates or disables the display of output to the terminal.
 
 ------
 
-:code:`--push-collection`
-"""""""""""""""""""""""""
+:code:`--push-platform`
+"""""""""""""""""""""""
 
 .. versionadded:: 4.0.0
 
-Activates or disables the push of the test results into the collection API.
+Activates or disables the push of the test results into the Platform API.
 
-**Default value:** :code:`collection.push: False`
+**Default value:** :code:`platform.push: False`
 
-Want to take submit data into the collection API ? This argument is for you.
+Want to take submit data into the platform API ? This argument is for you.
 
 .. warning::
 
-    This argument is useless if the :code:`PYFUNCEBLE_COLLECTION_API` environment
+    This argument is useless if the :code:`PYFUNCEBLE_PLATFORM_API` environment
     variable is not defined.
 
 ------
@@ -1585,7 +1585,7 @@ are set.
 +-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_AUTO_CONFIGURATION`   | Tell us if we have to install/update the configuration file automatically.                                           |
 +-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_COLLECTION_API_TOKEN` | Sets the API token to use when pushing data into the collection API.                                                 |
+| :code:`PYFUNCEBLE_PLATFORM_API_TOKEN` | Sets the API token to use when pushing data into the Platform API.                                                 |
 +-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_CONFIG_DIR`           | Tell us the location of the directory to use as the configuration directory.                                         |
 +-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
@@ -1641,8 +1641,8 @@ Global overview
                     [--filter CLI_TESTING__FILE_FILTER] [--mining] [--rpz]
                     [--wildcard] [--chancy] [-c]
                     [--cooldown-time CLI_TESTING__COOLDOWN_TIME] [--local]
-                    [--collection-preferred-origin {frequent,latest,recommended}]
-                    [--collection-lookup] [--collection-lookup-only]
+                    [--platform-preferred-origin {frequent,latest,recommended}]
+                    [--platform-lookup] [--platform-lookup-only]
                     [--dns-lookup] [--dns-lookup-only] [--http] [--http-only]
                     [--netinfo-lookup] [--netinfo-lookup-only]
                     [--special-lookup] [--special-lookup-only] [--whois-lookup]
@@ -1664,7 +1664,7 @@ Global overview
                     [--output-location OUTPUT_LOCATION] [--unified-results]
                     [--percentage] [--registrar]
                     [--max-registrar CLI_TESTING__DISPLAY_MODE__MAX_REGISTRAR]
-                    [--plain] [-q] [--push-collection] [-s]
+                    [--plain] [-q] [--push-platform] [-s]
                     [-w CLI_TESTING__MAX_WORKERS]
                     [--ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES] [--ci]
                     [--ci-branch CLI_TESTING__CI__BRANCH]
@@ -1755,14 +1755,14 @@ Global overview
         --local               Activates or disables the consideration of the test(s)
                                 in or for a local or private network context.
                                 Configured value: False
-        --collection-preferred-origin {frequent,latest,recommended}
+        --platform-preferred-origin {frequent,latest,recommended}
                                 Sets the preferred status origin.
                                 Configured value: 'recommended'
-        --collection-lookup   Activates or disables the usage of the Collection lookup
+        --platform-lookup   Activates or disables the usage of the Platform lookup
                                 whether possible.
                                 Configured value: False
-        --collection-lookup-only
-                                Only perform a Collection lookup.
+        --platform-lookup-only
+                                Only perform a Platform lookup.
         --dns-lookup          Activates or disables the usage of the DNS lookup
                                 whether possible.
                                 Configured value: True
@@ -1929,8 +1929,8 @@ Global overview
         -q, --quiet           Activates or disables the display of output to the
                                 terminal.
                                 Configured value: False
-        --push-collection     Activates or disables the push of test result into the
-                                collection API.
+        --push-platform     Activates or disables the push of test result into the
+                                Platform API.
                                 Configured value: False
         -s, --simple          Activates or disables the simple output mode.
                                 Configured value: False

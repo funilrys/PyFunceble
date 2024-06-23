@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Tests of the Collection query tool.
+Tests of the Platform query tool.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -64,12 +64,12 @@ import requests.models
 
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.config.loader import ConfigLoader
-from PyFunceble.query.collection import CollectionQueryTool
+from PyFunceble.query.platform import PlatformQueryTool
 
 
-class TestCollectionQueryTool(unittest.TestCase):
+class TestPlatformQueryTool(unittest.TestCase):
     """
-    Tests the Collection query tool.
+    Tests the Platform query tool.
     """
 
     def setUp(self) -> None:
@@ -77,7 +77,7 @@ class TestCollectionQueryTool(unittest.TestCase):
         Sets everything needed by the tests.
         """
 
-        self.query_tool = CollectionQueryTool()
+        self.query_tool = PlatformQueryTool()
 
         self.response_dataset = {
             "subject": "example.net",
@@ -203,7 +203,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         actual = self.query_tool.set_token(given)
 
-        self.assertIsInstance(actual, CollectionQueryTool)
+        self.assertIsInstance(actual, PlatformQueryTool)
 
     def test_set_token_method(self) -> None:
         """
@@ -240,7 +240,7 @@ class TestCollectionQueryTool(unittest.TestCase):
         given = secrets.token_urlsafe(6)
         expected = given
 
-        query_tool = CollectionQueryTool(token=given)
+        query_tool = PlatformQueryTool(token=given)
         actual = query_tool.token
 
         self.assertEqual(expected, actual)
@@ -256,9 +256,12 @@ class TestCollectionQueryTool(unittest.TestCase):
         if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
 
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+            del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
+
         expected = ""
 
-        query_tool = CollectionQueryTool(token=None)
+        query_tool = PlatformQueryTool(token=None)
         actual = query_tool.token
 
         self.assertEqual(expected, actual)
@@ -274,9 +277,12 @@ class TestCollectionQueryTool(unittest.TestCase):
         given = secrets.token_urlsafe(6)
         expected = given
 
-        os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"] = given
+        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
+            del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
 
-        query_tool = CollectionQueryTool(token=None)
+        os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"] = given
+
+        query_tool = PlatformQueryTool(token=None)
         actual = query_tool.token
 
         self.assertEqual(expected, actual)
@@ -290,74 +296,6 @@ class TestCollectionQueryTool(unittest.TestCase):
         given = ["Hello", "World!"]
 
         self.assertRaises(TypeError, lambda: self.query_tool.set_token(given))
-
-    def test_set_url_base_return(self) -> None:
-        """
-        Tests the response from the method which let us set the URL to work
-        from.
-        """
-
-        given = "https://example.org"
-
-        actual = self.query_tool.set_url_base(given)
-
-        self.assertIsInstance(actual, CollectionQueryTool)
-
-    def test_set_url_base_method(self) -> None:
-        """
-        Tests the method which let us set the URL to work from.
-        """
-
-        given = "https://example.org"
-        expected = given
-
-        self.query_tool.set_url_base(given)
-        actual = self.query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
-    def test_set_url_base_attribute(self) -> None:
-        """
-        Tests the overwritting of the url_base attribute.
-        """
-
-        given = "https://example.org"
-        expected = given
-
-        self.query_tool.url_base = given
-        actual = self.query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
-    def test_set_url_base_through_init(self) -> None:
-        """
-        Tests the overwritting of the URL to work from through the class
-        constructor.
-        """
-
-        given = "https://example.net"
-        expected = given
-
-        query_tool = CollectionQueryTool(url_base=given)
-        actual = query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
-    def test_set_url_base_through_init_none_given(self) -> None:
-        """
-        Tests the overwritting of the URL to work from through the class
-        constructor.
-
-        In this test, we test the case that the URL base is not given.
-        """
-
-        given = None
-        expected = "http://localhost:8001"
-
-        query_tool = CollectionQueryTool(url_base=given)
-        actual = query_tool.url_base
-
-        self.assertEqual(expected, actual)
 
     def test_set_url_base_not_str(self) -> None:
         """
@@ -393,42 +331,6 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_guess_and_set_url_base(self) -> None:
-        """
-        Tests the method which let us guess and set the URL base.
-        """
-
-        config_loader = ConfigLoader()
-        config_loader.set_custom_config(
-            {"collection": {"url_base": "https://example.org:8443"}}
-        ).start()
-
-        self.query_tool.guess_and_set_url_base()
-
-        expected = "https://example.org:8443"
-        actual = self.query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
-        del config_loader
-
-    def test_guess_and_set_url_base_not_str(self) -> None:
-        """
-        Tests the method which let us guess and set the URL base.
-        """
-
-        config_loader = ConfigLoader()
-        config_loader.set_custom_config({"collection": {"url_base": False}}).start()
-
-        self.query_tool.guess_and_set_url_base()
-
-        expected = "http://localhost:8001"
-        actual = self.query_tool.url_base
-
-        self.assertEqual(expected, actual)
-
-        del config_loader
-
     def test_set_preferred_status_origin_return(self) -> None:
         """
         Tests the response from the method which let us set the preferred status
@@ -439,7 +341,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         actual = self.query_tool.set_preferred_status_origin(given)
 
-        self.assertIsInstance(actual, CollectionQueryTool)
+        self.assertIsInstance(actual, PlatformQueryTool)
 
     def test_set_preferred_status_origin_method(self) -> None:
         """
@@ -476,7 +378,7 @@ class TestCollectionQueryTool(unittest.TestCase):
         given = "frequent"
         expected = given
 
-        query_tool = CollectionQueryTool(preferred_status_origin=given)
+        query_tool = PlatformQueryTool(preferred_status_origin=given)
         actual = query_tool.preferred_status_origin
 
         self.assertEqual(expected, actual)
@@ -492,7 +394,7 @@ class TestCollectionQueryTool(unittest.TestCase):
         given = None
         expected = "frequent"
 
-        query_tool = CollectionQueryTool(preferred_status_origin=given)
+        query_tool = PlatformQueryTool(preferred_status_origin=given)
         actual = query_tool.preferred_status_origin
 
         self.assertEqual(expected, actual)
@@ -528,7 +430,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         config_loader = ConfigLoader()
         config_loader.set_custom_config(
-            {"collection": {"preferred_status_origin": "latest"}}
+            {"platform": {"preferred_status_origin": "latest"}}
         ).start()
 
         self.query_tool.guess_and_set_preferred_status_origin()
@@ -547,7 +449,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         config_loader = ConfigLoader()
         config_loader.set_custom_config(
-            {"collection": {"preferred_status_origin": None}}
+            {"platform": {"preferred_status_origin": None}}
         ).start()
 
         self.query_tool.guess_and_set_preferred_status_origin()
@@ -559,10 +461,266 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         del config_loader
 
-    @unittest.mock.patch.object(requests.Session, "post")
-    def test_collection_contain(self, request_mock) -> None:
+    def test_set_checker_priority_return(self) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the response from the method which let us set the checker priority
+        to use.
+        """
+
+        given = ["reputation", "syntax", "availability"]
+
+        actual = self.query_tool.set_checker_priority(given)
+
+        self.assertIsInstance(actual, PlatformQueryTool)
+
+    def test_set_checker_priority_method(self) -> None:
+        """
+        Tests the method which let us set the checker priority to use.
+        """
+
+        given = ["availability", "syntax", "reputation"]
+        expected = given
+
+        self.query_tool.set_checker_priority(given)
+        actual = self.query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+    def test_set_checker_priority_attribute(self) -> None:
+        """
+        Tests the overwritting of the the checker priority.
+        """
+
+        given = ["syntax", "availability", "reputation"]
+        expected = given
+
+        self.query_tool.checker_priority = given
+        actual = self.query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+    def test_checker_priority_through_init(self) -> None:
+        """
+        Tests the overwritting of the checker priority through the class
+        constructor.
+        """
+
+        given = ["reputation", "syntax", "availability"]
+        expected = given
+
+        query_tool = PlatformQueryTool(checker_priority=given)
+        actual = query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+    def test_set_checker_priority_init_none_given(self) -> None:
+        """
+        Tests the overwritting of the checker through the class
+        constructor.
+
+        In this test, we test the case that nothing is given.
+        """
+
+        given = None
+        expected = ["none"]
+
+        query_tool = PlatformQueryTool(checker_priority=given)
+        actual = query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+    def test_set_checker_priority_not_str(self) -> None:
+        """
+        Tests the method which let us set the checker priority for the case
+        that a given value is not a :py:class:`str`.
+        """
+
+        given = ["reputation", "syntax", 123]
+
+        self.assertRaises(
+            TypeError, lambda: self.query_tool.set_checker_priority(given)
+        )
+
+    def test_set_checker_priority_not_supported(self) -> None:
+        """
+        Tests the method which let us set the checker priority to work from
+        for the case that the given checker is not supported.
+        """
+
+        given = ["reputation", "syntax", "hello"]
+
+        self.assertRaises(
+            ValueError, lambda: self.query_tool.set_checker_priority(given)
+        )
+
+    def test_guess_and_set_checker_priority(self) -> None:
+        """
+        Tests the method which let us guess and set the checker type.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config(
+            {"platform": {"checker_priority": ["reputation", "syntax", "availability"]}}
+        ).start()
+
+        self.query_tool.guess_and_set_checker_priority()
+
+        expected = ["reputation", "syntax", "availability"]
+        actual = self.query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
+
+    def test_guess_and_set_checker_priority_not_str(self) -> None:
+        """
+        Tests the method which let us guess and set the checker priority.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config(
+            {"platform": {"checker_priority": None}}
+        ).start()
+
+        self.query_tool.guess_and_set_checker_priority()
+
+        expected = ["none"]
+        actual = self.query_tool.checker_priority
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
+
+    def test_set_checker_exclude_return(self) -> None:
+        """
+        Tests the response from the method which let us set the checker to
+        exclude.
+        """
+
+        given = ["reputation", "syntax", "availability"]
+
+        actual = self.query_tool.set_checker_exclude(given)
+
+        self.assertIsInstance(actual, PlatformQueryTool)
+
+    def test_set_checker_exclude_method(self) -> None:
+        """
+        Tests the method which let us set the checker to exclude.
+        """
+
+        given = ["availability", "syntax", "reputation"]
+        expected = given
+
+        self.query_tool.set_checker_exclude(given)
+        actual = self.query_tool.checker_exclude
+
+        self.assertEqual(expected, actual)
+
+    def test_set_checker_exclude_attribute(self) -> None:
+        """
+        Tests the overwritting of the checker exclude to use.
+        """
+
+        given = ["syntax", "availability", "reputation"]
+        expected = given
+
+        self.query_tool.checker_exclude = given
+        actual = self.query_tool.checker_exclude
+
+        self.assertEqual(expected, actual)
+
+    def test_checker_exclude_through_init(self) -> None:
+        """
+        Tests the overwritting of the checker to exclude through the class
+        constructor.
+        """
+
+        given = ["reputation", "syntax", "availability"]
+        expected = given
+
+        query_tool = PlatformQueryTool(checker_exclude=given)
+        actual = query_tool.checker_exclude
+
+        self.assertEqual(expected, actual)
+
+    def test_set_checker_exclude_init_none_given(self) -> None:
+        """
+        Tests the overwritting of the checker through the class
+        constructor.
+
+        In this test, we test the case that nothing is given.
+        """
+
+        given = None
+        expected = ["none"]
+
+        query_tool = PlatformQueryTool(checker_exclude=given)
+        actual = query_tool.checker_exclude
+
+        self.assertEqual(expected, actual)
+
+    def test_set_checker_exclude_not_str(self) -> None:
+        """
+        Tests the method which let us set the checker exclude for the case
+        that a given value is not a :py:class:`str`.
+        """
+
+        given = ["reputation", "syntax", 123]
+
+        self.assertRaises(TypeError, lambda: self.query_tool.set_checker_exclude(given))
+
+    def test_set_checker_exclude_not_supported(self) -> None:
+        """
+        Tests the method which let us set the checker exclude to work with
+        for the case that the given checker is not supported.
+        """
+
+        given = ["syntax", "reputation", "hello"]
+
+        self.assertRaises(
+            ValueError, lambda: self.query_tool.set_checker_exclude(given)
+        )
+
+    def test_guess_and_set_checker_exclude(self) -> None:
+        """
+        Tests the method which let us guess and set the checker type to exclude.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config(
+            {"platform": {"checker_exclude": ["syntax", "reputation", "availability"]}}
+        ).start()
+
+        self.query_tool.guess_and_set_checker_exclude()
+
+        expected = ["syntax", "reputation", "availability"]
+        actual = self.query_tool.checker_exclude
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
+
+    def test_guess_and_set_checker_exclude_not_str(self) -> None:
+        """
+        Tests the method which let us guess and set the checker to exclude.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config({"platform": {"checker_exclude": None}}).start()
+
+        self.query_tool.guess_and_set_checker_exclude()
+
+        expected = ["none"]
+        actual = self.query_tool.checker_exclude
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
+
+    @unittest.mock.patch.object(requests.Session, "post")
+    def test_platform_contain(self, request_mock) -> None:
+        """
+        Tests the method which let us pull the subject from the platform.
         """
 
         response_dict = self.response_dataset
@@ -591,9 +749,9 @@ class TestCollectionQueryTool(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     @unittest.mock.patch.object(requests.Session, "post")
-    def test_collection_not_contain(self, request_mock) -> None:
+    def test_platform_not_contain(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
         """
 
         response_dict = {"detail": "Invalid subject."}
@@ -623,7 +781,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_getitem(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
         """
 
         response_dict = self.response_dataset
@@ -654,7 +812,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_getitem_not_found(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
         """
 
         response_dict = {"detail": "Invalid subject."}
@@ -684,7 +842,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_pull(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
         """
 
         response_dict = self.response_dataset
@@ -715,7 +873,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_pull_subject_not_found(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
 
         In this test case we check what happens when a subject is not found.
         """
@@ -747,7 +905,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_pull_subject_no_json_response(self, request_mock) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
 
         In this test case we check what happens when no JSON response is given.
         """
@@ -776,7 +934,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_pull_subject_not_str(self) -> None:
         """
-        Tests the method which let us pull the subject from the collection.
+        Tests the method which let us pull the subject from the platform.
 
         In this test we test the case that the given subject is not a
         :py:class:`str`.
@@ -789,7 +947,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_push(self, request_mock) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
         """
 
         response_dict = self.response_dataset
@@ -824,7 +982,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_push_no_json_response(self, request_mock) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test case, we test the case that the response is not JSON
         encoded.
@@ -860,7 +1018,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_push_with_whois(self, request_mock) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
         """
 
         response_dict = self.response_dataset
@@ -895,7 +1053,7 @@ class TestCollectionQueryTool(unittest.TestCase):
     @unittest.mock.patch.object(requests.Session, "post")
     def test_push_with_whois_no_json_response(self, request_mock) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
         """
 
         response_dict = self.response_dataset
@@ -929,7 +1087,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_with_whois_token_not_given(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that no token is given.
         """
@@ -940,6 +1098,9 @@ class TestCollectionQueryTool(unittest.TestCase):
 
         if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
+
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+            del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
 
         self.query_tool.token = ""
 
@@ -952,7 +1113,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_subject_not_str(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that the given subject is not a string.
         """
@@ -968,7 +1129,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_checker_status_not_correct(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that the given checker status is not
         correct.
@@ -983,7 +1144,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_subject_empty_str(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that the given subject is an empty string.
         """
@@ -999,7 +1160,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_checker_type_not_str(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that the given subject is not a string.
         """
@@ -1015,7 +1176,7 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_checker_type_not_supported(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that the given subject is not a string.
         """
@@ -1032,13 +1193,16 @@ class TestCollectionQueryTool(unittest.TestCase):
 
     def test_push_token_not_given(self) -> None:
         """
-        Tests the method which let us push some dataset into the collection.
+        Tests the method which let us push some dataset into the platform.
 
         In this test, we test the case that no token is given.
         """
 
         if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
+
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+            del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
 
         self.query_tool.token = ""
 

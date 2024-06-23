@@ -61,7 +61,7 @@ from dotenv import load_dotenv
 from PyFunceble.storage_facility import get_config_directory
 
 PROJECT_NAME: str = "PyFunceble"
-PROJECT_VERSION: str = "4.2.14.dev (Blue Duckling: Ixora)"
+PROJECT_VERSION: str = "4.2.23.dev (Blue Duckling: Ixora)"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
 DISTRIBUTED_DIR_STRUCTURE_FILENAME: str = "dir_structure_production.json"
@@ -126,7 +126,7 @@ STATUS: Optional[Box] = Box(
     frozen_box=True,
 )
 HTTP_CODES: Optional[Box] = Box({})
-COLLECTION: Optional[Box] = Box({})
+PLATFORM: Optional[Box] = Box({})
 LINKS: Optional[Box] = Box({})
 PROXY: Optional[Box] = Box({})
 

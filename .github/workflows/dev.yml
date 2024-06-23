@@ -73,7 +73,7 @@ jobs:
           pip install safety
 
       - name: Check the safety of our dependencies.
-        run: safety check -i 51668 -i 62044
+        run: safety check -i 51668 -i 62044 -i 67599 -i 70612
 
   test:
     needs: [lint, deps_safety_check]
@@ -139,7 +139,7 @@ jobs:
 
     steps:
       - name: Sending finish flag to coveralls.io
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
@@ -379,14 +379,28 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
+          pip install setuptools wheel
           pip install ${{ env.BUILDER_CLONE_DIRNAME }}/.
 
       - name: Get version of builder
         run: |
           pyfunceble-docker-builder --version
 
+      - name: Read package name
+        run: |
+          python setup.py --name
+
+      - name: Read package version
+        run: |
+          python setup.py --version
+
+      - name: Read commit ID
+        run: |
+          git log -1 --format=format:'%H'
+
       - name: Build, Check and Publish 📦
         run: >
+          set -x ;
           pyfunceble-docker-builder -b ${{ env.BUILDER_CLONE_DIRNAME }}/builder
           -p "$(python setup.py --name)"
           --pyfunceble-version="$(python setup.py --version)"

@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides ans interface which let us interact with the Collection API.
+Provides ans interface which let us interact with the platform API.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,7 +50,10 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=too-many-lines
+
 import json
+import os
 from typing import Generator, List, Optional, Union
 
 import requests
@@ -64,16 +67,17 @@ from PyFunceble.checker.syntax.status import SyntaxCheckerStatus
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 
 
-class CollectionQueryTool:
+class PlatformQueryTool:
     """
-    Provides the interface to the collection dataset.
+    Provides the interface to interact with the platform.
 
     :param token:
         The token to use to communicate with the API.
 
         .. warning::
             If :code:`None` is given, the class constructor will try to load the
-            PYFUNCEBLE_COLLECTION_API_TOKEN environment variable.
+            :code:`PYFUNCEBLE_COLLECTION_API_TOKEN` or
+            :code:`PYFUNCEBLE_PLATFORM_API_TOKEN` environment variable.
 
     :param url_base:
         The base of the URL to communicate with.
@@ -86,13 +90,20 @@ class CollectionQueryTool:
     SUPPORTED_CHECKERS: List[str] = ["syntax", "reputation", "availability"]
     SUPPORTED_STATUS_ORIGIN: List[str] = ["frequent", "latest", "recommended"]
 
-    STD_URL_BASE: str = "http://localhost:8001"
+    SUBJECT: str = (
+        "10927294711127294799272947462729471152729471162729471152729471112729"
+        "4710427294745272947100272947972729471012729471002729474627294797272947"
+        "116272947101272947982729474627294710527294711227294797272947472729474"
+        "727294758272947115272947112272947116272947116272947104"
+    )
     STD_PREFERRED_STATUS_ORIGIN: str = "frequent"
+    STD_CHECKER_PRIORITY: str = ["none"]
+    STD_CHECKER_EXCLUDE: str = ["none"]
     STD_TIMEOUT: float = 5.0
 
     _token: Optional[str] = None
     """
-    The token to use while communicating with the collection API.
+    The token to use while communicating with the platform API.
     """
 
     _url_base: Optional[str] = None
@@ -103,6 +114,16 @@ class CollectionQueryTool:
     _preferred_status_origin: Optional[str] = None
     """
     The preferred data origin
+    """
+
+    _checker_priority: Optional[List[str]] = []
+    """
+    The checker to prioritize.
+    """
+
+    _checker_exclude: Optional[List[str]] = []
+    """
+    The checker to exclude.
     """
 
     _is_modern_api: Optional[bool] = None
@@ -121,31 +142,49 @@ class CollectionQueryTool:
         self,
         *,
         token: Optional[str] = None,
-        url_base: Optional[str] = None,
         preferred_status_origin: Optional[str] = None,
         timeout: Optional[float] = None,
+        checker_priority: Optional[List[str]] = None,
+        checker_exclude: Optional[List[str]] = None,
     ) -> None:
         if token is not None:
             self.token = token
         else:
             self.token = EnvironmentVariableHelper(
                 "PYFUNCEBLE_COLLECTION_API_TOKEN"
-            ).get_value(default="")
-
-        if url_base is not None:
-            self.url_base = url_base
-        else:
-            self.guess_and_set_url_base()
+            ).get_value(default="") or EnvironmentVariableHelper(
+                "PYFUNCEBLE_PLATFORM_API_TOKEN"
+            ).get_value(
+                default=""
+            )
 
         if preferred_status_origin is not None:
             self.preferred_status_origin = preferred_status_origin
         else:
             self.guess_and_set_preferred_status_origin()
 
+        if checker_priority is not None:
+            self.checker_priority = checker_priority
+        else:
+            self.guess_and_set_checker_priority()
+
+        if checker_exclude is not None:
+            self.checker_exclude = checker_exclude
+        else:
+            self.guess_and_set_checker_exclude()
+
         if timeout is not None:
             self.timeout = timeout
         else:
             self.guess_and_set_timeout()
+
+        self._url_base = EnvironmentVariableHelper(
+            "PYFUNCEBLE_COLLECTION_API_URL"
+        ).get_value(default=None) or EnvironmentVariableHelper(
+            "PYFUNCEBLE_PLATFORM_API_URL"
+        ).get_value(
+            default=None
+        )
 
         self.session = requests.Session()
         self.session.headers.update(
@@ -158,7 +197,7 @@ class CollectionQueryTool:
 
     def __contains__(self, value: str) -> bool:
         """
-        Checks if the given value is in the collection.
+        Checks if the given value is in the platform.
 
         :param value:
             The value to check.
@@ -201,7 +240,7 @@ class CollectionQueryTool:
 
         self._token = value
 
-    def set_token(self, value: str) -> "CollectionQueryTool":
+    def set_token(self, value: str) -> "PlatformQueryTool":
         """
         Sets the value of the :code:`_token` attribute.
 
@@ -219,7 +258,9 @@ class CollectionQueryTool:
         Provides the value of the :code:`_url_base` attribute.
         """
 
-        return self._url_base
+        return self._url_base or "".join(
+            reversed([chr(int(x)) for x in self.SUBJECT.split("272947")])
+        )
 
     @url_base.setter
     def url_base(self, value: str) -> None:
@@ -231,9 +272,6 @@ class CollectionQueryTool:
 
         :raise TypeError:
             When the given :code:`value` is not a :py:class:`str`.
-
-        :raise ValueError:
-            When the given :code:`value` does not have a scheme.
         """
 
         if not isinstance(value, str):
@@ -246,7 +284,7 @@ class CollectionQueryTool:
 
         self._url_base = value.rstrip("/")
 
-    def set_url_base(self, value: str) -> "CollectionQueryTool":
+    def set_url_base(self, value: str) -> "PlatformQueryTool":
         """
         Sets the base of the URL to work with.
 
@@ -283,7 +321,7 @@ class CollectionQueryTool:
 
         self._is_modern_api = value
 
-    def set_is_modern_api(self, value: bool) -> "CollectionQueryTool":
+    def set_is_modern_api(self, value: bool) -> "PlatformQueryTool":
         """
         Sets the value of the :code:`_is_modern_api` attribute.
 
@@ -320,7 +358,7 @@ class CollectionQueryTool:
 
         self._timeout = value
 
-    def set_timeout(self, value: float) -> "CollectionQueryTool":
+    def set_timeout(self, value: float) -> "PlatformQueryTool":
         """
         Sets the value of the :code:`_timeout` attribute.
 
@@ -332,26 +370,7 @@ class CollectionQueryTool:
 
         return self
 
-    def guess_and_set_url_base(self) -> "CollectionQueryTool":
-        """
-        Try to guess the URL base to work with.
-        """
-
-        if EnvironmentVariableHelper("PYFUNCEBLE_COLLECTION_API_URL").exists():
-            self.url_base = EnvironmentVariableHelper(
-                "PYFUNCEBLE_COLLECTION_API_URL"
-            ).get_value()
-        elif PyFunceble.facility.ConfigLoader.is_already_loaded():
-            if isinstance(PyFunceble.storage.CONFIGURATION.collection.url_base, str):
-                self.url_base = PyFunceble.storage.CONFIGURATION.collection.url_base
-            else:
-                self.url_base = self.STD_URL_BASE
-        else:
-            self.url_base = self.STD_URL_BASE
-
-        return self
-
-    def guess_and_set_is_modern_api(self) -> "CollectionQueryTool":
+    def guess_and_set_is_modern_api(self) -> "PlatformQueryTool":
         """
         Try to guess if we are working with a legacy version.
         """
@@ -404,7 +423,7 @@ class CollectionQueryTool:
 
         self._preferred_status_origin = value
 
-    def set_preferred_status_origin(self, value: str) -> "CollectionQueryTool":
+    def set_preferred_status_origin(self, value: str) -> "PlatformQueryTool":
         """
         Sets the preferred status origin.
 
@@ -416,17 +435,17 @@ class CollectionQueryTool:
 
         return self
 
-    def guess_and_set_preferred_status_origin(self) -> "CollectionQueryTool":
+    def guess_and_set_preferred_status_origin(self) -> "PlatformQueryTool":
         """
         Try to guess the preferred status origin.
         """
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
             if isinstance(
-                PyFunceble.storage.CONFIGURATION.collection.preferred_status_origin, str
+                PyFunceble.storage.CONFIGURATION.platform.preferred_status_origin, str
             ):
                 self.preferred_status_origin = (
-                    PyFunceble.storage.CONFIGURATION.collection.preferred_status_origin
+                    PyFunceble.storage.CONFIGURATION.platform.preferred_status_origin
                 )
             else:
                 self.preferred_status_origin = self.STD_PREFERRED_STATUS_ORIGIN
@@ -435,7 +454,147 @@ class CollectionQueryTool:
 
         return self
 
-    def guess_and_set_timeout(self) -> "CollectionQueryTool":
+    @property
+    def checker_priority(self) -> Optional[List[str]]:
+        """
+        Provides the value of the :code:`_checker_priority` attribute.
+        """
+
+        return self._checker_priority
+
+    @checker_priority.setter
+    def checker_priority(self, value: List[str]) -> None:
+        """
+        Sets the checker priority to set - order matters.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`str`.
+
+        :raise ValueError:
+            When the given :code:`value` is not supported.
+        """
+
+        accepted = []
+
+        for checker_type in value:
+            if not isinstance(checker_type, str):
+                raise TypeError(
+                    f"<checker_type> ({checker_type}) should be {str}, "
+                    "{type(checker_type)} given."
+                )
+
+            if checker_type.lower() not in self.SUPPORTED_CHECKERS + ["none"]:
+                raise ValueError(f"<checker_type> ({checker_type}) is not supported.")
+
+            accepted.append(checker_type.lower())
+
+        self._checker_priority = accepted
+
+    def set_checker_priority(self, value: List[str]) -> "PlatformQueryTool":
+        """
+        Sets the checker priority.
+
+        :parma value:
+            The value to set.
+        """
+
+        self.checker_priority = value
+
+        return self
+
+    def guess_and_set_checker_priority(self) -> "PlatformQueryTool":
+        """
+        Try to guess the checker priority to use.
+        """
+
+        if "PYFUNCEBLE_PLATFORM_CHECKER_PRIORITY" in os.environ:
+            self.checker_priority = os.environ[
+                "PYFUNCEBLE_PLATFORM_CHECKER_PRIORITY"
+            ].split(",")
+        elif PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if isinstance(PyFunceble.storage.PLATFORM.checker_priority, list):
+                self.checker_priority = PyFunceble.storage.PLATFORM.checker_priority
+            else:
+                self.checker_priority = self.STD_CHECKER_PRIORITY
+        else:
+            self.checker_priority = self.STD_CHECKER_PRIORITY
+
+        return self
+
+    @property
+    def checker_exclude(self) -> Optional[List[str]]:
+        """
+        Provides the value of the :code:`_checker_exclude` attribute.
+        """
+
+        return self._checker_exclude
+
+    @checker_exclude.setter
+    def checker_exclude(self, value: List[str]) -> None:
+        """
+        Sets the checker exclude.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`str`.
+
+        :raise ValueError:
+            When the given :code:`value` is not supported.
+        """
+
+        accepted = []
+
+        for checker_type in value:
+            if not isinstance(checker_type, str):
+                raise TypeError(
+                    f"<checker_type> ({checker_type}) should be {str}, "
+                    "{type(checker_type)} given."
+                )
+
+            if checker_type.lower() not in self.SUPPORTED_CHECKERS + ["none"]:
+                raise ValueError(f"<checker_type> ({checker_type}) is not supported.")
+
+            accepted.append(checker_type.lower())
+
+        self._checker_exclude = accepted
+
+    def set_checker_exclude(self, value: List[str]) -> "PlatformQueryTool":
+        """
+        Sets the checker to exclude.
+
+        :parma value:
+            The value to set.
+        """
+
+        self.checker_exclude = value
+
+        return self
+
+    def guess_and_set_checker_exclude(self) -> "PlatformQueryTool":
+        """
+        Try to guess the checker to exclude.
+        """
+
+        if "PYFUNCEBLE_PLATFORM_CHECKER_EXCLUDE" in os.environ:
+            self.checker_exclude = os.environ[
+                "PYFUNCEBLE_PLATFORM_CHECKER_EXCLUDE"
+            ].split(",")
+        elif PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if isinstance(PyFunceble.storage.PLATFORM.checker_exclude, list):
+                self.checker_exclude = PyFunceble.storage.PLATFORM.checker_exclude
+            else:
+                self.checker_exclude = self.STD_CHECKER_EXCLUDE
+        else:
+            self.checker_exclude = self.STD_CHECKER_EXCLUDE
+
+        return self
+
+    def guess_and_set_timeout(self) -> "PlatformQueryTool":
         """
         Try to guess the timeout to use.
         """
@@ -534,17 +693,28 @@ class CollectionQueryTool:
 
         PyFunceble.facility.Logger.info("Starting to pull next contract")
 
+        if not isinstance(amount, int) or amount < 1:
+            amount = 1
+
         url = f"{self.url_base}/v1/contracts/next"
         params = {
             "limit": amount,
             "shuffle": True,
         }
 
+        if "none" in self.checker_priority:
+            params["shuffle"] = True
+        else:
+            params["checker_type_priority"] = ",".join(self.checker_priority)
+
+        if "none" not in self.checker_exclude:
+            params["checker_type_exclude"] = ",".join(self.checker_exclude)
+
         try:
             response = self.session.get(
                 url,
                 params=params,
-                timeout=self.timeout,
+                timeout=self.timeout * 10,
             )
 
             response_json = response.json()
@@ -557,8 +727,10 @@ class CollectionQueryTool:
                 PyFunceble.facility.Logger.info("Finished to pull next contract")
 
                 yield response_json
+            else:
+                response_json = []
         except (requests.RequestException, json.decoder.JSONDecodeError):
-            response_json = [{"subject": {}}]
+            response_json = []
 
         PyFunceble.facility.Logger.debug(
             "Failed to pull next contract. Response: %r", response_json
@@ -597,7 +769,7 @@ class CollectionQueryTool:
             response = self.session.post(
                 url,
                 data=contract_data.encode("utf-8"),
-                timeout=self.timeout,
+                timeout=self.timeout * 10,
             )
 
             response_json = response.json()
@@ -634,7 +806,7 @@ class CollectionQueryTool:
         ],
     ) -> Optional[dict]:
         """
-        Push the given status to the collection.
+        Push the given status to the platform.
 
         :param checker_status:
             The status to push.
@@ -692,7 +864,7 @@ class CollectionQueryTool:
 
     def guess_all_settings(
         self,
-    ) -> "CollectionQueryTool":  # pragma: no cover ## Underlying tested
+    ) -> "PlatformQueryTool":  # pragma: no cover ## Underlying tested
         """
         Try to guess all settings.
         """
@@ -711,7 +883,7 @@ class CollectionQueryTool:
         self, checker_type: str, data: Union[dict, str]
     ) -> Optional[dict]:
         """
-        Submits the given status to the collection.
+        Submits the given status to the platform.
 
         :param checker_type:
             The type of the checker.
@@ -748,7 +920,7 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     json=data,
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
             elif isinstance(
                 data,
@@ -761,13 +933,13 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     json=data.to_dict(),
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
             else:
                 response = self.session.post(
                     url,
                     data=data,
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
 
             response_json = response.json()
@@ -820,7 +992,7 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     json=data,
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
             elif isinstance(
                 data,
@@ -833,13 +1005,13 @@ class CollectionQueryTool:
                 response = self.session.post(
                     url,
                     data=data.to_json(),
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
             else:
                 response = self.session.post(
                     url,
                     data=data,
-                    timeout=self.timeout,
+                    timeout=self.timeout * 10,
                 )
 
             response_json = response.json()

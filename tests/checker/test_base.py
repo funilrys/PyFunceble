@@ -297,102 +297,102 @@ class TestCheckerBase(unittest.TestCase):
             TypeError, lambda: self.checker.set_do_syntax_check_first(given)
         )
 
-    def test_set_use_collection_return(self) -> None:
+    def test_set_use_platform_return(self) -> None:
         """
         Tests the response of the method which let us define that we want to
-        interact with the collection.
+        interact with the platform.
         """
 
         given = True
 
-        actual = self.checker.set_use_collection(given)
+        actual = self.checker.set_use_platform(given)
 
         self.assertIsInstance(actual, CheckerBase)
 
-    def test_set_use_collection_method(self) -> None:
+    def test_set_use_platform_method(self) -> None:
         """
         Tests the method which let us define that we want ti interact with the
-        collection.
+        platform.
         """
 
         given = False
         expected = False
 
-        self.checker.set_use_collection(given)
+        self.checker.set_use_platform(given)
 
-        actual = self.checker.use_collection
+        actual = self.checker.use_platform
 
         self.assertEqual(expected, actual)
 
-    def test_set_use_collection_init(self) -> None:
+    def test_set_use_platform_init(self) -> None:
         """
-        Tests the definition of the :code:`use_collection` attribute
+        Tests the definition of the :code:`use_platform` attribute
         through the class constructor.
         """
 
         given = True
         expected = True
 
-        checker = CheckerBase(use_collection=given)
+        checker = CheckerBase(use_platform=given)
 
-        actual = checker.use_collection
+        actual = checker.use_platform
 
         self.assertEqual(expected, actual)
 
-    def test_set_use_collection_not_bool(self) -> None:
+    def test_set_use_platform_not_bool(self) -> None:
         """
         Tests the case that we want to overwrite the
-        :code:`use_collection` attribute with a non-boolean value.
+        :code:`use_platform` attribute with a non-boolean value.
         """
 
         given = ["Hello", "World!"]
 
-        self.assertRaises(TypeError, lambda: self.checker.set_use_collection(given))
+        self.assertRaises(TypeError, lambda: self.checker.set_use_platform(given))
 
-    def test_guess_and_set_use_collection(self) -> None:
+    def test_guess_and_set_use_platform(self) -> None:
         """
-        Tests the method that let us guess and set the collection from the
+        Tests the method that let us guess and set the platform from the
         configuration.
         """
 
         config_loader = ConfigLoader()
-        config_loader.set_custom_config({"lookup": {"collection": True}}).start()
+        config_loader.set_custom_config({"lookup": {"platform": True}}).start()
 
-        self.checker.guess_and_set_use_collection()
-        actual = self.checker.use_collection
+        self.checker.guess_and_set_use_platform()
+        actual = self.checker.use_platform
         expected = True
 
         self.assertEqual(expected, actual)
 
-    def test_guess_and_set_use_collection_not_boolean(self) -> None:
+    def test_guess_and_set_use_platform_not_boolean(self) -> None:
         """
-        Tests the method that let us guess and set the collection from the
+        Tests the method that let us guess and set the platform from the
         configuration.
 
         In this case, we test the case that the given value is not a boolean.
         """
 
         config_loader = ConfigLoader()
-        config_loader.set_custom_config({"lookup": {"collection": None}}).start()
+        config_loader.set_custom_config({"lookup": {"platform": None}}).start()
 
-        self.checker.guess_and_set_use_collection()
-        actual = self.checker.use_collection
+        self.checker.guess_and_set_use_platform()
+        actual = self.checker.use_platform
         expected = False
 
         self.assertEqual(expected, actual)
 
         del config_loader
 
-    def test_guess_and_set_use_collection_no_configuration(self) -> None:
+    def test_guess_and_set_use_platform_no_configuration(self) -> None:
         """
-        Tests the method that let us guess and set the collection from the
+        Tests the method that let us guess and set the platform from the
         configuration.
 
         In this case, we test the case that no configuration is loaded.
         """
 
-        self.checker.guess_and_set_use_collection()
-        actual = self.checker.use_collection
+        self.checker.guess_and_set_use_platform()
+        actual = self.checker.use_platform
         expected = False
 
         self.assertEqual(expected, actual)

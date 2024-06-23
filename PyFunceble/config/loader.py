@@ -188,6 +188,7 @@ class ConfigLoader:
             config["cli_testing"]["local_network"] = False
             config["cli_testing"]["preload_file"] = False
             config["cli_testing"]["display_mode"]["percentage"] = False
+            config["lookup"]["platform"] = False
 
         return config
 
@@ -435,8 +436,8 @@ class ConfigLoader:
         PyFunceble.storage.HTTP_CODES = Box(
             config["http_codes"],
         )
-        if "collection" in config and config["collection"]:
-            PyFunceble.storage.COLLECTION = Box(config["collection"])
+        if "platform" in config and config["platform"]:
+            PyFunceble.storage.PLATFORM = Box(config["platform"])
         PyFunceble.storage.LINKS = Box(config["links"])
 
         if "proxy" in config and config["proxy"]:
@@ -455,7 +456,7 @@ class ConfigLoader:
             )
             PyFunceble.storage.FLATTEN_CONFIGURATION = {}
             PyFunceble.storage.HTTP_CODES = Box({})
-            PyFunceble.storage.COLLECTION = Box({})
+            PyFunceble.storage.PLATFORM = Box({})
             PyFunceble.storage.LINKS = Box({})
             PyFunceble.storage.PROXY = Box({})
         except (AttributeError, TypeError):  # pragma: no cover ## Safety.

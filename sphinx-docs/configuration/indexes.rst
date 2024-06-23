@@ -14,5 +14,5 @@ This page will try to detail each configuration available into :code:`.PyFuncebl
 .. include:: user-agent.rst
 .. include:: http-codes.rst
 .. include:: links.rst
-.. include:: collection.rst
+.. include:: platform.rst
 

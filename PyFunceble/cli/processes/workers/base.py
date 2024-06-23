@@ -55,7 +55,7 @@ import multiprocessing.connection
 import queue
 import time
 import traceback
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, List, Optional, Tuple
 
 import PyFunceble.cli.facility
@@ -271,7 +271,7 @@ class WorkerBase(multiprocessing.Process):
             if not wait_for_stop or not self.accept_waiting_delay:
                 return True
 
-            return datetime.utcnow() > break_time
+            return datetime.now(timezone.utc) > break_time
 
         if self.configuration is not None:
             PyFunceble.facility.ConfigLoader.set_custom_config(self.configuration)
@@ -287,7 +287,9 @@ class WorkerBase(multiprocessing.Process):
         wait_for_stop = (
             bool(PyFunceble.storage.CONFIGURATION.cli_testing.mining) is True
         )
-        break_time = datetime.utcnow() + timedelta(seconds=self.MINING_WAIT_TIME)
+        break_time = datetime.now(timezone.utc) + timedelta(
+            seconds=self.MINING_WAIT_TIME
+        )
 
         try:  # pylint: disable=too-many-nested-blocks
             while True:
@@ -389,7 +391,7 @@ class WorkerBase(multiprocessing.Process):
                         result,
                     )
 
-                break_time = datetime.utcnow() + timedelta(
+                break_time = datetime.now(timezone.utc) + timedelta(
                     seconds=self.MINING_WAIT_TIME
                 )
 

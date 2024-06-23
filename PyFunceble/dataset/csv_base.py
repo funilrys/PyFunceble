@@ -52,7 +52,7 @@ License:
 
 import csv
 import tempfile
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Generator, Optional, Tuple
 
 import PyFunceble.facility
@@ -210,7 +210,9 @@ class CSVDatasetBase(DBDatasetBase):
                     try:
                         row["tested_at"] = datetime.fromisoformat(row["tested_at"])
                     except (TypeError, ValueError):
-                        row["tested_at"] = datetime.utcnow() - timedelta(days=365)
+                        row["tested_at"] = datetime.now(timezone.utc) - timedelta(
+                            days=365
+                        )
 
                 yield row
 

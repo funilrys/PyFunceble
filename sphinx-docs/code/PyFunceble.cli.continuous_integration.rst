@@ -44,6 +44,14 @@ PyFunceble.cli.continuous\_integration.jenkins module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.cli.continuous\_integration.standalone module
+--------------------------------------------------------
+
+.. automodule:: PyFunceble.cli.continuous_integration.standalone
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.cli.continuous\_integration.travis\_ci module
 --------------------------------------------------------
 

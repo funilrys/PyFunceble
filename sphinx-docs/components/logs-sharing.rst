@@ -20,7 +20,7 @@ What is collected
 
 .. versionchanged:: 4.0.0
 
-As of :code:`4.0.0`, we temporarly disabled and removed all data collection.
+As of :code:`4.0.0`, we temporary disabled and removed all data collection.
 
 Indeed, I need to rewrite the infrastructure behind it. Therefore, I refused
 to implement any of the data collection source code until the infrastructure

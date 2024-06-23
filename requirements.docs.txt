@@ -14,3 +14,7 @@ mkdocs-section-index
 mkdocs-git-authors-plugin
 mkdocs-macros-plugin
 pymdown-extensions
+
+# Snyk
+requests>=2.32.0 # not directly required, pinned by Snyk to avoid a vulnerability
+urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability

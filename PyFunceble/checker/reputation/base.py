@@ -92,7 +92,7 @@ class ReputationCheckerBase(CheckerBase):
         subject: Optional[str] = None,
         do_syntax_check_first: Optional[bool] = None,
         db_session: Optional[Session] = None,
-        use_collection: Optional[bool] = None,
+        use_platform: Optional[bool] = None,
     ) -> None:
         self.dns_query_tool = DNSQueryTool()
         self.ipv4_reputation_query_tool = IPV4ReputationDataset()
@@ -110,7 +110,7 @@ class ReputationCheckerBase(CheckerBase):
             subject,
             do_syntax_check_first=do_syntax_check_first,
             db_session=db_session,
-            use_collection=use_collection,
+            use_platform=use_platform,
         )
 
     @staticmethod
@@ -242,45 +242,45 @@ class ReputationCheckerBase(CheckerBase):
 
         return self
 
-    def try_to_query_status_from_collection(self) -> "ReputationCheckerBase":
+    def try_to_query_status_from_platform(self) -> "ReputationCheckerBase":
         """
-        Tries to get and set the status from the Collection API.
+        Tries to get and set the status from the Platform API.
         """
 
         PyFunceble.facility.Logger.info(
-            "Started to try to query the status of %r from: Collection Lookup",
+            "Started to try to query the status of %r from: Platform Lookup",
             self.status.idna_subject,
         )
 
-        data = self.collection_query_tool[self.idna_subject]
+        data = self.platform_query_tool[self.idna_subject]
 
         if data and "status" in data:
             if (
-                self.collection_query_tool.preferred_status_origin == "frequent"
+                self.platform_query_tool.preferred_status_origin == "frequent"
                 and data["status"]["reputation"]["frequent"]
             ):
                 self.status.status = data["status"]["reputation"]["frequent"]
-                self.status.status_source = "COLLECTION"
+                self.status.status_source = "PLATFORM"
             elif (
-                self.collection_query_tool.preferred_status_origin == "latest"
+                self.platform_query_tool.preferred_status_origin == "latest"
                 and data["status"]["reputation"]["latest"]
             ):
                 self.status.status = data["status"]["reputation"]["latest"]["status"]
-                self.status.status_source = "COLLECTION"
+                self.status.status_source = "PLATFORM"
             elif (
-                self.collection_query_tool.preferred_status_origin == "recommended"
+                self.platform_query_tool.preferred_status_origin == "recommended"
                 and data["status"]["reputation"]["recommended"]
             ):
                 self.status.status = data["status"]["reputation"]["recommended"]
-                self.status.status_source = "COLLECTION"
+                self.status.status_source = "PLATFORM"
 
             PyFunceble.facility.Logger.info(
-                "Could define the status of %r from: Collection Lookup",
+                "Could define the status of %r from: Platform Lookup",
                 self.status.idna_subject,
             )
 
         PyFunceble.facility.Logger.info(
-            "Finished to try to query the status of %r from: Collection Lookup",
+            "Finished to try to query the status of %r from: Platform Lookup",
             self.status.idna_subject,
         )
 
@@ -294,9 +294,9 @@ class ReputationCheckerBase(CheckerBase):
         status_post_syntax_checker = None
 
         if (
-            not self.status.status and self.use_collection
+            not self.status.status and self.use_platform
         ):  # pragma: no cover ## Underlying tested
-            self.try_to_query_status_from_collection()
+            self.try_to_query_status_from_platform()
 
         if not self.status.status and self.do_syntax_check_first:
             self.try_to_query_status_from_syntax_lookup()

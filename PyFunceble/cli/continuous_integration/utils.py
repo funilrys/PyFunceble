@@ -55,6 +55,7 @@ from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 from PyFunceble.cli.continuous_integration.github_actions import GitHubActions
 from PyFunceble.cli.continuous_integration.gitlab_ci import GitLabCI
 from PyFunceble.cli.continuous_integration.jenkins import Jenkins
+from PyFunceble.cli.continuous_integration.standalone import Standalone
 from PyFunceble.cli.continuous_integration.travis_ci import TravisCI
 
 
@@ -63,7 +64,7 @@ def ci_object(*args, **kwargs) -> ContinuousIntegrationBase:
     A placeholder which provides the CI object to use.
     """
 
-    known_objects = [Jenkins, GitHubActions, TravisCI, GitLabCI]
+    known_objects = [Jenkins, GitHubActions, TravisCI, GitLabCI, Standalone]
     result = None
 
     for known in known_objects:

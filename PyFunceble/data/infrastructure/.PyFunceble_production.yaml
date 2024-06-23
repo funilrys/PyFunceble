@@ -522,11 +522,8 @@ lookup:
   # Exclusive CLI Argument: --reputation-lookup
   reputation: no
 
-  # Enable/Disable the usage of the collection (API) to lookup the status.
-  #
-  # CLI Argument: --collection-lookup
-  # Exclusive CLI Argument: --collection-lookup-only
-  collection: no
+  # Activate the usage of the platform to lookup status.
+  platform: no
 
   # Set the timeout to apply to each of our lookup methods - when possible.
   #
@@ -762,29 +759,24 @@ links:
   api_date_format: "https://pyfunceble.funilrys.com/api/date-format"
   api_no_referrer: "https://pyfunceble.funilrys.com/api/no-referrer"
 
-collection:
-  # Provides everything related to the collection.
-  # PyFunceble alone is a great tool. What if we could just test the subject that
-  # were not already tested by others ?
+platform:
+  # Provides everything related to the platform.
 
-  # Set the base URL to access to the collection (API).
-  url_base: https://collection.dead-hosts.funilrys.com
-
-  # Enable or disable the push of datasets (cf: test results) into the collection
-  # (API).
-  #
-  # NOTE:
-  #     This parameter is useless, unless you have a valid API Token defined
-  #     into the COLLECTION_API_TOKEN environment variable.
+  # Activates the push of dataset into the platform.
+  # WARNING: This is useless, if you don't have an API Token set as the
+  # PYFUNCEBLE_PLATFORM_API_TOKEN environment variable.
   push: no
 
   # Sets the preferred pull origin.
   #
+  # When choosing `recommended`, the system will pull the recommended status
+  # that is provided and calculated by the platform.
+  #
   # When choosing, `frequent`, the system will pull the most frequent status
-  # that is provided and calculated by the collection.
+  # that is provided and calculated by the platform.
   #
   # When choosing, `latest`, the system will pull the latest status that is
-  # provided and available into the collection.
+  # provided and available into the platform.
   #
   # Available: frequent | latest | recommended
 
@@ -799,3 +791,45 @@ collection:
   #   - `latest`, which provides the status based on the lastest submitted datasets.
   #   - `recommended`, which provides the recommended status.
   preferred_status_origin: recommended
+
+  # Defines the checker type to prioritize when trying to fullfil platform
+  # contracts.
+  #
+  # Notes:
+  #   1. This is a list. The order matters.
+  #   2. One can overwrite this value, by settings a comma separated list of
+  #      checker type to prioritize through the PYFUNCEBLE_PLATFORM_CHECKER_PRIORITY
+  #      environment variable.
+  #   3. When set to `none`, the platform will throw a random contract at us.
+  #
+  # Example:
+  #   Prioritize availability checker until no contract is available, then
+  #   prioritize syntax checker until no contract is available, then prioritize
+  #   reputation checker until no contract is available.
+  #
+  #   - availability
+  #   - syntax
+  #   - reputation
+  #
+  # Available: none | availability | reputation | syntax
+  checker_priority:
+    - none
+
+  # Defines the checker type to exclude when trying to fullfil platform
+  # contracts.
+  #
+  # Notes:
+  #   1. This is a list.
+  #   2. One can overwrite this value, by settings a comma separated list of
+  #      checker type to exclude through the PYFUNCEBLE_PLATFORM_CHECKER_EXCLUDE
+  #      environment variable.
+  #   3. When set to `none`, no checker type will be excluded.
+  #
+  # Example:
+  #   Exclude the reputation checker from the list of checker to use to fullfil.
+  #
+  #   - reputation
+  #
+  # Available: none | availability | reputation | syntax
+  checker_exclude:
+    - none
