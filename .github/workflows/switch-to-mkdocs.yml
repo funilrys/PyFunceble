@@ -1,8 +1,5 @@
 name: Switch-To-Mkdocs Development Workflow
 on:
-  pull_request:
-    branches:
-      - switch-to-mkdocs
   push:
     branches:
       - switch-to-mkdocs
@@ -266,7 +263,7 @@ jobs:
     needs: [run_cli, run_cli_mariadb]
     name: "Deploy Documentation 📦 to the Docker Hub"
 
-    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/switch-to-mkdocs'
 
     runs-on: "${{ matrix.os }}"
 
