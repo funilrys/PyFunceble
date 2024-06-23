@@ -17,7 +17,6 @@ theme:
         icon: material/brightness-7
         name: Switch to dark mode
 
-
   logo: https://github.com/PyFunceble/logo/raw/master/Green/HD/Logomark.png
   favicon: https://github.com/PyFunceble/logo/raw/master/Green/Favicons/75x75.png
   features:
@@ -40,8 +39,14 @@ extra:
     - icon: fontawesome/brands/docker
       link: https://hub.docker.com/u/pyfunceble
 
-copyright: >
-  Copyright &copy; 2017 - 2023 Nissar Chababy
+    - icon: fontawesome/brands/github
+      link: https://github.com/funilrys/PyFunceble
+
+    - icon: fontawesome/brands/github
+      link: https://github.com/PyFunceble
+
+copyright: |
+  Copyright &copy; 2017 - 2024 <b>Nissar Chababy <i>(@funilrys)</i> & PyFunceble Contributors</b>
 
 markdown_extensions:
   - admonition
@@ -92,6 +97,7 @@ nav:
       - Installation: use/installation.md
       - Update: use/update.md
   - User Guides:
+      - use/index.md
       - Installation: use/installation.md
       - Update: use/update.md
       - Getting Started: use/getting-started.md
@@ -111,7 +117,7 @@ nav:
       - Known Issues: use/known-issues.md
   - Developer Guides:
       - Getting Started: develop/getting-started.md
-      - Checker Reponses: develop/checker-responses.md
+      - Checker Responses: develop/checker-responses.md
       - Examples:
           - Domain Availability: develop/examples/domain-availability.md
           - Domain Syntax: develop/examples/domain-syntax.md
