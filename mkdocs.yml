@@ -3,7 +3,21 @@ site_name: PyFunceble
 theme:
   name: material
   palette:
-    primary: indigo
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+
   logo: https://github.com/PyFunceble/logo/raw/master/Green/HD/Logomark.png
   favicon: https://github.com/PyFunceble/logo/raw/master/Green/Favicons/75x75.png
   features:
