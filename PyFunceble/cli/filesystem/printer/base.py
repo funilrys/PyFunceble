@@ -53,7 +53,7 @@ License:
 import copy
 import functools
 import string
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 
 class PrinterBase:
@@ -118,18 +118,23 @@ class PrinterBase:
 
     _template_to_use: Optional[str] = None
     _dataset: Optional[Dict[str, str]] = None
+    _skip_column: Optional[List[str]] = []
 
     def __init__(
         self,
         template_to_use: Optional[str] = None,
         *,
         dataset: Optional[Dict[str, str]] = None,
+        skip_column: Optional[List[str]] = None,
     ) -> None:
         if template_to_use is not None:
             self.template_to_use = template_to_use
 
         if dataset is not None:
             self.dataset = dataset
+
+        if skip_column is not None:
+            self.skip_column = skip_column
 
     def ensure_template_to_use_is_given(func):  # pylint: disable=no-self-argument
         """
@@ -166,6 +171,46 @@ class PrinterBase:
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
 
         return wrapper
+
+    @property
+    def skip_column(self) -> Optional[List[str]]:
+        """
+        Provides the current state of the :code:`_skip_column` attribute.
+        """
+
+        return self._skip_column
+
+    @skip_column.setter
+    def skip_column(self, value: List[str]) -> None:
+        """
+        Sets the columns to skip.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`list`.
+        """
+
+        if not isinstance(value, list):
+            raise TypeError(f"<value> should be {list}, {type(value)} given.")
+
+        if any(not isinstance(x, str) for x in value):
+            raise TypeError(f"<value> should be a list of {str}, {type(value)} given.")
+
+        self._skip_column = value
+
+    def set_skip_column(self, value: List[str]) -> "PrinterBase":
+        """
+        Sets the columns to skip.
+
+        :param value:
+            The value to set.
+        """
+
+        self.skip_column = value
+
+        return self
 
     @property
     def template_to_use(self) -> Optional[str]:
@@ -269,6 +314,12 @@ class PrinterBase:
                 if key not in self.TEMPLATES[self.template_to_use].template:
                     continue
 
+                if key in self.skip_column:
+                    self.TEMPLATES[self.template_to_use].template = self.TEMPLATES[
+                        self.template_to_use
+                    ].template.replace(f"${key} ", "")
+                    continue
+
                 to_print_data[0][key] = f"{value:<{self.STD_LENGTH[key]}}"
 
             for key, value in to_print_data[0].items():
@@ -297,7 +348,7 @@ class PrinterBase:
         ignore_length = ["simple", "hosts", "plain", "execution_time"]
 
         for key, value in self.dataset.items():
-            if key not in self.HEADERS:
+            if key not in self.HEADERS or key in self.skip_column:
                 continue
 
             if not value and value != 0:
