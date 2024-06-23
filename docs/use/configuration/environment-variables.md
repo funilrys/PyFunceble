@@ -20,15 +20,16 @@ In this page you will find all environment variables grouped by "features".
 
 ## Git / CI Management
 
-| Environment Variable    | Description                                                                                                                              |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| GIT_NAME                | Defines the `git.name` to setup and use.                                                                                                 |
-| GIT_EMAIL               | Defines the `git.email` to setup and use.                                                                                                |
-| GIT_BRANCH              | Defines the branch to use to store results between multiple CI/CD sessions. **WARNING:** This doesn't apply to the final results         |
-| GIT_DISTRIBUTION_BRANCH | Defines the branch to use to distribute the final results of multiple CI/CD sessions.                                                    |
-| GITHUB_TOKEN            | Under a GitHub Action worker or Jenkins CI worker, defines the token to use to authenticate ourselves against the GitHub infrastructure. |
-| GL_TOKEN                | Under a GitLab CI/CD runner, defines the token to use to authenticate ourselves against the GitLab infrastructure.                       |
-| GH_TOKEN                | Under a Travis CI instance, defines the token to use to authenticate ourselves against the GitHub infrastructure.                        |
+| Environment Variable     | Description                                                                                                                                                                                      |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| GIT_NAME                 | Defines the `git.name` to setup and use.                                                                                                                                                         |
+| GIT_EMAIL                | Defines the `git.email` to setup and use.                                                                                                                                                        |
+| GIT_BRANCH               | Defines the branch to use to store results between multiple CI/CD sessions. **WARNING:** This doesn't apply to the final results                                                                 |
+| GIT_DISTRIBUTION_BRANCH  | Defines the branch to use to distribute the final results of multiple CI/CD sessions.                                                                                                            |
+| GITHUB_TOKEN             | Under a GitHub Action worker or Jenkins CI worker, defines the token to use to authenticate ourselves against the GitHub infrastructure.                                                         |
+| GL_TOKEN                 | Under a GitLab CI/CD runner, defines the token to use to authenticate ourselves against the GitLab infrastructure.                                                                               |
+| GH_TOKEN                 | Under a Travis CI instance, defines the token to use to authenticate ourselves against the GitHub infrastructure.                                                                                |
+| PYFUNCEBLE_BYPASS_BYPASS | If set, PyFunceble will skip the bypass logic. Meaning that if a commit match the defined markers _(cf: [ci skip], and others)_, the bypass logic will be skipped - if this variable is defined. |
 
 ## Database Management
 
@@ -67,16 +68,16 @@ The environment variables listed below can be used to control the extended outpu
 The environment variables shouldn't be set by yourself, but PyFunceble somehow still
 read and use them. #MayTheForceBeWithYou :star:
 
-| Environment Variable | Description                                                                                             |
-| -------------------- | ------------------------------------------------------------------------------------------------------- |
-| APPDATA              | Used under Windows to build or get the configuration folder, when `PYFUNCEBLE_CONFIG_DIR` is not found. |
-| GITHUB_ACTIONS       | Used to detect whether we are running under a GitHub Action worker                                      |
-| GITLAB_CI            | Used to detect whether we are running under a GitLab CI/CD runner.                                      |
-| GITLAB_USER_ID       | Used to detect whether we are running under a GitLab CI/CD runner.                                      |
-| TRAVIS_BUILD_DIR     | Used to detect whether we are running under a Travis CI instance.                                       |
-| JENKINS_URL          | Used to detect whether we are running under a Jenkins CI worker.                                        |
-| JENKINS_HOME         | Used to detect whether we are running under a Jenkins CI worker.                                        |
-
+| Environment Variable     | Description                                                                                             |
+| ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| APPDATA                  | Used under Windows to build or get the configuration folder, when `PYFUNCEBLE_CONFIG_DIR` is not found. |
+| GITHUB_ACTIONS           | Used to detect whether we are running under a GitHub Action worker                                      |
+| GITLAB_CI                | Used to detect whether we are running under a GitLab CI/CD runner.                                      |
+| GITLAB_USER_ID           | Used to detect whether we are running under a GitLab CI/CD runner.                                      |
+| TRAVIS_BUILD_DIR         | Used to detect whether we are running under a Travis CI instance.                                       |
+| JENKINS_URL              | Used to detect whether we are running under a Jenkins CI worker.                                        |
+| JENKINS_HOME             | Used to detect whether we are running under a Jenkins CI worker.                                        |
+| PYFUNCEBLE_STANDALONE_CI | Used to detect whether we are running under a Standalone CI/CD engine.                                  |
 
 ## Beta Features
 !!! danger "Beware!!!"
@@ -85,6 +86,8 @@ read and use them. #MayTheForceBeWithYou :star:
 
 The environment variables listed below, are strictely reserved to selected or power users.
 
-| Environment Variable            | Description                                                         |
-| ------------------------------- | ------------------------------------------------------------------- |
-| PYFUNCEBLE_COLLECTION_API_TOKEN | Set the API token to use when pushing data into the collection API. |
+| Environment Variable                 | Description                                                           |
+| ------------------------------------ | --------------------------------------------------------------------- |
+| PYFUNCEBLE_PLATFORM_API_TOKEN        | Set the API token to use when pushing data into the platform API.     |
+| PYFUNCEBLE_PLATFORM_CHECKER_PRIORITY | Set the prioritized checker to accept while testing for the platform. |
+| PYFUNCEBLE_PLATFORM_CHECKER_EXCLUDE  | Set the checker to exclude while testing for the platform.            |
