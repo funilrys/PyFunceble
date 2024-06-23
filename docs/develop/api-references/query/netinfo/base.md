@@ -1,1 +1,0 @@
-::: PyFunceble.query.netinfo.base

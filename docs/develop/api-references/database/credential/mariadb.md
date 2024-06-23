@@ -1,1 +1,0 @@
-::: PyFunceble.database.credential.mariadb

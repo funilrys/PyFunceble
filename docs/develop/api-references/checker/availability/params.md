@@ -1,1 +1,0 @@
-::: PyFunceble.checker.availability.params
