@@ -2,11 +2,11 @@
 
 ![image](https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png)
 
-<p align="center">
+<p style="text-align: center;">
     <em>The tool to check the availability or syntax of domain, IP or URL.</em>
 </p>
 
-<p align="center">
+<p style="text-align: center;">
     <a href="https://github.com/ambv/black">
         <img src="https://img.shields.io/badge/code%20style-black-000000.png" alt="image">
     </a>
@@ -23,7 +23,7 @@
         <img src="https://img.shields.io/github/issues/funilrys/PyFunceble.png" alt="image">
     </a>
 </p>
-<p align="center">
+<p style="text-align: center;">
     <a href="https://pepy.tech/project/pyfunceble-dev">
         <img src="https://static.pepy.tech/badge/pyfunceble-dev" alt="image">
     </a>
@@ -46,8 +46,9 @@ the usage of multiple sources which are for example - to only list a few:
 PyFunceble can be included in your existing project through:
 
 - its standard built-in CLI implementation.
-- its [Python
-  API](./develop/api-references/index.md).
+# TODO: Re-enable the link to the API
+- its `[Python
+  API](./develop/api-references/index.md)`.
 - the [PyFunceble
   web-worker](https://github.com/pyfunceble/web-worker) (beta) project that
   provides the core functionalities of PyFunceble behind a web API.
