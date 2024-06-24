@@ -1,0 +1,29 @@
+name: Documentation (@PyFunceble)
+description: |
+  Create a report to help us improve the documentation.
+title: 'DOC: '
+assignees:
+  - funilrys
+labels: documentation
+projects: ['spirillen/ITT', 'funilrys/pyfunceble']
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: Where did you find this text
+      placeholder: Please copy and pasted the full URI
+
+  - type: textarea
+    id: Description
+    attributes:
+      label: Description
+      description: A clear description of the part that is missing or not easy to understand.
+      placeholder: I've found it hard to understand how...
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggestion / Improvement
+      description: A clear description of your suggestion and what you would like to improve
+      placeholder: Replace X with Y
