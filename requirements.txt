@@ -10,6 +10,6 @@ python-box[all]~=6.0.0
 python-dotenv
 PyYAML
 requests[socks]<3
-setuptools>=65.5.1
+setuptools>=70.0.0
 shtab
 SQLAlchemy~=2.0
