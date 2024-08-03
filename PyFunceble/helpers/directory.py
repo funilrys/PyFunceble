@@ -150,7 +150,7 @@ class DirectoryHelper:
         """
 
         if self.path and not self.exists():
-            os.makedirs(self.path)
+            os.makedirs(self.path, exist_ok=True)
 
         return self
 
