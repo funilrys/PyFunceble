@@ -227,6 +227,10 @@ class DownloaderBase:
         """
 
         current_datetime = datetime.datetime.now(datetime.timezone.utc)
+        if epoch := os.environ.get("SOURCE_DATE_EPOCH"):
+            current_datetime = datetime.datetime.fromtimestamp(
+                float(epoch), datetime.timezone.utc
+            )
 
         self.all_downtimes[self.DOWNTIME_INDEX] = {
             "iso": current_datetime.isoformat(),
