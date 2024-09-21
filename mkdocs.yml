@@ -1,0 +1,140 @@
+site_name: PyFunceble
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+  logo: https://github.com/PyFunceble/logo/raw/master/Green/HD/Logomark.png
+  favicon: https://github.com/PyFunceble/logo/raw/master/Green/Favicons/75x75.png
+  features:
+    - navigation.footer
+    - content.action.edit
+    - content.code.copy
+    - navigation.tabs
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+
+# TOOD: Switch to main branch.
+edit_uri: edit/switch-to-mkdocs/docs/
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/pyfunceble
+
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/u/pyfunceble
+
+    - icon: fontawesome/brands/github
+      link: https://github.com/funilrys/PyFunceble
+
+    - icon: fontawesome/brands/github
+      link: https://github.com/PyFunceble
+
+copyright: |
+  Copyright &copy; 2017 - 2024 <b>Nissar Chababy <i>(@funilrys)</i> & PyFunceble Contributors</b>
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: yes
+      line_spans: __span
+      pygments_lang_class: yes
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: yes
+  - footnotes
+  - tables
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search
+  - offline:
+      enabled: true
+  - autorefs
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: sphinx
+  - gen-files:
+      scripts:
+        - docs/gen_ref_pages.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+  - git-revision-date-localized:
+      enable_creation_date: yes
+      fallback_to_build_date: yes
+
+repo_name: funilrys/PyFunceble
+repo_url: https://github.com/funilrys/PyFunceble
+
+nav:
+  - Home:
+      - index.md
+      - Installation: use/installation.md
+      - Update: use/update.md
+  - User Guides:
+      - use/index.md
+      - Installation: use/installation.md
+      - Update: use/update.md
+      - Getting Started: use/getting-started.md
+      - Examples:
+          - Availability Check: use/examples/availability.md
+          - Syntax Check: use/examples/syntax.md
+      - Configuration:
+          - use/configuration/index.md
+          - Location: use/configuration/location.md
+          - Environment Variables: use/configuration/environment-variables.md
+          - Parameters: use/configuration/parameters/
+      - CI/CD:
+          - GitHub Actions: use/ci-cd/github-actions.md
+          - GitLab CI/CD: use/ci-cd/gitlab-ci-cd.md
+          - Travis CI: use/ci-cd/travis-ci.md
+      - FAQ: use/faq.md
+      - Known Issues: use/known-issues.md
+  - Developer Guides:
+      - Getting Started: develop/getting-started.md
+      - Checker Responses: develop/checker-responses.md
+      - Examples:
+          - Domain Availability: develop/examples/domain-availability.md
+          - Domain Syntax: develop/examples/domain-syntax.md
+          - Domain & IP Availability: develop/examples/domain-ip-availability.md
+          - IP Availability: develop/examples/ip-availability.md
+          - IP Syntax: develop/examples/ip-syntax.md
+          - URL Availability: develop/examples/url-availability.md
+          - URL Syntax: develop/examples/url-syntax.md
+          - File Generation: develop/examples/file-generation.md
+      - Code References: develop/api-references/index.md
+  - Contribution Guides:
+      - Contributing: contributing/contributing.md
+      - Code of Conduct: contributing/code-of-conduct.md
+  - About:
+      - History & Origins: about/history.md
+      - License: about/license.md
+      - Contributors: about/contributors.md
+      - Special Thanks: about/special-thanks.md
+  - Get Help: help.md
+  - Support: support.md

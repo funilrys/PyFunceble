@@ -261,7 +261,7 @@ jobs:
       PYFUNCEBLE_DB_HOST: "127.0.0.1"
       PYFUNCEBLE_DB_NAME: pyfunceble
       PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
-      PYFUNCEBLE_DB_PORT: "3306"
+      PYFUNCEBLE_DB_PORT: "5432"
       PYFUNCEBLE_DB_USERNAME: pyfunceble
 
     strategy:
@@ -338,8 +338,91 @@ jobs:
           password: ${{ secrets.PYPI_DEV_API_TOKEN }}
           skip-existing: true
 
+  deploy_docs_container:
+    needs: [run_cli, run_cli_mariadb, run_cli_postgresql]
+    name: "Deploy 🗎 (📦)"
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.12"
+        os:
+          - ubuntu-latest
+
+    env:
+      DOCKER_PYTHON_VERSION: "3.11"
+      BUILDER_CLONE_DIRNAME: pyfunceble_docker
+
+    steps:
+      - uses: actions/checkout@v4
+        name: Clone repository
+
+      - uses: actions/checkout@v4
+        name: Clone docker 📦 repository
+        with:
+          repository: PyFunceble/docker
+          path: ${{ env.BUILDER_CLONE_DIRNAME }}/
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install setuptools wheel
+          pip install ${{ env.BUILDER_CLONE_DIRNAME }}/.
+
+      - name: Get version of builder
+        run: |
+          pyfunceble-docker-builder --version
+
+      - name: Read package name
+        run: |
+          python setup.py --name
+
+      - name: Read package version
+        run: |
+          python setup.py --version
+
+      - name: Read commit ID
+        run: |
+          git log -1 --format=format:'%H'
+
+      - name: Build, Check and Publish 📦 to Docker Hub
+        run: >
+          set -x ;
+          pyfunceble-docker-builder -b ${{ env.BUILDER_CLONE_DIRNAME }}/docs_builder
+          -p docs
+          --pyfunceble-version="$(python setup.py --version)"
+          --python-version="${DOCKER_PYTHON_VERSION}"
+          --is-latest --publish --commit="$(git log -1 --format=format:'%H')"
+        env:
+          OUR_DOCKER_USERNAME: ${{ secrets.OUR_DOCKER_USERNAME }}
+          OUR_DOCKER_PASSWORD: ${{ secrets.OUR_DOCKER_PASSWORD }}
+          OUR_DOCKER_EMAIL: ${{ secrets.OUR_DOCKER_EMAIL }}
+
+      - name: Build, Check and Publish 📦 to Internal Hub
+        run: >
+          set -x ;
+          pyfunceble-docker-builder -b ${{ env.BUILDER_CLONE_DIRNAME }}/docs_builder
+          -p docs
+          --pyfunceble-version="$(python setup.py --version)"
+          --python-version="${DOCKER_PYTHON_VERSION}"
+          --is-latest --publish --commit="$(git log -1 --format=format:'%H')"
+        env:
+          OUR_DOCKER_USERNAME: ${{ secrets.INTERNAL_DOCKER_USERNAME }}
+          OUR_DOCKER_PASSWORD: ${{ secrets.INTERNAL_DOCKER_PASSWORD }}
+          OUR_DOCKER_REGISTRY: ${{ secrets.INTERNAL_DOCKER_REGISTRY }}
+
   deploy_to_docker_hub:
-    needs: [run_cli, run_cli_mariadb]
+    needs: [run_cli, run_cli_mariadb, run_cli_postgresql]
     name: "Deploy 📦 to the Docker Hub"
 
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'

@@ -208,7 +208,7 @@ def get_long_description():  # pragma: no cover
     This function return the long description.
     """
 
-    return open("README.rst", encoding="utf-8").read()
+    return open("README.md", encoding="utf-8").read()
 
 
 def get_console_scripts():  # pragma: no cover
@@ -263,6 +263,7 @@ if __name__ == "__main__":
         },
         description="The tool to check the availability or syntax of domain, IP or URL.",
         long_description=get_long_description(),
+        long_description_content_type='text/markdown',
         author="funilrys",
         author_email="contact@funilrys.com",
         license="Apache 2.0",
