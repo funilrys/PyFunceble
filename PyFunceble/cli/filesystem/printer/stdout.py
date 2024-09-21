@@ -110,13 +110,14 @@ class StdoutPrinter(PrinterBase):
         *,
         dataset: Optional[Dict[str, str]] = None,
         allow_coloration: Optional[bool] = None,
+        **kwargs,
     ) -> None:
         if allow_coloration is not None:
             self.allow_coloration = allow_coloration
         else:
             self.guess_allow_coloration()
 
-        super().__init__(template_to_use=template_to_use, dataset=dataset)
+        super().__init__(template_to_use=template_to_use, dataset=dataset, **kwargs)
 
     @property
     def allow_coloration(self) -> bool:

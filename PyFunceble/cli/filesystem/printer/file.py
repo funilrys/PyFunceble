@@ -82,11 +82,12 @@ class FilePrinter(PrinterBase):
         *,
         dataset: Optional[Dict[str, str]] = None,
         destination: Optional[str] = None,
+        **kwargs,
     ) -> None:
         if destination is not None:
             self.destination = destination
 
-        super().__init__(template_to_use=template_to_use, dataset=dataset)
+        super().__init__(template_to_use=template_to_use, dataset=dataset, **kwargs)
 
     def ensure_destination_is_given(func):  # pylint: disable=no-self-argument
         """

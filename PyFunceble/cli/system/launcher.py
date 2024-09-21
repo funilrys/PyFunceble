@@ -410,7 +410,8 @@ class SystemLauncher(SystemBase):
 
         # pylint: disable=line-too-long
         if (
-            PyFunceble.storage.CONFIGURATION.cli_testing.testing_mode.platform_contribution
+            not self.testing_protocol
+            and PyFunceble.storage.CONFIGURATION.cli_testing.testing_mode.platform_contribution
         ):
             self.testing_protocol.append(
                 {
