@@ -347,7 +347,7 @@ Check the availability of all (decoded) subject of the adblock filter list 'myad
 # Documentation as the place to be!
 
 Want to know more about details **PyFunceble**? I invite you to read the
-documentation at <https://pyfunceble.readthedocs.io/en/dev/>!
+documentation at [docs.pyfunceble.com](https://docs.pyfunceble.com)!
 
 Want a local copy? I get you covered!
 
