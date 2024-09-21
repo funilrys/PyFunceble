@@ -351,7 +351,18 @@ documentation at [docs.pyfunceble.com](https://docs.pyfunceble.com)!
 
 Want a local copy? I get you covered!
 
-Simply run the following and enjoy the documentation!
+If you want to run the documentation locally, you can do so by following the
+instructions below.
+
+Through Docker:
+
+```shell
+docker run -it -p 8080:80 pyfunceble/docs
+# Open Documentation with browser: http://localhost:8080
+palemoon http://127.0.0.1:8000
+```
+
+From source:
 
 ```shell
 # Install dependencies.
