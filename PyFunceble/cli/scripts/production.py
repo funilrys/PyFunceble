@@ -272,31 +272,6 @@ class ProductionPrep:
 
         return self
 
-    def update_docs_urls(self) -> "ProductionPrep":
-        """
-        Updates all URL in the documentation files.
-        """
-
-        to_ignore = ["they-use-d-it.rst"]
-
-        self.update_urls(
-            os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "README.rst")
-        )
-
-        for root, _, files in os.walk(
-            os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "docs")
-        ):
-            for file in files:
-                if not file.endswith(".rst"):
-                    continue
-
-                full_path = os.path.join(root, file)
-
-                if any(x in full_path for x in to_ignore):
-                    continue
-
-                self.update_urls(os.path.join(root, file))
-
     @staticmethod
     def update_code_format() -> "ProductionPrep":
         """
