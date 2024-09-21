@@ -88,7 +88,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://docs.pyfunceble.com
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -269,7 +269,7 @@ if __name__ == "__main__":
         license="Apache 2.0",
         url="https://github.com/funilrys/PyFunceble",
         project_urls={
-            "Documentation": "https://pyfunceble.readthedocs.io/en/dev/",
+            "Documentation": "https://docs.pyfunceble.com",
             "Funding": "https://github.com/sponsors/funilrys",
             "Source": "https://github.com/funilrys/PyFunceble/tree/dev",
             "Tracker": "https://github.com/funilrys/PyFunceble/issues",
