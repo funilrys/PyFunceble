@@ -1,20 +1,11 @@
-alabaster<0.8,>=0.7
-sphinx>=3.4.3
-sphinx_rtd_theme
-Pygments>=2.0
-
 # Mkdocs
 mkdocs~=1.5
-mkdocstrings[python]
-mkdocs-material~=9.5.2
-mkdocs-git-revision-date-localized-plugin
-mkdocs-gen-files
-mkdocs-literate-nav
-mkdocs-section-index
-mkdocs-git-authors-plugin
-mkdocs-macros-plugin
-pymdown-extensions
-
-# Snyk
-requests>=2.32.0 # not directly required, pinned by Snyk to avoid a vulnerability
-urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
+mkdocstrings[python]~=0.26
+mkdocs-material~=9.5
+mkdocs-git-revision-date-localized-plugin~=1.2
+mkdocs-gen-files~=0.5
+mkdocs-literate-nav~=0.6
+mkdocs-section-index~=0.3
+mkdocs-git-authors-plugin~=0.9
+mkdocs-macros-plugin~=1.2
+pymdown-extensions~=10.9
