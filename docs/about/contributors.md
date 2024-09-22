@@ -6,6 +6,7 @@ contribution(s) and or issue report which made or make PyFunceble a better tool.
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+
 <table>
   <tbody>
     <tr>
