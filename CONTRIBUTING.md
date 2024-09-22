@@ -29,6 +29,7 @@ All types of contributions are encouraged and valued. See the [Table of Contents
       - [Before Submitting an Enhancement](#before-submitting-an-enhancement)
       - [How Do I Submit a Good Enhancement Suggestion?](#how-do-i-submit-a-good-enhancement-suggestion)
     - [Your First Code Contribution](#your-first-code-contribution)
+      - [Notes for Code Contributions](#notes-for-code-contributions)
     - [Improving The Documentation](#improving-the-documentation)
   - [Styleguides](#styleguides)
     - [Code Format](#code-format)
@@ -155,7 +156,7 @@ include Setup of env, IDE and typical getting started instructions?
 
 -->
 
-We do not any contraint regarding the way to use or configure your IDE.
+We do not any constraint regarding the way to use or configure your IDE.
 But, we compiled some of the necessary steps that you may need before starting to
 hack PyFunceble.
 
@@ -190,9 +191,16 @@ hack PyFunceble.
 
 Once you went through all of those steps, you are ready and can start to code.
 
+#### Notes for Code Contributions
+
+1. When you are working on a new feature or a bug, make sure to create a new branch.
+2. When developing, please keep in mind that your configuration files located in the `~/.config/pyfunceble/` directory will be ignored.
+
+   Therefore, you may want to create a new configuration file in the root of the repository. You can overwrite it by using the `PYFUNCEBLE_CONFIG_DIR` environment variable.
+
 ### Improving The Documentation
 
-Maintaining a documentation is rarely a one man action. If you think a paragragh,
+Maintaining a documentation is rarely a one man action. If you think a paragraph,
 a section should be improved or a totally new section added, feel free to write
 a draft and submit your change through a Pull Request.
 
