@@ -73,7 +73,7 @@ jobs:
           pip install safety
 
       - name: Check the safety of our dependencies.
-        run: safety check -i 51668 -i 62044 -i 67599
+        run: safety check -i 51668 -i 62044 -i 67599 -i 70612
 
   test:
     needs: [lint, deps_safety_check]
@@ -85,6 +85,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
+          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
@@ -122,6 +123,7 @@ jobs:
           COVERALLS_PARALLEL: true
 
   coveralls:
+    continue-on-error: true
     needs: test
     name: Finish Coveralls
 

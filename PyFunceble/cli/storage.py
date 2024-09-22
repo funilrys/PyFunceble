@@ -147,7 +147,7 @@ else:
     ERROR: str = f"{colorama.Fore.RED}ERROR"
 
 VERSION_DUMP_LINK: str = (
-    "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
+    "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"
 )
 
 HASHES_FILENAME: str = "hashes_tracker.json"
