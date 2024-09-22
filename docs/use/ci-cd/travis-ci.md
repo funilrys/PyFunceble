@@ -62,7 +62,7 @@ language: python
 # This is the python version we are going to use for the tests.
 # Note: you can add any 3.x version to the list.
 python:
-  - "3.11"
+  - "3.12"
 
 # The following will tell Travis CI to ends as fast as possible.
 matrix:

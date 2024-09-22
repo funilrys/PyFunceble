@@ -355,7 +355,7 @@ jobs:
           - ubuntu-latest
 
     env:
-      DOCKER_PYTHON_VERSION: "3.11"
+      DOCKER_PYTHON_VERSION: "3.12"
       BUILDER_CLONE_DIRNAME: pyfunceble_docker
 
     steps:
@@ -442,7 +442,7 @@ jobs:
           - ubuntu-latest
 
     env:
-      DOCKER_PYTHON_VERSION: "3.11"
+      DOCKER_PYTHON_VERSION: "3.12"
       BUILDER_CLONE_DIRNAME: pyfunceble_docker
       OUR_DOCKER_USERNAME: ${{ secrets.OUR_DOCKER_USERNAME }}
       OUR_DOCKER_PASSWORD: ${{ secrets.OUR_DOCKER_PASSWORD }}
