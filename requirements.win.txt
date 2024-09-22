@@ -1,6 +1,6 @@
 alembic
 colorama
-cryptography~=43.0
+cryptography~=42.0
 dnspython[DOH]~=2.6.0
 domain2idna~=1.12.0
 inflection
