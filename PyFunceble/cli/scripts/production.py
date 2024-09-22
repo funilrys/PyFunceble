@@ -60,9 +60,7 @@ import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.cli.filesystem.dir_structure.backup import DirectoryStructureBackup
-from PyFunceble.helpers.command import CommandHelper
 from PyFunceble.helpers.dict import DictHelper
-from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.helpers.file import FileHelper
 from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.utils.version import VersionUtility
