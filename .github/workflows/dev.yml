@@ -395,6 +395,10 @@ jobs:
         run: |
           git log -1 --format=format:'%H'
 
+      - name: Update code references
+        run: |
+          python docs/gen_ref_pages.py
+
       - name: Build, Check and Publish 📦 to Docker Hub
         run: >
           set -x ;
