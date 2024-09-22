@@ -338,46 +338,6 @@ class ProductionPrep:
 
                 format_file(os.path.join(root, file), isort_config)
 
-    @staticmethod
-    def update_documentation() -> "ProductionPrep":
-        """
-        Updates the code documentation.
-
-        :raise RuntimeError:
-            When one of the wanted directory is not found.
-        """
-
-        PyFunceble.facility.Logger.info(
-            "Started to update and generate the documentation.",
-        )
-
-        docs_dir_helper = DirectoryHelper("docs")
-        source_code_dir_helper = DirectoryHelper("PyFunceble")
-
-        if not docs_dir_helper.exists():
-            raise RuntimeError(f"{docs_dir_helper.realpath!r} not found.")
-
-        if not source_code_dir_helper.exists():
-            raise RuntimeError(f"{source_code_dir_helper.realpath!r} not found.")
-
-        header = "Code Documentation"
-        source_code_destination = os.path.join(docs_dir_helper.realpath, "code")
-
-        CommandHelper(
-            f"sphinx-apidoc -d 5 -f -H {header!r} -o "
-            f"{source_code_destination!r} {source_code_dir_helper.realpath}"
-        ).execute(raise_on_error=True)
-
-        docs_destination = os.path.join(docs_dir_helper.realpath, "_build", "html")
-
-        CommandHelper(
-            f"sphinx-build -a -Q {docs_dir_helper.realpath!r} {docs_destination!r}"
-        ).execute(raise_on_error=False)
-
-        PyFunceble.facility.Logger.info(
-            "Finished to update and generate the documentation.",
-        )
-
     def update_code_urls(self) -> "ProductionPrep":
         """
         Updates all URL in the source code.

@@ -141,12 +141,3 @@ def producer() -> None:  # pylint: disable=too-many-statements
         print(PyFunceble.cli.storage.ERROR)
         print(traceback.format_exc())
         sys.exit(1)
-
-    print("Update documentation", end=" ")
-    try:
-        utility.update_documentation()
-        print(PyFunceble.cli.storage.DONE)
-    except:  # pylint: disable=bare-except
-        print(PyFunceble.cli.storage.ERROR)
-        print(traceback.format_exc())
-        sys.exit(1)
