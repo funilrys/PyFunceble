@@ -394,7 +394,7 @@ class ProductionPrep:
             ]
         elif self.branch == "master":
             regexes = [
-                (r'name=".*"', 'name="PyFunceble-dev"'),
+                (r'name=".*"', 'name="PyFunceble"'),
                 (
                     r'"Development\sStatus\s::.*"',
                     '"Development Status :: 5 - Production/Stable"',

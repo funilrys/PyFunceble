@@ -250,7 +250,7 @@ def get_console_scripts():  # pragma: no cover
 
 if __name__ == "__main__":
     setuptools.setup(
-        name="PyFunceble-dev",
+        name="PyFunceble",
         version=get_version(),
         python_requires=">=3.8, <4",
         install_requires=get_requirements(mode="standard"),
@@ -271,7 +271,7 @@ if __name__ == "__main__":
         project_urls={
             "Documentation": "https://docs.pyfunceble.com",
             "Funding": "https://github.com/sponsors/funilrys",
-            "Source": "https://github.com/funilrys/PyFunceble/tree/dev",
+            "Source": "https://github.com/funilrys/PyFunceble/tree/master",
             "Tracker": "https://github.com/funilrys/PyFunceble/issues",
         },
         platforms=["any"],
@@ -288,7 +288,7 @@ if __name__ == "__main__":
         classifiers=[
             "Environment :: Console",
             "Topic :: Internet",
-            "Development Status :: 4 - Beta",
+            "Development Status :: 5 - Production/Stable",
             "Intended Audience :: Developers",
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",
