@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://docs.pyfunceble.com
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -246,10 +246,12 @@ class VersionUtility:
         list_of_files = [
             ".coveragerc",
             ".gitignore",
-            "CODE_OF_CONDUCT.rst",
-            "CONTRIBUTING.rst",
+            "alembic.ini",
+            "CODE_OF_CONDUCT.md",
+            "CONTRIBUTING.md",
+            "CONTRIBUTORS.md",
             "MANIFEST.in",
-            "README.rst",
+            "README.md",
             "requirements.txt",
             "setup.py",
             "version.yaml",

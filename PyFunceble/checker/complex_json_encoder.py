@@ -28,7 +28,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://docs.pyfunceble.com
 
 Project homepage:
     https://pyfunceble.github.io/

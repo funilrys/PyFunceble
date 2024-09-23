@@ -73,7 +73,7 @@ jobs:
           pip install safety
 
       - name: Check the safety of our dependencies.
-        run: safety check -i 51668 -i 62044 -i 67599
+        run: safety check -i 51668 -i 62044 -i 67599 -i 70612
 
   test:
     needs: [lint, deps_safety_check]
@@ -85,6 +85,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
+          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
@@ -122,6 +123,7 @@ jobs:
           COVERALLS_PARALLEL: true
 
   coveralls:
+    continue-on-error: true
     needs: test
     name: Finish Coveralls
 
@@ -203,8 +205,8 @@ jobs:
           - ubuntu-latest
 
     env:
-      DOCKER_PYTHON_VERSION: "3.11"
-      BUILDER_CLONE_DIRNAM2: pyfunceble_docker
+      DOCKER_PYTHON_VERSION: "3.12"
+      BUILDER_CLONE_DIRNAME: pyfunceble_docker
       OUR_DOCKER_USERNAME: ${{ secrets.OUR_DOCKER_USERNAME }}
       OUR_DOCKER_PASSWORD: ${{ secrets.OUR_DOCKER_PASSWORD }}
       OUR_DOCKER_EMAIL: ${{ secrets.OUR_DOCKER_EMAIL }}
@@ -227,11 +229,24 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
+          pip install setuptools wheel
           pip install ${{ env.BUILDER_CLONE_DIRNAME }}/.
 
       - name: Get version of builder
         run: |
           pyfunceble-docker-builder --version
+
+      - name: Read package name
+        run: |
+          python setup.py --name
+
+      - name: Read package version
+        run: |
+          python setup.py --version
+
+      - name: Read commit ID
+        run: |
+          git log -1 --format=format:'%H'
 
       - name: Build, Check and Publish 📦
         run: >

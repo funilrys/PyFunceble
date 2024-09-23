@@ -2,9 +2,8 @@ graft PyFunceble
 global-exclude __pycache__
 global-exclude *.py[co]
 include LICENSE
-include CODE_OF_CONDUCT.rst
-include CONTRIBUTING.rst
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include CONTRIBUTORS.md
 include requirements*.txt
-include .PyFunceble_production.yaml
 include version.yaml
-include dir_structure_production.json

@@ -88,7 +88,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://docs.pyfunceble.com
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -208,7 +208,7 @@ def get_long_description():  # pragma: no cover
     This function return the long description.
     """
 
-    return open("README.rst", encoding="utf-8").read()
+    return open("README.md", encoding="utf-8").read()
 
 
 def get_console_scripts():  # pragma: no cover
@@ -263,12 +263,13 @@ if __name__ == "__main__":
         },
         description="The tool to check the availability or syntax of domain, IP or URL.",
         long_description=get_long_description(),
+        long_description_content_type="text/markdown",
         author="funilrys",
         author_email="contact@funilrys.com",
         license="Apache 2.0",
         url="https://github.com/funilrys/PyFunceble",
         project_urls={
-            "Documentation": "https://pyfunceble.readthedocs.io/en/dev/",
+            "Documentation": "https://docs.pyfunceble.com",
             "Funding": "https://github.com/sponsors/funilrys",
             "Source": "https://github.com/funilrys/PyFunceble/tree/dev",
             "Tracker": "https://github.com/funilrys/PyFunceble/issues",

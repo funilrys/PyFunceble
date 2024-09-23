@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://docs.pyfunceble.com
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -115,15 +115,6 @@ def producer() -> None:  # pylint: disable=too-many-statements
         print(traceback.format_exc())
         sys.exit(1)
 
-    print("Update URL in documentation", end=" ")
-    try:
-        utility.update_docs_urls()
-        print(PyFunceble.cli.storage.DONE)
-    except:  # pylint: disable=bare-except
-        print(PyFunceble.cli.storage.ERROR)
-        print(traceback.format_exc())
-        sys.exit(1)
-
     print("Update source code and tests format", end=" ")
     try:
         utility.update_code_format()
@@ -145,15 +136,6 @@ def producer() -> None:  # pylint: disable=too-many-statements
     print("Update dir structure file", end=" ")
     try:
         utility.update_dir_structure_file()
-        print(PyFunceble.cli.storage.DONE)
-    except:  # pylint: disable=bare-except
-        print(PyFunceble.cli.storage.ERROR)
-        print(traceback.format_exc())
-        sys.exit(1)
-
-    print("Update documentation", end=" ")
-    try:
-        utility.update_documentation()
         print(PyFunceble.cli.storage.DONE)
     except:  # pylint: disable=bare-except
         print(PyFunceble.cli.storage.ERROR)
