@@ -57,7 +57,7 @@ import os
 import secrets
 import unittest
 import unittest.mock
-from datetime import datetime
+from datetime import datetime, timezone
 
 import requests
 import requests.models
@@ -170,7 +170,9 @@ class TestPlatformQueryTool(unittest.TestCase):
             "status_source_before_extra_rules": None,
             "subdomain_syntax": False,
             "subject": "example.com",
-            "tested_at": datetime.fromisoformat("2021-03-09T17:42:15.771647"),
+            "tested_at": datetime.fromisoformat(
+                "2021-03-09T17:42:15.771647"
+            ).astimezone(timezone.utc),
             "url_syntax": False,
             "whois_lookup_record": {
                 "expiration_date": None,

@@ -208,7 +208,9 @@ class CSVDatasetBase(DBDatasetBase):
             for row in reader:
                 if "tested_at" in row:
                     try:
-                        row["tested_at"] = datetime.fromisoformat(row["tested_at"])
+                        row["tested_at"] = datetime.fromisoformat(
+                            row["tested_at"]
+                        ).astimezone(timezone.utc)
                     except (TypeError, ValueError):
                         row["tested_at"] = datetime.now(timezone.utc) - timedelta(
                             days=365
