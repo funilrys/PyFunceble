@@ -66,7 +66,6 @@ PROJECT_VERSION: str = "4.2.29.dev (Blue Duckling: Tulip)"
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
 
 CONFIGURATION_FILENAME: str = ".PyFunceble.yaml"
-CONFIGURATION_REMOTE_FILENAME: str = ".PyFunceble.remote.yaml"
 ENV_FILENAME: str = ".pyfunceble-env"
 
 # pylint: disable=line-too-long

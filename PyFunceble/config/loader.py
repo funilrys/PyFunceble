@@ -349,7 +349,7 @@ class ConfigLoader:
         else:
             self.path_to_remote_config = os.path.join(
                 PyFunceble.storage.CONFIG_DIRECTORY,
-                PyFunceble.storage.CONFIGURATION_REMOTE_FILENAME,
+                ".PyFunceble.remote.yaml",
             )
 
         self._remote_config_location = value
