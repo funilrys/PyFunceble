@@ -61,37 +61,20 @@ from dotenv import load_dotenv
 from PyFunceble.storage_facility import get_config_directory
 
 PROJECT_NAME: str = "PyFunceble"
-PROJECT_VERSION: str = "4.2.28a1.dev (Blue Duckling: Tulip)"
+PROJECT_VERSION: str = "4.2.29.dev (Blue Duckling: Tulip)"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
-DISTRIBUTED_DIR_STRUCTURE_FILENAME: str = "dir_structure_production.json"
 
-IANA_DUMP_FILENAME: str = "iana-domains-db.json"
-PUBLIC_SUFFIX_DUMP_FILENAME: str = "public-suffix.json"
 CONFIGURATION_FILENAME: str = ".PyFunceble.yaml"
-CONFIGURATION_OVERWRITE_FILENAME: str = ".PyFunceble.overwrite.yaml"
 CONFIGURATION_REMOTE_FILENAME: str = ".PyFunceble.remote.yaml"
 ENV_FILENAME: str = ".pyfunceble-env"
-DOWN_FILENAME: str = ".pyfunceble_intern_downtime.json"
-USER_AGENT_FILENAME: str = "user_agents.json"
-IPV4_REPUTATION_FILENAME: str = "ipv4_reputation.data"
 
 # pylint: disable=line-too-long
-IANA_DUMP_LINK: str = (
-    "https://raw.githubusercontent.com/PyFunceble/iana/master/iana-domains-db.json"
-)
-PUBLIC_SUFFIX_DUMP_LINK: str = (
-    "https://raw.githubusercontent.com/PyFunceble/public-suffix/master/public-suffix.json"
-)
-USER_AGENT_DUMP_LINK: str = (
-    "https://raw.githubusercontent.com/PyFunceble/user_agents/master/user_agents.json"
-)
-IPV4_REPUTATION_DUMP_LINK: str = "https://reputation.alienvault.com/reputation.data"
 
 SHORT_REPO_LINK: str = "https://pyfunceble.github.io"
 REPO_LINK: str = "https://github.com/funilrys/PyFunceble"
 
-NOT_RESOLVED_STD_HOSTNAME: str = f"pyfunceble-{secrets.token_hex(12)}.com"
+NOT_RESOLVED_STD_HOSTNAME: str = f"{secrets.token_hex(12)}.mock-resolver.pyfunceble.com"
 
 IANA: Optional[dict] = {}
 PUBLIC_SUFFIX: Optional[dict] = {}

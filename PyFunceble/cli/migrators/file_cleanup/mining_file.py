@@ -64,7 +64,7 @@ class MiningFileCleanupMigrator(FileClenupMigratorBase):
 
     def __post_init__(self) -> None:
         self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.MINING_OLD_FILE
+            self.config_dir, PyFunceble.cli.storage.MINING_OLD_FILE
         )
 
         return super().__post_init__()

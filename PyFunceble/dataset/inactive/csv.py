@@ -68,7 +68,7 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
 
     def __post_init__(self) -> None:
         self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.INACTIVE_DB_FILE
+            self.config_dir, PyFunceble.cli.storage.INACTIVE_DB_FILE
         )
 
         return super().__post_init__()
@@ -84,7 +84,9 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
         ):
             if not isinstance(dataset["tested_at"], datetime):
                 try:
-                    date_of_inclusion = datetime.fromisoformat(dataset["tested_at"])
+                    date_of_inclusion = datetime.fromisoformat(
+                        dataset["tested_at"]
+                    ).astimezone(timezone.utc)
                 except (TypeError, ValueError):
                     date_of_inclusion = datetime.now(timezone.utc) - timedelta(days=365)
             else:

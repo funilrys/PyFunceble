@@ -508,7 +508,9 @@ class SystemLauncher(SystemBase):
                 possible_session_id = running_file_helper.read().split()[0]
 
                 try:
-                    _ = datetime.datetime.fromisoformat(possible_session_id)
+                    _ = datetime.datetime.fromisoformat(possible_session_id).astimezone(
+                        datetime.timezone.utc
+                    )
                     self.sessions_id[parent_dirname] = None
                 except (ValueError, TypeError):
                     self.sessions_id[parent_dirname] = possible_session_id

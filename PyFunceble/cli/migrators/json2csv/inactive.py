@@ -75,7 +75,7 @@ class InactiveJSON2CSVMigrator(JSON2CSVMigratorBase):
 
     def __post_init__(self) -> None:
         self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
+            self.config_dir,
             PyFunceble.cli.storage.INACTIVE_DB_OLD_FILE,
         )
 
