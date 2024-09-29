@@ -84,7 +84,9 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
         ):
             if not isinstance(dataset["tested_at"], datetime):
                 try:
-                    date_of_inclusion = datetime.fromisoformat(dataset["tested_at"])
+                    date_of_inclusion = datetime.fromisoformat(
+                        dataset["tested_at"]
+                    ).astimezone(timezone.utc)
                 except (TypeError, ValueError):
                     date_of_inclusion = datetime.now(timezone.utc) - timedelta(days=365)
             else:
