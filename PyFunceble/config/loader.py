@@ -145,7 +145,7 @@ class ConfigLoader:
             result = func(self, *args, **kwargs)  # pylint: disable=not-callable
 
             if self.is_already_loaded():
-                self.reload()
+                self.reload(keep_custom=True)
 
             return result
 
@@ -519,12 +519,16 @@ class ConfigLoader:
 
         return PyFunceble.storage.FLATTEN_CONFIGURATION[entry]
 
-    def reload(self) -> "ConfigLoader":
+    def reload(self, keep_custom: bool = False) -> "ConfigLoader":
         """
         Reloads the configuration.
+
+        :param bool keep_custom:
+            If set to :code:`True`, we keep the custom configuration, otherwise
+            we delete it.
         """
 
-        self.destroy()
+        self.destroy(keep_custom=keep_custom)
         self.start()
 
     def start(self) -> "ConfigLoader":
@@ -560,9 +564,13 @@ class ConfigLoader:
 
         return self
 
-    def destroy(self) -> "ConfigLoader":
+    def destroy(self, keep_custom: bool = False) -> "ConfigLoader":
         """
         Destroys everything loaded.
+
+        :param bool keep_custom:
+            If set to :code:`True`, we keep the custom configuration, otherwise
+            we delete it.
         """
 
         try:
@@ -577,7 +585,8 @@ class ConfigLoader:
         except (AttributeError, TypeError):  # pragma: no cover ## Safety.
             pass
 
-        # This is not a mistake.
-        self._custom_config = {}
+        if not keep_custom:
+            # This is not a mistake.
+            self._custom_config = {}
 
         return self
