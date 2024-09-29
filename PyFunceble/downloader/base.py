@@ -119,7 +119,7 @@ class DownloaderBase:
             self.config_dir = PyFunceble.storage.CONFIG_DIRECTORY
 
         self.downtimes_file = FileHelper(
-            os.path.join(self.config_dir, PyFunceble.storage.DOWN_FILENAME)
+            os.path.join(self.config_dir, ".pyfunceble_intern_downtime.json")
         )
 
         self.all_downtimes.update(self.get_all_downtimes())

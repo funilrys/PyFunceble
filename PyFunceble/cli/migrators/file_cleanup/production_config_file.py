@@ -65,7 +65,7 @@ class ProductionConfigFileCleanupMigrator(FileClenupMigratorBase):
 
     def __post_init__(self) -> None:
         self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
+            self.config_dir,
             PyFunceble.storage.DISTRIBUTED_CONFIGURATION_FILENAME,
         )
 

@@ -92,25 +92,33 @@ class ConfigLoader:
 
     _custom_config: dict = {}
     _merge_upstream: bool = False
+    _config_dir: Optional[str] = None
 
     file_helper: FileHelper = FileHelper()
     dict_helper: DictHelper = DictHelper()
 
-    def __init__(self, merge_upstream: Optional[bool] = None) -> None:
+    def __init__(
+        self, merge_upstream: Optional[bool] = None, *, config_dir: Optional[str] = None
+    ) -> None:
         with package_resources.path(
             "PyFunceble.data.infrastructure",
             PyFunceble.storage.DISTRIBUTED_CONFIGURATION_FILENAME,
         ) as file_path:
             self.path_to_default_config = str(file_path)
 
+        if config_dir is not None:
+            self.config_dir = config_dir
+        else:
+            self.config_dir = PyFunceble.storage.CONFIG_DIRECTORY
+
         self.path_to_config = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
+            self.config_dir,
             PyFunceble.storage.CONFIGURATION_FILENAME,
         )
 
         self.path_to_overwrite_config = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
-            PyFunceble.storage.CONFIGURATION_OVERWRITE_FILENAME,
+            self.config_dir,
+            ".PyFunceble.overwrite.yaml",
         )
 
         if merge_upstream is not None:
@@ -199,6 +207,44 @@ class ConfigLoader:
         """
 
         return bool(PyFunceble.storage.CONFIGURATION)
+
+    @property
+    def config_dir(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_config_dir` attribute.
+        """
+
+        return self._config_dir
+
+    @config_dir.setter
+    @reload_config
+    def config_dir(self, value: str) -> None:
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._config_dir = value
+
+    def set_config_dir(self, value: str) -> "ConfigLoader":
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+        """
+
+        self.config_dir = value
+
+        return self
 
     @property
     def custom_config(self) -> dict:

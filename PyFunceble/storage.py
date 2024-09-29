@@ -64,19 +64,16 @@ PROJECT_NAME: str = "PyFunceble"
 PROJECT_VERSION: str = "4.2.29.dev (Blue Duckling: Tulip)"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
-DISTRIBUTED_DIR_STRUCTURE_FILENAME: str = "dir_structure_production.json"
 
 CONFIGURATION_FILENAME: str = ".PyFunceble.yaml"
-CONFIGURATION_OVERWRITE_FILENAME: str = ".PyFunceble.overwrite.yaml"
 ENV_FILENAME: str = ".pyfunceble-env"
-DOWN_FILENAME: str = ".pyfunceble_intern_downtime.json"
 
 # pylint: disable=line-too-long
 
 SHORT_REPO_LINK: str = "https://pyfunceble.github.io"
 REPO_LINK: str = "https://github.com/funilrys/PyFunceble"
 
-NOT_RESOLVED_STD_HOSTNAME: str = f"pyfunceble-{secrets.token_hex(12)}.com"
+NOT_RESOLVED_STD_HOSTNAME: str = f"{secrets.token_hex(12)}.mock-resolver.pyfunceble.com"
 
 IANA: Optional[dict] = {}
 PUBLIC_SUFFIX: Optional[dict] = {}

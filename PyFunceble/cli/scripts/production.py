@@ -84,10 +84,6 @@ class ProductionPrep:
         you should run this only if your are developing PyFunceble.
     """
 
-    VERSION_FILE_PATH: str = os.path.join(
-        PyFunceble.storage.CONFIG_DIRECTORY,
-        PyFunceble.cli.storage.DISTRIBUTED_VERSION_FILENAME,
-    )
     AVAILABLE_BRANCHES: List[str] = ["dev", "master"]
 
     regex_helper: RegexHelper = RegexHelper()
@@ -101,15 +97,23 @@ class ProductionPrep:
     """
 
     _branch: Optional[str] = None
+    _config_dir: Optional[str] = None
 
     previous_version: Optional[str] = None
     """
     Provides the previous version (from :code:`version_file_content`)
     """
 
-    def __init__(self, branch: Optional[str] = None) -> None:
+    def __init__(
+        self, branch: Optional[str] = None, *, config_dir: Optional[str] = None
+    ) -> None:
+        if config_dir is not None:
+            self.config_dir = config_dir
+        else:
+            self.config_dir = PyFunceble.storage.CONFIG_DIRECTORY
+
         self.version_file_content = self.dict_helper.from_yaml_file(
-            self.VERSION_FILE_PATH
+            self.version_file_path
         )
 
         self.previous_version = copy.deepcopy(
@@ -137,6 +141,54 @@ class ProductionPrep:
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
 
         return wrapper
+
+    @property
+    def config_dir(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_config_dir` attribute.
+        """
+
+        return self._config_dir
+
+    @config_dir.setter
+    def config_dir(self, value: str) -> None:
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._config_dir = value
+
+    def set_config_dir(self, value: str) -> "ProductionPrep":
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+        """
+
+        self.config_dir = value
+
+        return self
+
+    @property
+    def version_file_path(self) -> str:
+        """
+        Provides the path to the version file.
+        """
+
+        return os.path.join(
+            self.config_dir,
+            PyFunceble.cli.storage.DISTRIBUTED_VERSION_FILENAME,
+        )
 
     @property
     def branch(self) -> Optional[str]:
@@ -270,8 +322,7 @@ class ProductionPrep:
 
         return self
 
-    @staticmethod
-    def update_code_format() -> "ProductionPrep":
+    def update_code_format(self) -> "ProductionPrep":
         """
         Updates the format of the source code using black.
         """
@@ -304,16 +355,14 @@ class ProductionPrep:
         isort_config = isort.settings.Config(settings_file="setup.cfg")
 
         files = [
-            os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "setup.py"),
+            os.path.join(self.config_dir, "setup.py"),
         ]
 
         for file in files:
             format_file(file, isort_config)
 
         for root, _, files in os.walk(
-            os.path.join(
-                PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.storage.PROJECT_NAME
-            )
+            os.path.join(self.config_dir, PyFunceble.storage.PROJECT_NAME)
         ):
             if "__pycache__" in root:
                 continue
@@ -324,9 +373,7 @@ class ProductionPrep:
 
                 format_file(os.path.join(root, file), isort_config)
 
-        for root, _, files in os.walk(
-            os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "tests")
-        ):
+        for root, _, files in os.walk(os.path.join(self.config_dir, "tests")):
             if "__pycache__" in root:
                 continue
 
@@ -346,12 +393,10 @@ class ProductionPrep:
             ".keep",
         ]
 
-        self.update_urls(os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "setup.py"))
+        self.update_urls(os.path.join(self.config_dir, "setup.py"))
 
         for root, _, files in os.walk(
-            os.path.join(
-                PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.storage.PROJECT_NAME
-            )
+            os.path.join(self.config_dir, PyFunceble.storage.PROJECT_NAME)
         ):
             if "__pycache__" in root:
                 continue
@@ -362,9 +407,7 @@ class ProductionPrep:
 
                 self.update_urls(os.path.join(root, file))
 
-        for root, _, files in os.walk(
-            os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "tests")
-        ):
+        for root, _, files in os.walk(os.path.join(self.config_dir, "tests")):
             if "__pycache__" in root:
                 continue
 
@@ -409,9 +452,7 @@ class ProductionPrep:
                 ),
             ]
 
-        self.file_helper.set_path(
-            os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "setup.py")
-        )
+        self.file_helper.set_path(os.path.join(self.config_dir, "setup.py"))
 
         if not self.file_helper.exists():
             raise FileNotFoundError(self.file_helper.path)
@@ -453,7 +494,7 @@ class ProductionPrep:
         )
 
         self.dict_helper.set_subject(self.version_file_content).to_yaml_file(
-            self.VERSION_FILE_PATH
+            self.version_file_path
         )
 
         PyFunceble.facility.Logger.info(
