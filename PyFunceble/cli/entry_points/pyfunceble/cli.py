@@ -1209,6 +1209,16 @@ def get_default_group_data() -> List[Tuple[List[str], dict]]:
                 "overwritten by your overwrite configuration file.",
             },
         ),
+        (
+            [
+                "--config-dir",
+            ],
+            {
+                "dest": "config_dir",
+                "type": os.path.realpath,
+                "help": "Sets the configuration directory to use.",
+            },
+        ),
     ]
 
 

@@ -60,6 +60,7 @@ except ImportError:  # pragma: no cover ## Retro compatibility
     import importlib_resources as package_resources
 
 from box import Box
+from dotenv import load_dotenv
 from yaml.error import MarkedYAMLError
 
 import PyFunceble.cli.storage
@@ -144,7 +145,7 @@ class ConfigLoader:
             result = func(self, *args, **kwargs)  # pylint: disable=not-callable
 
             if self.is_already_loaded():
-                self.start()
+                self.reload()
 
             return result
 
@@ -530,6 +531,9 @@ class ConfigLoader:
         """
         Starts the loading processIs.
         """
+
+        load_dotenv(os.path.join(self.config_dir, ".env"))
+        load_dotenv(os.path.join(self.config_dir, PyFunceble.storage.ENV_FILENAME))
 
         config = self.get_config_file_content()
 

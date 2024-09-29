@@ -265,6 +265,10 @@ class SystemIntegrator(SystemBase):
                     )
                 )
 
+            if hasattr(self.args, "config_dir") and self.args.config_dir:
+                PyFunceble.facility.ConfigLoader.set_config_dir(self.args.config_dir)
+                PyFunceble.storage.CONFIG_DIRECTORY = self.args.config_dir
+
             if hasattr(self.args, "config_file") and self.args.config_file:
                 PyFunceble.facility.ConfigLoader.set_remote_config_location(
                     self.args.config_file
