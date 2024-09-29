@@ -662,7 +662,7 @@ proxy:
 
   # The rules to apply.
   # See example.
-  rules: []
+  rules: [ ]
 
 # Enable/Disable the verification of the certificate when making HTTPS requests.
 verify_ssl_certificate: no
@@ -749,15 +749,6 @@ http_codes:
       - 508
       - 510
       - 511
-
-links:
-  # Provides some of the non hard-coded URLs.
-
-  # WARNING:
-  #     The parameters listed bellow are not implemented yet as the
-  #     underlaying infrastructure will be rewritten.
-  api_date_format: "https://pyfunceble.funilrys.com/api/date-format"
-  api_no_referrer: "https://pyfunceble.funilrys.com/api/no-referrer"
 
 platform:
   # Provides everything related to the platform.

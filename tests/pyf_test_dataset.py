@@ -446,10 +446,6 @@ DEFAULT_CONFIG: dict = {
         },
         "self_managed": False,
     },
-    "links": {
-        "api_date_format": "https://pyfunceble.funilrys.com/api/date-format",
-        "api_no_referrer": "https://pyfunceble.funilrys.com/api/no-referrer",
-    },
     "lookup": {
         "dns": True,
         "http_status_code": True,
