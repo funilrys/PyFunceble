@@ -136,6 +136,103 @@ class TestConfigLoader(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_set_config_dir(self) -> None:
+        """
+        Tests the method which let us set the directory to work with.
+        """
+
+        given = "hello/world"
+        expected = "hello/world"
+
+        self.config_loader.config_dir = given
+        actual = self.config_loader.config_dir
+
+        self.assertEqual(expected, actual)
+
+    def test_set_config_dir_return(self) -> None:
+        """
+        Tests the method which let us set the directory to work with.
+
+        In this case, we just want to be sure that the response is correct.
+        """
+
+        given = "hello/world"
+
+        actual = self.config_loader.set_config_dir(given)
+
+        self.assertIsInstance(actual, ConfigLoader)
+
+    def test_set_config_dir_not_str(self) -> None:
+        """
+        Tests the method which let us set the directory to work with for the
+        case that the given directory is not a :py:class:`str`.
+        """
+
+        given = ["hello", "world"]
+
+        self.assertRaises(TypeError, lambda: self.config_loader.set_config_dir(given))
+
+    def test_set_remote_config_location(self) -> None:
+        """
+        Tests the method which let us set the remote configuration location.
+        """
+
+        given = "hello/world"
+        expected = "hello/world"
+
+        self.config_loader.remote_config_location = given
+        actual = self.config_loader.remote_config_location
+
+        self.assertEqual(expected, actual)
+
+    def test_set_remote_config_location_return(self) -> None:
+        """
+        Tests the method which let us set the remote configuration location.
+
+        In this case, we just want to be sure that the response is correct.
+        """
+
+        given = "hello/world"
+
+        actual = self.config_loader.set_remote_config_location(given)
+
+        self.assertIsInstance(actual, ConfigLoader)
+
+    def test_set_remote_config_location_not_str(self) -> None:
+        """
+        Tests the method which let us set the remote configuration location for
+        the case that the given location is not a :py:class:`str`.
+        """
+
+        given = ["hello", "world"]
+
+        self.assertRaises(
+            TypeError, lambda: self.config_loader.set_remote_config_location(given)
+        )
+
+    def test_set_remote_config_location_url(self) -> None:
+        """
+        Tests the method which let us set the remote configuration location for
+        the case that the given location is not a URL.
+        """
+
+        given = "https://example.org/hello/world"
+
+        self.config_loader.config_dir = "./hello/world"
+        self.config_loader.path_to_remote_config = None
+        self.config_loader.remote_config_location = given
+
+        expected = given
+        actual = self.config_loader.remote_config_location
+
+        self.assertEqual(expected, actual)
+
+        expected = os.path.join("./hello/world", ".PyFunceble.remote.yaml")
+
+        actual = self.config_loader.path_to_remote_config
+
+        self.assertEqual(expected, actual)
+
     def test_set_custom_config(self) -> None:
         """
         Tests the method which let us set the custom configuration to work with.

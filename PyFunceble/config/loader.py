@@ -349,7 +349,7 @@ class ConfigLoader:
             self.path_to_remote_config = os.path.realpath(value)
         else:
             self.path_to_remote_config = os.path.join(
-                PyFunceble.storage.CONFIG_DIRECTORY,
+                self.config_dir,
                 ".PyFunceble.remote.yaml",
             )
 
@@ -432,7 +432,7 @@ class ConfigLoader:
             if src and (src.startswith("http") or src.startswith("https")):
                 if dest is None:
                     destination = os.path.join(
-                        PyFunceble.storage.CONFIG_DIRECTORY,
+                        self.config_dir,
                         os.path.basename(dest),
                     )
                 else:
