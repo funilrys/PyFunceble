@@ -763,7 +763,11 @@ class PlatformQueryTool:
             if not isinstance(contract_data, dict)
             else contract_data
         )
-        url = f"{self.url_base}/v1/contracts/{contract_id}/delivery"
+
+        if contract_id != contract["subject"]["id"]:
+            url = f"{self.url_base}/v1/contracts/{contract_id}/delivery"
+        else:
+            url = f"{self.url_base}/v1/contracts/self-delivery"
 
         try:
             response = self.session.post(
