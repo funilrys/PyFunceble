@@ -103,6 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# JetBrains Tools like IntelliJ
+.idea
+
 # VSCode (Visual Basic Code)
 .vscode
 

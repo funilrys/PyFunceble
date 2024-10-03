@@ -1,0 +1,46 @@
+name: Documentation Improvement Request
+description: Suggestions for improving the documentation.
+title: "Documentation | My Awesome Idea"
+labels:
+  - documentation
+projects:
+  - funilrys/6
+assignees:
+  - funilrys
+body:
+  - type: markdown
+    attributes:
+      value: |+
+        Thanks for taking the time to fill out this documentation improvement request!
+
+        lease be patient and rest assured that we will get back to you as soon as possible.
+        To help us understand and reproduce the issue, please provide as much information as possible.
+
+        If you have a question or need help, please ask in our [Discussions](https://github.com/funilrys/PyFunceble/discussions) section.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What is missing or not easy to understand?
+      description: |
+        Please describe what is missing or not easy to understand in the documentation.
+
+      placeholder: |
+        I've found it hard to understand how...
+      value: |
+        I've found it hard to understand how...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: What is your suggestion or improvement?
+      description: |
+        A clear description of your suggestion and what you would like to improve and how you would like to improve it.
+      placeholder: |
+        I suggest that we...
+      value: |
+        I suggest that we...
+    validations:
+      required: true

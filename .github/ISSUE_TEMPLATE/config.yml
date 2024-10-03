@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussions
+    url: https://github.com/funilrys/PyFunceble/discussions
+    about: Please ask and answer questions here.
+  - name: Documentation
+    url: https://docs.pyfunceble.com
+    about: Find more information about PyFunceble through our documentation.
