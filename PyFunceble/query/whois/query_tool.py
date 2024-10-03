@@ -369,6 +369,7 @@ class WhoisQueryTool:
 
         return self.iana_dataset.get_whois_server(extension)
 
+    @update_lookup_record
     def get_lookup_record(
         self,
     ) -> Optional[WhoisQueryToolRecord]:

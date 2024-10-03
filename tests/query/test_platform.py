@@ -255,10 +255,10 @@ class TestPlatformQueryTool(unittest.TestCase):
         In this test we test the case that nothing is given or declared.
         """
 
-        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
 
-        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
 
         expected = ""
@@ -1098,10 +1098,10 @@ class TestPlatformQueryTool(unittest.TestCase):
         response_dict["subject"] = "example.net"
         self.availability_status_dataset["expiration_date"] = "23-nov-2090"
 
-        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
 
-        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
 
         self.query_tool.token = ""
@@ -1200,10 +1200,10 @@ class TestPlatformQueryTool(unittest.TestCase):
         In this test, we test the case that no token is given.
         """
 
-        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
 
-        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
 
         self.query_tool.token = ""
