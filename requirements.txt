@@ -12,4 +12,4 @@ PyYAML
 requests[socks]<3
 setuptools>=65.5.1
 shtab
-SQLAlchemy[postgresql-psycopg2binary]~=2.0
+SQLAlchemy[postgresql_psycopg2binary]~=2.0
