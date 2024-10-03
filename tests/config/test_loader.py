@@ -399,7 +399,7 @@ class TestConfigLoader(unittest.TestCase):
         expected = self.our_config.to_dict()
 
         actual = self.config_loader.get_config_file_content()
-
+        self.maxDiff = None
         self.assertEqual(expected, actual)
 
     def test_get_config_file_content_yaml_issue(self) -> None:

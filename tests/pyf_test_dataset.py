@@ -446,7 +446,10 @@ DEFAULT_CONFIG: dict = {
         },
         "self_managed": False,
     },
-    "links": {},
+    "links": {
+        # Keep this for the sake of the tests - and future reference.
+        "example": "https://example.org",
+    },
     "lookup": {
         "dns": True,
         "http_status_code": True,

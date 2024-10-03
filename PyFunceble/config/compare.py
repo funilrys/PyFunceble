@@ -74,6 +74,8 @@ class ConfigComparison:
         "repo",
         "requirements",
         "user_agents",
+        "api_date_format",
+        "api_no_referrer",
     ]
     DELETED_CORE: List[str] = [
         "dns_lookup_over_tcp",
