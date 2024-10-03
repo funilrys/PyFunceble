@@ -52,6 +52,8 @@ License:
 """
 
 import os
+import sys
+import traceback
 
 import colorama
 
@@ -59,7 +61,9 @@ import PyFunceble.cli.facility
 import PyFunceble.cli.factory
 import PyFunceble.cli.storage
 import PyFunceble.facility
+import PyFunceble.helpers.exceptions
 import PyFunceble.storage
+from PyFunceble.cli.continuous_integration.exceptions import StopExecution
 from PyFunceble.cli.system.base import SystemBase
 from PyFunceble.helpers.dict import DictHelper
 
@@ -250,23 +254,56 @@ class SystemIntegrator(SystemBase):
         Starts a group of actions provided by this interface.
         """
 
-        if hasattr(self.args, "output_location") and self.args.output_location:
-            PyFunceble.cli.storage.OUTPUT_DIRECTORY = os.path.realpath(
-                os.path.join(
-                    self.args.output_location,
-                    PyFunceble.cli.storage.OUTPUTS.parent_directory,
+        try:
+            self.init_logger()
+
+            if hasattr(self.args, "output_location") and self.args.output_location:
+                PyFunceble.cli.storage.OUTPUT_DIRECTORY = os.path.realpath(
+                    os.path.join(
+                        self.args.output_location,
+                        PyFunceble.cli.storage.OUTPUTS.parent_directory,
+                    )
                 )
+
+            if hasattr(self.args, "config_dir") and self.args.config_dir:
+                PyFunceble.facility.ConfigLoader.set_config_dir(self.args.config_dir)
+                PyFunceble.storage.CONFIG_DIRECTORY = self.args.config_dir
+
+            if hasattr(self.args, "config_file") and self.args.config_file:
+                PyFunceble.facility.ConfigLoader.set_remote_config_location(
+                    self.args.config_file
+                ).reload()
+
+            PyFunceble.facility.Logger.debug("Given arguments:\n%r", self.args)
+
+            self.inject_into_config()
+            self.check_config()
+            self.check_deprecated()
+
+            PyFunceble.cli.facility.CredentialLoader.start()
+            PyFunceble.cli.factory.DBSession.init_db_sessions()
+        except (KeyboardInterrupt, StopExecution):
+            pass
+        except Exception as exception:  # pylint: disable=broad-except
+            PyFunceble.facility.Logger.critical(
+                "Fatal error.",
+                exc_info=True,
             )
+            if isinstance(exception, PyFunceble.helpers.exceptions.UnableToDownload):
+                message = (
+                    f"{colorama.Fore.RED}{colorama.Style.BRIGHT}Unable to download "
+                    f"{exception}"
+                )
+            else:
+                message = (
+                    f"{colorama.Fore.RED}{colorama.Style.BRIGHT}Fatal Error: "
+                    f"{exception}"
+                )
+            print(message)
 
-        self.init_logger()
+            if PyFunceble.facility.Logger.authorized:
+                print(traceback.format_exc())
 
-        PyFunceble.facility.Logger.debug("Given arguments:\n%r", self.args)
-
-        self.inject_into_config()
-        self.check_config()
-        self.check_deprecated()
-
-        PyFunceble.cli.facility.CredentialLoader.start()
-        PyFunceble.cli.factory.DBSession.init_db_sessions()
+            sys.exit(1)
 
         return self

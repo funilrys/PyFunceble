@@ -74,6 +74,7 @@ import PyFunceble.cli.utils.ascii_logo
 import PyFunceble.cli.utils.sort
 import PyFunceble.cli.utils.stdout
 import PyFunceble.facility
+import PyFunceble.helpers.exceptions
 import PyFunceble.storage
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
@@ -1138,12 +1139,20 @@ class SystemLauncher(SystemBase):
                 "Fatal error.",
                 exc_info=True,
             )
-            print(
-                f"{colorama.Fore.RED}{colorama.Style.BRIGHT}Fatal Error: "
-                f"{exception}"
-            )
+            if isinstance(exception, PyFunceble.helpers.exceptions.UnableToDownload):
+                message = (
+                    f"{colorama.Fore.RED}{colorama.Style.BRIGHT}Unable to download "
+                    f"{exception}"
+                )
+            else:
+                message = (
+                    f"{colorama.Fore.RED}{colorama.Style.BRIGHT}Fatal Error: "
+                    f"{exception}"
+                )
+            print(message)
 
-            print(traceback.format_exc())
+            if PyFunceble.facility.Logger.authorized:
+                print(traceback.format_exc())
             sys.exit(1)
 
         PyFunceble.cli.utils.stdout.print_thanks()

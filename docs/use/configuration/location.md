@@ -3,12 +3,23 @@
 Depending on how and where PyFunceble is operated, it will try to load the
 configuration from dedicated locations.
 
-## Custom Location
+## Custom Folder
 
 If you want to skip and define your own configuration folder, you can define
 the storage location of the configuration files through
 the `PYFUNCEBLE_CONFIG_DIR` environment variable.
 
+## Custom File
+
+If you want to provide your own configuration file, you can provide it through
+the `--config-file` CLI argument. If the given argument is a URL, PyFunceble
+will download it and use it as the configuration file.
+
+
+!!! note
+
+    The given configuration file will be loaded **after** the default
+    configuration file _(`.PyFunceble.yaml`)_ and **before** the overwrite _(`.PyFunceble.overwrite.yaml`)_ configuration file.
 
 ## Operating Systems
 

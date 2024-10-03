@@ -59,7 +59,6 @@ except ImportError:  # pragma: no cover ## Retro compatibility
     import importlib_resources as package_resources
 
 
-import PyFunceble.storage
 from PyFunceble.cli.filesystem.cleanup import FilesystemCleanup
 from PyFunceble.cli.filesystem.dir_base import FilesystemDirBase
 
@@ -78,7 +77,7 @@ class DirectoryStructureBase(FilesystemDirBase):
     ) -> None:
         with package_resources.path(
             "PyFunceble.data.infrastructure",
-            PyFunceble.storage.DISTRIBUTED_DIR_STRUCTURE_FILENAME,
+            "dir_structure_production.json",
         ) as file_path:
             self.std_source_file = str(file_path)
 

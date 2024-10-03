@@ -65,7 +65,7 @@ class DatasetBase:
     """
 
     STORAGE_INDEX: Optional[str] = None
-    DOWNLOADER: Optional[DownloaderBase] = None
+    downloader: Optional[DownloaderBase] = None
 
     source_file: Optional[str] = None
 
@@ -129,9 +129,9 @@ class DatasetBase:
         file_helper = FileHelper(self.source_file)
 
         if not file_helper.exists() and bool(
-            self.DOWNLOADER
+            self.downloader
         ):  # pragma: no cover ## This is just a safety endpoint.
-            self.DOWNLOADER.start()
+            self.downloader.start()
 
             if not file_helper.exists():
                 raise FileNotFoundError(file_helper.path)

@@ -54,6 +54,7 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
+import PyFunceble.storage
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 
 
@@ -66,10 +67,18 @@ class MigratorBase:
     continuous_integration: Optional[ContinuousIntegrationBase] = None
     db_session: Optional[Session] = None
 
+    _config_dir: Optional[str] = None
     print_action_to_stdout: bool = False
 
-    def __init__(self, print_action_to_stdout: bool = False) -> None:
+    def __init__(
+        self, print_action_to_stdout: bool = False, *, config_dir: Optional[str] = None
+    ) -> None:
         self.print_action_to_stdout = print_action_to_stdout
+
+        if config_dir is not None:
+            self._config_dir = config_dir
+        else:
+            self._config_dir = PyFunceble.storage.CONFIG_DIRECTORY
 
         self.__post_init__()
 
@@ -77,6 +86,43 @@ class MigratorBase:
         """
         A method to be called (automatically) after the __init__ execution.
         """
+
+    @property
+    def config_dir(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_config_dir` attribute.
+        """
+
+        return self._config_dir
+
+    @config_dir.setter
+    def config_dir(self, value: str) -> None:
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._config_dir = value
+
+    def set_config_dir(self, value: str) -> "MigratorBase":
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+        """
+
+        self.config_dir = value
+
+        return self
 
     def start(self) -> "MigratorBase":
         """

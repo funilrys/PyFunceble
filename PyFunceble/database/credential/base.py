@@ -100,6 +100,8 @@ class CredentialBase:
     _password: Optional[str] = None
     _charset: Optional[str] = None
 
+    _config_dir: Optional[str] = None
+
     def __init__(
         self,
         *,
@@ -109,6 +111,7 @@ class CredentialBase:
         username: Optional[str] = None,
         password: Optional[str] = None,
         charset: Optional[str] = None,
+        config_dir: Optional[str] = None,
     ) -> None:
         if host is not None:
             self.host = host
@@ -140,11 +143,14 @@ class CredentialBase:
         else:
             self.charset = self.STD_CHARSET
 
+        if config_dir is not None:
+            self.config_dir = config_dir
+        else:
+            self.config_dir = PyFunceble.storage.CONFIG_DIRECTORY
+
         self.dotenv_locations = [
             os.path.realpath(PyFunceble.storage.ENV_FILENAME),
-            os.path.join(
-                PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.storage.ENV_FILENAME
-            ),
+            os.path.join(self.config_dir, PyFunceble.storage.ENV_FILENAME),
         ]
 
     def ensure_protocol_is_given(func):  # pylint: disable=no-self-argument
@@ -164,6 +170,43 @@ class CredentialBase:
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
 
         return wrapper
+
+    @property
+    def config_dir(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_config_dir` attribute.
+        """
+
+        return self._config_dir
+
+    @config_dir.setter
+    def config_dir(self, value: str) -> None:
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._config_dir = value
+
+    def set_config_dir(self, value: str) -> "CredentialBase":
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+        """
+
+        self.config_dir = value
+
+        return self
 
     @property
     def host(self) -> Optional[str]:

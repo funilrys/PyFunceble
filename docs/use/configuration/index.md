@@ -3,7 +3,7 @@
 PyFunceble provides a set of functionalities that you can influence through configuration.
 There are multiple way to configure PyFunceble so let's get started :smile:
 
-PyFunceble primarely load it's configuration from a file called `.PyFunceble.yaml`.
+PyFunceble primarily load it's configuration from a file called `.PyFunceble.yaml`.
 That's the file PyFunceble generate with its default settings. However, you can
 overwrite any of the configuration value through a `.PyFunceble.overwrite.yaml` file
 or the corresponding CLI parameter.
@@ -28,6 +28,7 @@ the `PYFUNCEBLE_CONFIG_DIR` environment variable.
 | Travis CI      | Workspace              |
 | Jenkins CI     | Workspace              |
 
+At any time, you can provide your own configuration file through the `--config-file` CLI argument. If the given argument is a URL, PyFunceble will download it and use it as the configuration file.
 
 ## Filename-s
 

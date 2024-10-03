@@ -53,6 +53,7 @@ License:
 import functools
 from typing import Any, Generator, List, Optional
 
+import PyFunceble.storage
 from PyFunceble.dataset.base import DatasetBase
 
 
@@ -77,7 +78,13 @@ class DBDatasetBase(DatasetBase):
         *,
         authorized: Optional[bool] = None,
         remove_unneeded_fields: Optional[bool] = None,
+        config_dir: Optional[str] = None,
     ) -> None:
+        if config_dir is not None:
+            self.config_dir = config_dir
+        else:
+            self.config_dir = PyFunceble.storage.CONFIG_DIRECTORY
+
         if authorized is not None:
             self.set_authorized(authorized)
 
@@ -107,6 +114,43 @@ class DBDatasetBase(DatasetBase):
             return wrapper
 
         return inner_metdhod
+
+    @property
+    def config_dir(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_config_dir` attribute.
+        """
+
+        return self._config_dir
+
+    @config_dir.setter
+    def config_dir(self, value: str) -> None:
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._config_dir = value
+
+    def set_config_dir(self, value: str) -> "DBDatasetBase":
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+        """
+
+        self.config_dir = value
+
+        return self
 
     @property
     def authorized(self) -> Optional[bool]:

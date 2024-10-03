@@ -50,9 +50,8 @@ License:
     limitations under the License.
 """
 
-import os
 import secrets
-from typing import Any
+from typing import Any, Optional
 from warnings import warn
 
 import PyFunceble.storage
@@ -66,16 +65,14 @@ class UserAgentDataset(DatasetBase):
     """
 
     STORAGE_INDEX: str = "USER_AGENTS"
-    DOWNLOADER: UserAgentsDownloader = UserAgentsDownloader()
+    downloader: Optional[UserAgentsDownloader] = None
 
     preferred_browser: str = "chrome"
     preferred_platform: str = "linux"
 
     def __init__(self) -> None:
-        self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
-            PyFunceble.storage.USER_AGENT_FILENAME,
-        )
+        self.downloader = UserAgentsDownloader()
+        self.source_file = self.downloader.destination
 
     def __contains__(self, value: Any) -> bool:
         content = self.get_content()

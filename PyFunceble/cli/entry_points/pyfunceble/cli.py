@@ -1197,6 +1197,28 @@ def get_default_group_data() -> List[Tuple[List[str], dict]]:
                 "version": "%(prog)s " + PyFunceble.storage.PROJECT_VERSION,
             },
         ),
+        (
+            [
+                "--config-file",
+            ],
+            {
+                "dest": "config_file",
+                "type": str,
+                "help": "Sets the configuration file to use. It can be a\n"
+                "local or remote file. Please note that this configuration can be\n"
+                "overwritten by your overwrite configuration file.",
+            },
+        ),
+        (
+            [
+                "--config-dir",
+            ],
+            {
+                "dest": "config_dir",
+                "type": os.path.realpath,
+                "help": "Sets the configuration directory to use.",
+            },
+        ),
     ]
 
 

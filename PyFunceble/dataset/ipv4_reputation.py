@@ -50,10 +50,8 @@ License:
     limitations under the License.
 """
 
-import os
 from typing import Any, Optional
 
-import PyFunceble.storage
 from PyFunceble.dataset.base import DatasetBase
 from PyFunceble.downloader.ipv4_reputation import IPV4ReputationDownloader
 from PyFunceble.helpers.file import FileHelper
@@ -65,13 +63,11 @@ class IPV4ReputationDataset(DatasetBase):
     """
 
     STORAGE_INDEX: Optional[str] = None
-    DOWNLOADER: IPV4ReputationDownloader = IPV4ReputationDownloader()
+    downloader: Optional[IPV4ReputationDownloader] = None
 
     def __init__(self) -> None:
-        self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
-            PyFunceble.storage.IPV4_REPUTATION_FILENAME,
-        )
+        self.downloader = IPV4ReputationDownloader()
+        self.source_file = self.downloader.destination
 
     def __contains__(self, value: Any) -> bool:
         with self.get_content() as file_stream:
@@ -95,9 +91,9 @@ class IPV4ReputationDataset(DatasetBase):
 
         file_helper = FileHelper(self.source_file)
 
-        if not file_helper.exists() and bool(self.DOWNLOADER):  # pragma: no cover
+        if not file_helper.exists() and bool(self.downloader):  # pragma: no cover
             ## pragma reason: Safety.
-            self.DOWNLOADER.start()
+            self.downloader.start()
 
             if not file_helper.exists():
                 raise FileNotFoundError(file_helper.path)

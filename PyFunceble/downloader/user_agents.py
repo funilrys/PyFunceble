@@ -50,9 +50,6 @@ License:
     limitations under the License.
 """
 
-import os
-
-import PyFunceble.storage
 from PyFunceble.downloader.base import DownloaderBase
 
 
@@ -64,14 +61,11 @@ class UserAgentsDownloader(DownloaderBase):
     DOWNTIME_INDEX: str = "user_agents"
     DOWNLOAD_FREQUENCY: int = 1
 
-    def __init__(self) -> None:
-        self.destination = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
-            PyFunceble.storage.USER_AGENT_FILENAME,
-        )
-        self.download_link = PyFunceble.storage.USER_AGENT_DUMP_LINK
-
-        super().__init__()
+    # pylint: disable=line-too-long
+    DEFAULT_DOWNLOAD_URL: str = (
+        "https://raw.githubusercontent.com/PyFunceble/user_agents/master/user_agents.json"
+    )
+    DEFAULT_FILENAME: str = "user_agents.json"
 
     @property
     def authorized(self) -> bool:
