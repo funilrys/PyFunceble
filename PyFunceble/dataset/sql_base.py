@@ -305,7 +305,7 @@ class SQLDBDatasetBase(DBDatasetBase):
             if "expiration_date" not in row and "epoch" not in row:
                 raise exception
 
-            y2k38_limit = datetime(2037, 12, 31, 0, 0)
+            y2k38_limit = datetime(2035, 12, 31, 0, 0)
             new_date = datetime.fromtimestamp(float(row["epoch"]), timezone.utc)
             new_date -= new_date - y2k38_limit
 
