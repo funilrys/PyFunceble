@@ -657,6 +657,8 @@ class SystemLauncher(SystemBase):
             breakoff = initial_breakoff
 
             while True:
+                protocol_data = {}
+
                 for next_contract in next(
                     query_tool.pull_contract(
                         PyFunceble.storage.CONFIGURATION.cli_testing.max_workers
@@ -685,12 +687,14 @@ class SystemLauncher(SystemBase):
                 if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots:
                     PyFunceble.cli.utils.stdout.print_single_line("S")
 
-                time.sleep(breakoff)
-
-                if breakoff < max_breakoff:
+                if protocol_data:
+                    breakoff = initial_breakoff
+                elif breakoff < max_breakoff:
                     breakoff += 0.02
                 else:
                     breakoff = initial_breakoff
+
+                time.sleep(breakoff)
 
         for protocol in self.testing_protocol:
             self.ci_stop_in_the_middle_if_time_exceeded()
