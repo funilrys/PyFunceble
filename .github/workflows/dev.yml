@@ -99,6 +99,15 @@ jobs:
       - uses: actions/checkout@v4
         name: Clone repository
 
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+        if: matrix.os == 'macos-latest'
+
+      - name: Install PostgreSQL
+        run: |
+          brew install postgresql
+        if: matrix.os == 'macos-latest'
+
       - name: Set up Python ${{ matrix.python_version }}
         uses: actions/setup-python@v5
         with:
