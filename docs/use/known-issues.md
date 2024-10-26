@@ -4,20 +4,10 @@ On this page, you will find any issues that are known and not fixed - yet.
 
 ## Python Support
 
-Any Python version lower than `3.7` are not compatible with PyFunceble.
+Any Python version lower than `3.9` are not compatible with PyFunceble.
 
-This means you actually are unable to run any version below Python 3.7 as a
-number of used builtin features are missing and were first introduced in Python 3.7.
-
-Here are some of the message you might experience:
-
-```python
-Fatal Error: type object 'datetime.datetime' has no attribute 'fromisoformat'
-```
-
-```python
-ModuleNotFoundError: No module named 'dataclasses'
-```
+Because we don't want to support a version that is not maintained anymore, we
+decided to drop the support for Python `3.6`, `3.7`, and `3.8`.
 
 ## PyFunceble CLI
 
