@@ -364,7 +364,7 @@ From source:
 
 ```shell
 # Install dependencies.
-pip install --user -r requirements.docs.txt
+pip install --user .[docs]
 # Serve documentation locally.
 mkdocs serve
 # Open Documentation with browser.

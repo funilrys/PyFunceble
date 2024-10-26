@@ -35,8 +35,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pylint
+          pip install .[test,dev]
 
       - name: Lint PyFunceble with Pylint
         run: pylint PyFunceble
@@ -69,7 +68,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install .
           pip install safety
 
       - name: Check the safety of our dependencies.
@@ -107,8 +106,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install tox coveralls
+          pip install .[test]
+          pip install coveralls
 
       - name: Test PyFunceble as defined by tox.ini
         run: |

@@ -39,8 +39,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pylint
+          pip install .[test,dev]
 
       - name: Lint PyFunceble with Pylint
         run: pylint PyFunceble
@@ -80,8 +79,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install tox coveralls
+          pip install .[test]
+          pip install coveralls
 
       - name: Test PyFunceble as defined by tox.ini
         run: |
@@ -148,8 +147,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install tox
+          pip install .[test]
 
       - name: Run PyFunceble as defined by tox_run.ini
         run: tox -c tox_run.ini
@@ -204,8 +202,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install tox
+          pip install .[test]
 
       - name: Run PyFunceble as defined by tox_run_mariadb.ini
         run: tox -c tox_run_mariadb.ini
@@ -233,7 +230,7 @@ jobs:
       PYFUNCEBLE_DB_HOST: "127.0.0.1"
       PYFUNCEBLE_DB_NAME: pyfunceble
       PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
-      PYFUNCEBLE_DB_PORT: "3306"
+      PYFUNCEBLE_DB_PORT: "5432"
       PYFUNCEBLE_DB_USERNAME: pyfunceble
 
     strategy:
@@ -260,8 +257,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install tox psycopg2
+          pip install .[psql-binary,test]
 
       - name: Run PyFunceble as defined by tox_run_postgresql.ini
         run: tox -c tox_run_postgresql.ini
