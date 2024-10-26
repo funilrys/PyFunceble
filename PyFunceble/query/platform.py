@@ -702,9 +702,7 @@ class PlatformQueryTool:
             "shuffle": True,
         }
 
-        if "none" in self.checker_priority:
-            params["shuffle"] = True
-        else:
+        if "none" not in self.checker_priority:
             params["checker_type_priority"] = ",".join(self.checker_priority)
 
         if "none" not in self.checker_exclude:
@@ -717,9 +715,9 @@ class PlatformQueryTool:
                 timeout=self.timeout * 10,
             )
 
-            response_json = response.json()
-
             if response.status_code == 200:
+                response_json = response.json()
+
                 PyFunceble.facility.Logger.debug(
                     "Successfully pulled next %r contracts. Response: %r", response_json
                 )
@@ -772,9 +770,9 @@ class PlatformQueryTool:
                 timeout=self.timeout * 10,
             )
 
-            response_json = response.json()
+            if response.status_code in (202, 200):
+                response_json = response.json()
 
-            if response.status_code == 200:
                 PyFunceble.facility.Logger.debug(
                     "Successfully delivered contract: %r. Response: %r",
                     contract_data,
@@ -786,6 +784,7 @@ class PlatformQueryTool:
                 )
 
                 return response_json
+            response_json = {}
         except (requests.RequestException, json.decoder.JSONDecodeError):
             response_json = {}
 
@@ -796,7 +795,7 @@ class PlatformQueryTool:
             "Finished to deliver contract: %r", contract_data
         )
 
-        return None
+        return response_json
 
     @ensure_modern_api
     def push(

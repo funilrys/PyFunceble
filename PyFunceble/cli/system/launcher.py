@@ -651,18 +651,14 @@ class SystemLauncher(SystemBase):
 
             max_breakoff = 120.0
 
-            initial_breakoff = (
-                max_breakoff / PyFunceble.storage.CONFIGURATION.cli_testing.max_workers
-            )
+            initial_breakoff = 0.1 * self.tester_process_manager.max_worker
             breakoff = initial_breakoff
 
             while True:
                 protocol_data = {}
 
                 for next_contract in next(
-                    query_tool.pull_contract(
-                        PyFunceble.storage.CONFIGURATION.cli_testing.max_workers
-                    )
+                    query_tool.pull_contract(self.tester_process_manager.max_worker)
                 ):
                     if "subject" not in next_contract or not next_contract["subject"]:
                         continue
@@ -684,15 +680,25 @@ class SystemLauncher(SystemBase):
 
                 self.ci_stop_in_the_middle_if_time_exceeded()
 
+                if (
+                    self.tester_process_manager.input_queue.qsize()
+                    >= self.tester_process_manager.max_worker
+                ):
+                    breakoff_multiplier = (
+                        self.tester_process_manager.input_queue.qsize() * 2
+                    )
+
+                    if breakoff < max_breakoff:
+                        breakoff += 0.1 * breakoff_multiplier
+                    else:
+                        breakoff = initial_breakoff
+                elif breakoff >= max_breakoff:
+                    breakoff = initial_breakoff
+
+                print(f"Breakoff: {breakoff}")
+
                 if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots:
                     PyFunceble.cli.utils.stdout.print_single_line("S")
-
-                if protocol_data:
-                    breakoff = initial_breakoff
-                elif breakoff < max_breakoff:
-                    breakoff += 0.02
-                else:
-                    breakoff = initial_breakoff
 
                 time.sleep(breakoff)
 
