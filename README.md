@@ -46,6 +46,7 @@ Happy testing with PyFunceble!
 - [Installation](#installation)
   - [Packages \& Versioning](#packages--versioning)
   - [PyPi - Python Package Index](#pypi---python-package-index)
+    - [Optional Dependencies](#optional-dependencies)
     - [pyfunceble](#pyfunceble)
     - [pyfunceble-dev](#pyfunceble-dev)
   - [Container Image Registry](#container-image-registry)
@@ -109,9 +110,35 @@ the OS specific packages _(see below)_.
 Here is an overview of the packages and where they are hosted.
 
 | Package        | PyPi Link                                |
-|----------------|------------------------------------------|
+| -------------- | ---------------------------------------- |
 | pyfunceble     | https://pypi.org/project/PyFunceble      |
 | pyfunceble-dev | https://pypi.org/project/PyFunceblee-dev |
+
+### Optional Dependencies
+
+The following dependencies are optional and can be installed if you need them.
+
+| Dependency                         | Description                                                                                                                                                            |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `all`                              | Install all functional dependencies. Basically all but `dev`, `test` and `docs`. _When a binary and non binary version is available, the binary version is installed._ |
+| `full`                             | Install all dependencies listed below. _When a binary and non binary version is available, the binary version is installed._                                           |
+| `psql`, `postgresql`               | **Build** and install the dependencies required to interact with PostgreSQL.                                                                                           |
+| `psql-binary`, `postgresql-binary` | **Install** the dependencies required to interact with PostgreSQL - from binary.                                                                                       |
+| `docs`                             | Install the dependencies required to build the documentation.                                                                                                          |
+| `test`                             | Install the dependencies required to run the tests.                                                                                                                    |
+| `dev`                              | Install the dependencies required to develop PyFunceble.                                                                                                               |
+
+They are intended to be installed through the following syntax:
+
+```shell
+pip3 install --user {pkg}[{dependency}]
+```
+
+As an example if you want to install the `docs` and `test` dependencies, you should run:
+
+```shell
+pip3 install --user pyfunceble[docs,test]
+```
 
 ### pyfunceble
 
@@ -145,7 +172,7 @@ is available. :smile:
 Here is an overview of the packages and where they are hosted.
 
 | Host       | Package        | Link                                                                                                     |
-|------------|----------------|----------------------------------------------------------------------------------------------------------|
+| ---------- | -------------- | -------------------------------------------------------------------------------------------------------- |
 | Docker Hub | pyfunceble     | [https://hub.docker.com/r/pyfunceble/pyfunceble](https://hub.docker.com/r/pyfunceble/pyfunceble)         |
 | Docker Hub | pyfunceble-dev | [https://hub.docker.com/r/pyfunceble/pyfunceble-dev](https://hub.docker.com/r/pyfunceble/pyfunceble-dev) |
 
@@ -195,7 +222,7 @@ this is probably for you.
 Here is an overview of the packages and where they are hosted.
 
 | Host   | Package        | Repository                                                              |
-|--------|----------------|-------------------------------------------------------------------------|
+| ------ | -------------- | ----------------------------------------------------------------------- |
 | GitHub | pyfunceble     | `git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble`  |
 | GitHub | pyfunceble-dev | `git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble-dev` |
 | GitLab | pyfunceble     | `git+https://gitlab.com/funilrys/PyFunceble.git@master#egg=PyFunceble`  |

@@ -148,6 +148,15 @@ def get_requirements(*, mode="standard"):
         "postgresql-binary": ["requirements.txt"],
     }
 
+    ignored_modes_for_all = [
+        "dev",
+        "test",
+        "docs",
+        "psql",
+        "postgresql",
+        "postgresql-binary",
+    ]
+
     if is_win_platform():
         for known_mode, files in mode2files.items():
             new_files = set()
@@ -163,6 +172,9 @@ def get_requirements(*, mode="standard"):
             mode2files[known_mode] = list(new_files)
 
     mode2files["full"] = [y for x in mode2files.values() for y in x]
+    mode2files["all"] = [
+        z for x, y in mode2files.items() for z in y if x not in ignored_modes_for_all
+    ]
 
     result = set()
 
@@ -184,7 +196,7 @@ def get_requirements(*, mode="standard"):
 
     if mode in ("psql", "postgresql"):
         result.add("psycopg2")
-    elif mode in ("psql-binary", "postgresql-binary"):
+    elif mode in ("psql-binary", "postgresql-binary", "all"):
         result.add("psycopg2-binary")
 
     return list(result)
@@ -270,6 +282,7 @@ if __name__ == "__main__":
             "postgresql": get_requirements(mode="postgresql"),
             "postgresql-binary": get_requirements(mode="postgresql-binary"),
             "full": get_requirements(mode="full"),
+            "all": get_requirements(mode="all"),
         },
         description="The tool to check the availability or syntax of domain, IP or URL.",
         long_description=get_long_description(),
