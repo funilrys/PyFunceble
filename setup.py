@@ -141,6 +141,9 @@ def get_requirements(*, mode="standard"):
         "docs": ["requirements.docs.txt"],
         "test": ["requirements.test.txt"],
         "psql": ["requirements.txt"],
+        "postgresql": ["requirements.txt"],
+        "psql-binary": ["requirements.txt"],
+        "postgresql-binary": ["requirements.txt"],
     }
 
     if is_win_platform():
@@ -177,8 +180,10 @@ def get_requirements(*, mode="standard"):
 
                 result.add(line)
 
-    if mode == "psql":
+    if mode in ("psql", "postgresql"):
         result.add("psycopg2")
+    elif mode in ("psql-binary", "postgresql-binary"):
+        result.add("psycopg2-binary")
 
     return list(result)
 
@@ -259,6 +264,9 @@ if __name__ == "__main__":
             "dev": get_requirements(mode="dev"),
             "test": get_requirements(mode="test"),
             "psql": get_requirements(mode="psql"),
+            "psql-binary": get_requirements(mode="psql-binary"),
+            "postgresql": get_requirements(mode="postgresql"),
+            "postgresql-binary": get_requirements(mode="postgresql-binary"),
             "full": get_requirements(mode="full"),
         },
         description="The tool to check the availability or syntax of domain, IP or URL.",
