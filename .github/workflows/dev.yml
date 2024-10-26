@@ -289,7 +289,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install tox psycopg2
+          pip install tox psycopg2-binary
 
       - name: Run PyFunceble as defined by tox_run_postgresql.ini
         run: tox -c tox_run_postgresql.ini
