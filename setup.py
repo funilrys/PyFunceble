@@ -112,6 +112,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=line-too-long
+
 import os
 import platform
 import re
@@ -125,9 +127,9 @@ def is_win_platform():
     Checks if the current platform is Windows.
     """
 
-    WIN_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
+    win_platforms = ["windows", "cygwin", "cygwin_nt-10.0"]
 
-    return platform.system().lower() in WIN_PLATFORMS
+    return platform.system().lower() in win_platforms
 
 
 def get_requirements(*, mode="standard"):
