@@ -695,8 +695,6 @@ class SystemLauncher(SystemBase):
                 elif breakoff >= max_breakoff:
                     breakoff = initial_breakoff
 
-                print(f"Breakoff: {breakoff}")
-
                 if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots:
                     PyFunceble.cli.utils.stdout.print_single_line("S")
 
