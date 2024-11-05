@@ -91,7 +91,7 @@ class TestHashHelper(unittest.TestCase):
         work with.
         """
 
-        given = "SHA512_224"
+        given = "sha512_224"
 
         hash_helper = HashHelper()
         actual = hash_helper.set_algo(given)
@@ -103,8 +103,8 @@ class TestHashHelper(unittest.TestCase):
         Tests the method which let us set the algorithm to work with.
         """
 
-        given = "SHA512_224"
-        expected = "SHA512_224"
+        given = "sha512_224"
+        expected = "sha512_224"
 
         hash_helper = HashHelper()
         hash_helper.set_algo(given)

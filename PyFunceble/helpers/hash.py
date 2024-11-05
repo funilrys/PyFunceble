@@ -66,7 +66,7 @@ class HashHelper:
     :raise ValueError: When the given algo is not known.
     """
 
-    _algo: str = "SHA512_224"
+    _algo: str = "sha512_224"
 
     def __init__(self, algo: Optional[str] = None):
         if algo is not None:
