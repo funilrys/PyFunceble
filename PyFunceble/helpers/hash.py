@@ -50,10 +50,8 @@ License:
     limitations under the License.
 """
 
+import hashlib
 from typing import Optional, Union
-
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
 
 from PyFunceble.helpers.file import FileHelper
 
@@ -97,11 +95,12 @@ class HashHelper:
         if not isinstance(value, str):
             raise TypeError(f"<value> should be {str}, {type(value)} given.")
 
-        value = value.upper()
+        value = value.lower()
 
-        if not hasattr(hashes, value):
+        if value not in hashlib.algorithms_available:
             raise ValueError(
-                f"<value> ({value!r}) in an unknown algorithm ({self.algo!r})."
+                f"<value> ({value!r}) in an unknown algorithm "
+                f"({hashlib.algorithms_available})."
             )
 
         self._algo = value
@@ -118,13 +117,6 @@ class HashHelper:
 
         return self
 
-    def __get_hash(self) -> hashes.Hash:
-        """
-        Provides the Hash to use.
-        """
-
-        return hashes.Hash(getattr(hashes, self.algo)(), backend=default_backend())
-
     def hash_file(self, file_path: str) -> str:
         """
         Hashes the content of the given file.
@@ -135,7 +127,7 @@ class HashHelper:
 
         block_size = 4096
 
-        digest = self.__get_hash()
+        digest = hashlib.new(self.algo)
 
         with FileHelper(file_path).open("rb") as file_stream:
             block = file_stream.read(block_size)
@@ -144,7 +136,7 @@ class HashHelper:
                 digest.update(block)
                 block = file_stream.read(block_size)
 
-        return digest.finalize().hex()
+        return digest.hexdigest()
 
     def hash_data(self, data: Union[str, bytes]) -> str:
         """
@@ -163,7 +155,7 @@ class HashHelper:
         if isinstance(data, str):
             data = data.encode()
 
-        digest = self.__get_hash()
+        digest = hashlib.new(self.algo)
         digest.update(data)
 
-        return digest.finalize().hex()
+        return digest.hexdigest()
