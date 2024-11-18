@@ -81,6 +81,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
                 (self.switch_to_down_if_status_code, {410, 424}),
             ],
             r"\.24\.eu$": [(self.switch_to_down_if_status_code, 503)],
+            r"\.3x\.ro$": [(self.switch_to_down_if_status_code, 404)],
             r"\.altervista\.org$": [(self.switch_to_down_if_status_code, 403)],
             r"\.angelfire\.com$": [(self.switch_to_down_if_status_code, 404)],
             r"\.blogspot\.": [self.handle_blogspot],
