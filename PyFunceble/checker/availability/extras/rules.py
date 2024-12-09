@@ -98,6 +98,10 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             r"\.sz.id$": [(self.switch_to_down_if_status_code, 302)],
             r"\.translate\.goog$": [(self.switch_to_down_if_status_code, 403)],
             r"\.tumblr\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.vercel\.app$": [
+                (self.switch_to_down_if_status_code, "451"),
+                self.handle_vercel_dot_app
+            ],
             r"\.web\.app$": [(self.switch_to_down_if_status_code, 404)],
             r"\.wix\.com$": [(self.switch_to_down_if_status_code, 404)],
             r"^s3\.ap-south-1\.amazonaws\.com$": [
@@ -170,24 +174,6 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         return self
 
-    def handle_wordpress_dot_com(self) -> "ExtraRulesHandler":
-        """
-        Handles the :code:`wordpress.com` case.
-
-        .. warning::
-            This method assume that we know that we are handling a blogspot domain.
-        """
-
-        regex_wordpress = [r"doesn&#8217;t&nbsp;exist", r"no\slonger\savailable"]
-
-        self.do_on_body_match(
-            self.req_url,
-            regex_wordpress,
-            method=self.switch_to_down,
-            allow_redirects=True,
-        )
-
-        return self
 
     def handle_fc2_dot_com(self) -> "ExtraRulesHandler":
         """
@@ -224,6 +210,53 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
         if "Location" in req.headers:
             if req.headers["Location"].endswith(("/removed.png", f"/user/{username}")):
                 self.switch_to_down()
+
+        return self
+
+    def handle_vercel_dot_app(self) -> "ExtraRulesHandler":
+        """
+        Handles the :code:`vercel.app` case.
+
+        .. warning::
+            This method assume that we know that we are handling a vercel.app domain.
+        """
+
+        regex_vercel = [r"This%20Deployment%20has%20been%20disabled"]
+
+        self.do_on_header_match(
+            self.req_url,
+            {"x-vercel-error": ["DEPLOYMENT_DISABLED"]},
+            method=self.switch_to_down,
+            match_mode="std",
+            strict=True,
+            allow_redirects=False,
+        )
+
+        self.do_on_body_match(
+            self.req_url,
+            regex_vercel,
+            method=self.switch_to_down,
+            allow_redirects=False,
+        )
+
+        return self
+
+    def handle_wordpress_dot_com(self) -> "ExtraRulesHandler":
+        """
+        Handles the :code:`wordpress.com` case.
+
+        .. warning::
+            This method assume that we know that we are handling a blogspot domain.
+        """
+
+        regex_wordpress = [r"doesn&#8217;t&nbsp;exist", r"no\slonger\savailable"]
+
+        self.do_on_body_match(
+            self.req_url,
+            regex_wordpress,
+            method=self.switch_to_down,
+            allow_redirects=True,
+        )
 
         return self
 
