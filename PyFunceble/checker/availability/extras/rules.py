@@ -98,6 +98,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             r"\.sz.id$": [(self.switch_to_down_if_status_code, 302)],
             r"\.translate\.goog$": [(self.switch_to_down_if_status_code, 403)],
             r"\.tumblr\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.vercel\.app$": [(self.switch_to_down_if_status_code, 451)],
             r"\.web\.app$": [(self.switch_to_down_if_status_code, 404)],
             r"\.wix\.com$": [(self.switch_to_down_if_status_code, 404)],
             r"^s3\.ap-south-1\.amazonaws\.com$": [
