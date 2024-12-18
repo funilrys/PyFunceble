@@ -14,7 +14,7 @@ body:
         Thanks for taking the time to fill out this feature request!
 
         Please be patient and rest assured that we will get back to you as soon as possible.
-        To help us understand and reproduce the issue, please provide as much information as possible.
+        To help us understand the request, please provide as much information as possible.
 
         If you have a question or need help, please ask in our [Discussions](https://github.com/funilrys/PyFunceble/discussions) section.
 
@@ -24,8 +24,6 @@ body:
       label: What is the feature you'd like to request?
       description: Please describe the feature you'd like to request.
       placeholder: |
-        I'd like to request a feature that...
-      value: |
         I'd like to request a feature that...
     validations:
       required: true
@@ -37,8 +35,6 @@ body:
       description: Please describe the problem you are trying to solve.
       placeholder: |
         I'm trying to solve a problem where...
-      value: |
-        I'm trying to solve a problem where...
     validations:
       required: true
 
@@ -48,8 +44,6 @@ body:
       label: What solution would you like to see?
       description: Please describe the solution you'd like to see.
       placeholder: |
-        I'd like to see a solution that...
-      value: |
         I'd like to see a solution that...
     validations:
       required: true
@@ -61,8 +55,6 @@ body:
       description: Please describe any alternatives you've considered.
       placeholder: |
         I've considered alternatives such as...
-      value: |
-        I've considered alternatives such as...
     validations:
       required: false
 
@@ -72,8 +64,6 @@ body:
       label: Additional context
       description: Please provide any additional context or screenshots.
       placeholder: |
-        I would like to add...
-      value: |
         I would like to add...
     validations:
       required: false
