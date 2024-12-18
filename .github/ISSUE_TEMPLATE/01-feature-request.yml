@@ -13,7 +13,7 @@ body:
       value: |+
         Thanks for taking the time to fill out this feature request!
 
-        lease be patient and rest assured that we will get back to you as soon as possible.
+        Please be patient and rest assured that we will get back to you as soon as possible.
         To help us understand and reproduce the issue, please provide as much information as possible.
 
         If you have a question or need help, please ask in our [Discussions](https://github.com/funilrys/PyFunceble/discussions) section.
@@ -78,11 +78,11 @@ body:
     validations:
       required: false
 
-  # - type: checkboxes
-  #   id: terms
-  #   attributes:
-  #     label: Code of Conduct
-  #     description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.org/todo).
-  #     options:
-  #       - label: I agree to follow this project's Code of Conduct
-  #         required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/funilrys/PyFunceble/blob/dev/CODE_OF_CONDUCT.md).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
