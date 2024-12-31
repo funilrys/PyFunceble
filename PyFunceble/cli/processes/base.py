@@ -60,8 +60,3 @@ class ProcessesManagerBase(PyFunceble.ext.process_manager.ProcessManagerCore):
     """
     Provides the base of all classes.
     """
-
-    def __post_init__(self):
-        self._extra_args["configuration"] = PyFunceble.storage.CONFIGURATION.to_dict()
-
-        return super().__post_init__()

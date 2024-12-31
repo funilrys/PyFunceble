@@ -95,10 +95,13 @@ class WorkerBase(PyFunceble.ext.process_manager.WorkerCore):
         Perform the external poweron checks.
         """
 
-        if self.configuration is not None:
+        if hasattr(self, "configuration") and self.configuration is not None:
             PyFunceble.facility.ConfigLoader.set_custom_config(self.configuration)
 
-        if multiprocessing.get_start_method() != "fork":
+        if (
+            multiprocessing.get_start_method() != "fork"
+            or not PyFunceble.storage.CONFIGURATION
+        ):
             PyFunceble.facility.ConfigLoader.start()
             PyFunceble.cli.facility.CredentialLoader.start()
             PyFunceble.cli.factory.DBSession.init_db_sessions()

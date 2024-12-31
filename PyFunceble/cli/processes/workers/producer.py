@@ -103,6 +103,8 @@ class ProducerWorker(WorkerBase):
     )
 
     def perform_external_poweron_checks(self) -> None:
+        result = super().perform_external_poweron_checks()
+
         skip_columns = []
         extra_formatters = {}
 
@@ -135,7 +137,7 @@ class ProducerWorker(WorkerBase):
 
         self.header_already_printed = False
 
-        return super().perform_external_poweron_checks()
+        return result
 
     @staticmethod
     def should_we_ignore(test_result: CheckerStatusBase) -> bool:
