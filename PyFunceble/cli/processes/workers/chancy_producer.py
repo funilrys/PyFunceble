@@ -69,8 +69,6 @@ class ChancyProducerWorker(ProducerWorker):
         USE AT YOUR OWN RISK. GOOD LUCK!
     """
 
-    STD_NAME: str = "pyfunceble_chancy_producer_worker"
-
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
         if not isinstance(consumed, tuple):
             PyFunceble.facility.Logger.info(

@@ -59,4 +59,5 @@ class MinerProcessesManager(ProcessesManagerBase):
     Provides the miner manager.
     """
 
-    WORKER_OBJ: MinerWorker = MinerWorker
+    STD_NAME: str = "pyfunceble_miner_worker"
+    WORKER_CLASS: MinerWorker = MinerWorker

@@ -85,8 +85,6 @@ class DireFileSorterWorker(FileSorterWorkerBase):
         None
     """
 
-    STD_NAME: str = "pyfunceble_dir_files_sorter_worker"
-
     @staticmethod
     def get_files_to_sort(directory: str) -> List[str]:
         """
@@ -130,6 +128,13 @@ class DireFileSorterWorker(FileSorterWorkerBase):
         return result
 
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
+        """
+        The producer of the worker.
+
+        :param consumed:
+            The consumed data to work with.
+        """
+
         if (
             not isinstance(consumed, dict)
             and "directory" not in consumed

@@ -59,4 +59,5 @@ class ProducerProcessesManager(ProcessesManagerBase):
     Provides the producer manager.
     """
 
-    WORKER_OBJ: ProducerWorker = ProducerWorker
+    STD_NAME: str = "pyfunceble_producer_worker"
+    WORKER_CLASS: ProducerWorker = ProducerWorker

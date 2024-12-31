@@ -70,10 +70,10 @@ class ChancyTesterWorker(TesterWorker):
         USE AT YOUR OWN RISK. GOOD LUCK!
     """
 
-    STD_NAME: str = "pyfunceble_chancy_tester_worker"
-
     def __post_init__(self) -> None:
-        self.producer_worker = ProducerWorker(**self._params)
+        self.producer_worker = ProducerWorker(**self._all_args)
+        self.producer_worker.name = f"{self.name}.producer"
+        self.producer_worker.perform_external_poweron_checks()
 
         return super().__post_init__()
 
@@ -81,7 +81,7 @@ class ChancyTesterWorker(TesterWorker):
         """
         The actually wall destructor.
 
-        :param consummed:
+        :param consumed:
             The data that needs to be tested.
         """
 

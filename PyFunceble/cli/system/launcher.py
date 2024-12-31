@@ -199,67 +199,96 @@ class SystemLauncher(SystemBase):
 
         if not PyFunceble.storage.CONFIGURATION.cli_testing.chancy_tester:
             self.tester_process_manager = TesterProcessesManager(
-                self.manager,
-                max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
-                continuous_integration=self.continuous_integration,
+                max_workers=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
+                manager=self.manager,
                 daemon=True,
-                output_workers_count=1,
-                output_queue_num=2,
-            )
-            self.producer_process_manager = ProducerProcessesManager(
-                self.manager,
-                max_worker=1,
+                generate_output_queue=True,
+                output_queue_count=(
+                    1 if not PyFunceble.storage.CONFIGURATION.cli_testing.mining else 2
+                ),
+                spread_stop_signal=True,
+                spread_wait_signal=True,
+                dynamic_up_scaling=True,
+                dynamic_down_scaling=True,
+                delay_shutdown=PyFunceble.storage.CONFIGURATION.cli_testing.mining,
+                generate_configuration_queue=False,
                 continuous_integration=self.continuous_integration,
-                input_queue=self.tester_process_manager.output_queue[0],
+            )
+
+            self.producer_process_manager = ProducerProcessesManager(
+                max_workers=1,
+                manager=self.manager,
                 daemon=True,
                 generate_output_queue=False,
+                spread_stop_signal=True,
+                spread_wait_signal=True,
+                delay_shutdown=PyFunceble.storage.CONFIGURATION.cli_testing.mining,
+                generate_configuration_queue=False,
+                continuous_integration=self.continuous_integration,
             )
         else:
             self.tester_process_manager = ChancyTesterProcessesManager(
-                self.manager,
-                max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
-                continuous_integration=self.continuous_integration,
+                max_workers=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
+                manager=self.manager,
                 daemon=True,
-                output_workers_count=1,
-                output_queue_num=2,
+                generate_output_queue=True,
+                output_queue_count=(
+                    1 if not PyFunceble.storage.CONFIGURATION.cli_testing.mining else 2
+                ),
+                spread_stop_signal=True,
+                spread_wait_signal=True,
+                dynamic_up_scaling=True,
+                dynamic_down_scaling=True,
+                delay_shutdown=PyFunceble.storage.CONFIGURATION.cli_testing.mining,
+                generate_configuration_queue=False,
+                continuous_integration=self.continuous_integration,
             )
             self.producer_process_manager = ChancyProducerProcessesManager(
-                self.manager,
-                max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
-                continuous_integration=self.continuous_integration,
-                input_queue=self.tester_process_manager.output_queue[0],
+                max_workers=1,
+                manager=self.manager,
                 daemon=True,
                 generate_output_queue=False,
+                spread_stop_signal=True,
+                spread_wait_signal=True,
+                delay_shutdown=PyFunceble.storage.CONFIGURATION.cli_testing.mining,
+                generate_configuration_queue=False,
+                continuous_integration=self.continuous_integration,
             )
 
+        self.tester_process_manager.add_dependent_manager(self.producer_process_manager)
+
         self.dir_files_sorter_process_manager = DirFileSorterProcessesManager(
-            self.manager,
-            max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
+            manager=self.manager,
+            max_workers=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
             continuous_integration=self.continuous_integration,
             daemon=True,
             generate_output_queue=False,
-            output_workers_count=0,
+            generate_configuration_queue=False,
         )
         self.migrator_process_manager = MigratorProcessesManager(
-            self.manager,
+            manager=self.manager,
             continuous_integration=self.continuous_integration,
             daemon=True,
             generate_input_queue=False,
             generate_output_queue=False,
-            output_workers_count=0,
         )
 
         if PyFunceble.storage.CONFIGURATION.cli_testing.mining:
             self.miner_process_manager = MinerProcessesManager(
-                self.manager,
-                max_worker=1,
+                manager=self.manager,
+                max_workers=1,
                 continuous_integration=self.continuous_integration,
-                input_queue=self.tester_process_manager.output_queue[1],
-                output_queue=self.tester_process_manager.input_queue,
+                output_queues=[self.tester_process_manager.input_queue],
                 generate_input_queue=False,
                 generate_output_queue=False,
                 daemon=True,
-                output_workers_count=self.tester_process_manager.max_worker,
+                spread_stop_signal=False,
+                spread_wait_signal=True,
+                delay_shutdown=PyFunceble.storage.CONFIGURATION.cli_testing.mining,
+            )
+
+            self.tester_process_manager.add_dependent_manager(
+                self.miner_process_manager
             )
 
         if self.continuous_integration.authorized:
@@ -587,8 +616,8 @@ class SystemLauncher(SystemBase):
                     to_send["subject"], to_send["idna_subject"] = subject, subject
                     to_send["from_preload"] = True
 
-                    self.tester_process_manager.add_to_input_queue(
-                        to_send, worker_name="main"
+                    self.tester_process_manager.push_to_input_queue(
+                        to_send, source_worker="main"
                     )
 
             else:
@@ -620,8 +649,8 @@ class SystemLauncher(SystemBase):
                             to_send["subject"] = subject
                             to_send["idna_subject"] = domain2idna.domain2idna(subject)
 
-                            self.tester_process_manager.add_to_input_queue(
-                                to_send, worker_name="main"
+                            self.tester_process_manager.push_to_input_queue(
+                                to_send, source_worker="main"
                             )
 
             # Now, let's handle the inactive one :-)
@@ -642,8 +671,8 @@ class SystemLauncher(SystemBase):
                     to_send["subject"] = dataset["idna_subject"]
                     to_send["idna_subject"] = dataset["idna_subject"]
 
-                    self.tester_process_manager.add_to_input_queue(
-                        to_send, worker_name="main"
+                    self.tester_process_manager.push_to_input_queue(
+                        to_send, source_worker="main"
                     )
 
             self.dir_files_sorter_process_manager.input_datasets.append(
@@ -660,14 +689,14 @@ class SystemLauncher(SystemBase):
 
             max_breakoff = 120.0
 
-            initial_breakoff = 0.1 * self.tester_process_manager.max_worker
+            initial_breakoff = 0.1 * self.tester_process_manager.max_workers
             breakoff = initial_breakoff
 
             while True:
                 protocol_data = {}
 
                 for next_contract in next(
-                    query_tool.pull_contract(self.tester_process_manager.max_worker)
+                    query_tool.pull_contract(self.tester_process_manager.max_workers)
                 ):
                     if "subject" not in next_contract or not next_contract["subject"]:
                         continue
@@ -683,19 +712,14 @@ class SystemLauncher(SystemBase):
                     )
                     protocol_data["contract"] = copy.deepcopy(next_contract)
 
-                    self.tester_process_manager.add_to_input_queue(
-                        protocol_data, worker_name="main"
+                    self.tester_process_manager.push_to_input_queue(
+                        protocol_data, source_worker="main"
                     )
 
                 self.ci_stop_in_the_middle_if_time_exceeded()
 
-                if (
-                    self.tester_process_manager.input_queue.qsize()
-                    >= self.tester_process_manager.max_worker
-                ):
-                    breakoff_multiplier = (
-                        self.tester_process_manager.input_queue.qsize() * 2
-                    )
+                if self.tester_process_manager.queue_full:
+                    breakoff_multiplier = self.tester_process_manager.queue_size * 2
 
                     if breakoff < max_breakoff:
                         breakoff += 0.1 * breakoff_multiplier
@@ -732,8 +756,8 @@ class SystemLauncher(SystemBase):
                         domain2idna.domain2idna(subject),
                     )
 
-                    self.tester_process_manager.add_to_input_queue(
-                        to_send, worker_name="main"
+                    self.tester_process_manager.push_to_input_queue(
+                        to_send, source_worker="main"
                     )
             elif protocol["type"] == "file":
                 handle_file(protocol)
@@ -1069,7 +1093,7 @@ class SystemLauncher(SystemBase):
         # The idea out here is to propate the stop signal.
         # Meaning that the tester will share it's stop signal to all
         # subsequencial queues after all submitted tasks are done.
-        self.tester_process_manager.send_stop_signal(worker_name="main")
+        self.tester_process_manager.push_stop_signal(source_worker="main")
 
         if self.miner_process_manager:
             self.miner_process_manager.wait()
@@ -1081,7 +1105,7 @@ class SystemLauncher(SystemBase):
             # From here, we are sure that every test and files are produced.
             # We now format the generated file(s).
             self.dir_files_sorter_process_manager.start()
-            self.dir_files_sorter_process_manager.send_stop_signal()
+            self.dir_files_sorter_process_manager.push_stop_signal()
             self.dir_files_sorter_process_manager.wait()
         except AssertionError:
             # Example: Already started previously.
@@ -1101,13 +1125,14 @@ class SystemLauncher(SystemBase):
         Starts our core processes.
         """
 
-        if not self.producer_process_manager.is_running():
+        if not self.producer_process_manager.running:
             self.producer_process_manager.start()
 
+        if not self.tester_process_manager.running:
             self.tester_process_manager.start()
 
-            if self.miner_process_manager:
-                self.miner_process_manager.start()
+        if self.miner_process_manager and not self.miner_process_manager.running:
+            self.miner_process_manager.start()
 
     @SystemBase.ensure_args_is_given
     def start(self) -> "SystemLauncher":
@@ -1166,7 +1191,6 @@ class SystemLauncher(SystemBase):
                     f"{colorama.Fore.RED}{colorama.Style.BRIGHT}Fatal Error: "
                     f"{exception}"
                 )
-            print(message)
 
             if PyFunceble.facility.Logger.authorized:
                 print(traceback.format_exc())

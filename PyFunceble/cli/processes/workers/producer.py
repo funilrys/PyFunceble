@@ -85,8 +85,6 @@ class ProducerWorker(WorkerBase):
     the production of output to stdout or files.
     """
 
-    STD_NAME: str = "pyfunceble_producer_worker"
-
     stdout_printer: Optional[StdoutPrinter] = None
     file_printer: Optional[FilePrinter] = None
     whois_dataset: Optional[WhoisDatasetBase] = None
@@ -104,7 +102,7 @@ class ProducerWorker(WorkerBase):
         PyFunceble.storage.STATUS.invalid,
     )
 
-    def __post_init__(self) -> None:
+    def perform_external_poweron_checks(self) -> None:
         skip_columns = []
         extra_formatters = {}
 
@@ -137,7 +135,7 @@ class ProducerWorker(WorkerBase):
 
         self.header_already_printed = False
 
-        return super().__post_init__()
+        return super().perform_external_poweron_checks()
 
     @staticmethod
     def should_we_ignore(test_result: CheckerStatusBase) -> bool:
@@ -177,7 +175,7 @@ class ProducerWorker(WorkerBase):
         """
         Checks if we should block the file printer.
 
-        The reason behindn this is that we don't want to generate an output
+        The reason behind this is that we don't want to generate an output
         when a subject was already into the inactive database.
         """
 
@@ -303,7 +301,7 @@ class ProducerWorker(WorkerBase):
         Runs the analytic behind the file printer.
 
         .. warning::
-            Thie method assume that the givne dataset is ignored from the normal
+            Thie method assume that the given dataset is ignored from the normal
             file printer.
         """
 
@@ -388,6 +386,13 @@ class ProducerWorker(WorkerBase):
                 ).count(test_result.registrar)
 
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
+        """
+        The producer of the worker.
+
+        :param consumed:
+            The consumed data to work with.
+        """
+
         if not isinstance(consumed, tuple):
             PyFunceble.facility.Logger.info(
                 "Skipping latest dataset because consumed data was not a tuple."
@@ -399,7 +404,7 @@ class ProducerWorker(WorkerBase):
 
         if not isinstance(test_dataset, dict):
             PyFunceble.facility.Logger.info(
-                "Skipping because test dataset is not a dictionnary."
+                "Skipping because test dataset is not a dictionary."
             )
             return None
 

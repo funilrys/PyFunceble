@@ -64,9 +64,11 @@ class MigratorWorker(WorkerBase):
     to handle the mining of dataset to test.
     """
 
-    STD_NAME: str = "pyfunceble_migrator_worker"
-
     def run(self) -> None:
+        """
+        This is the brain of the worker.
+        """
+
         try:
             try:
                 self.target(self.continuous_integration, db_session=self.db_session)

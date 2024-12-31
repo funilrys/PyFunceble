@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     # We start the producer thread.
     producer_process_manager = ProducerProcessesManager(
-        max_worker=1, daemon=True, generate_output_queue=False
+        max_workers=1, daemon=True, generate_output_queue=False
     )
     producer_process_manager.start()
 
@@ -86,14 +86,14 @@ if __name__ == "__main__":
 
         # We order the generation of the status file by putting our information
         # to the producer queue.
-        producer_process_manager.add_to_input_queue(
+        producer_process_manager.push_to_input_queue(
             (communication_dataset, test_result)
         )
 
     # We are now done, it's time to send the stop signal.
     # The stop signal will inform thhe producer thread that it needs to stop
     # listening to new order (from the time it reads the stop signal).
-    producer_process_manager.send_stop_signal(worker_name="main")
+    producer_process_manager.push_stop_signal(source_worker="main")
 
     # Now we wait until it's done.
     producer_process_manager.wait()

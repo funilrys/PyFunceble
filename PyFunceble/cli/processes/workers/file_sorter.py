@@ -81,9 +81,14 @@ class FileSorterWorker(FileSorterWorkerBase):
         None
     """
 
-    STD_NAME: str = "pyfunceble_file_sorter_worker"
-
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
+        """
+        The producer of the worker.
+
+        :param consumed:
+            The consumed data to work with.
+        """
+
         if (
             not isinstance(consumed, dict)
             and "file" not in consumed

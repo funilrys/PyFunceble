@@ -317,6 +317,5 @@ if __name__ == "__main__":
             "Programming Language :: Python :: 3",
             "License :: OSI Approved",
         ],
-        test_suite="setup._test_suite",
         entry_points={"console_scripts": get_console_scripts()},
     )

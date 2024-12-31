@@ -59,4 +59,5 @@ class TesterProcessesManager(ProcessesManagerBase):
     Provides the tester manager.
     """
 
-    WORKER_OBJ: TesterWorker = TesterWorker
+    STD_NAME: str = "pyfunceble_tester_worker"
+    WORKER_CLASS: TesterWorker = TesterWorker

@@ -299,7 +299,6 @@ class SystemIntegrator(SystemBase):
                     f"{colorama.Fore.RED}{colorama.Style.BRIGHT}Fatal Error: "
                     f"{exception}"
                 )
-            print(message)
 
             if PyFunceble.facility.Logger.authorized:
                 print(traceback.format_exc())

@@ -59,4 +59,5 @@ class FileSorterProcessesManager(ProcessesManagerBase):
     Provides the file sorter manager.
     """
 
-    WORKER_OBJ: FileSorterWorker = FileSorterWorker
+    STD_NAME: str = "pyfunceble_file_sorter_worker"
+    WORKER_CLASS: FileSorterWorker = FileSorterWorker

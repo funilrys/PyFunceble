@@ -78,8 +78,6 @@ class TesterWorker(WorkerBase):
     the tests.
     """
 
-    STD_NAME: str = "pyfunceble_tester_worker"
-
     continue_dataset: Optional[ContinueDatasetBase] = None
     inactive_dataset: Optional[InactiveDatasetBase] = None
     testing_object: Optional[CheckerBase] = None
@@ -87,7 +85,7 @@ class TesterWorker(WorkerBase):
     known_testing_objects: dict = {}
     initiated_testing_objects: dict = {}
 
-    def __post_init__(self) -> None:
+    def perform_external_poweron_checks(self) -> None:
         self.continue_dataset = (
             PyFunceble.cli.utils.testing.get_continue_databaset_object(
                 db_session=self.db_session
@@ -123,7 +121,7 @@ class TesterWorker(WorkerBase):
             },
         }
 
-        return super().__post_init__()
+        return super().perform_external_poweron_checks()
 
     @staticmethod
     def should_be_ignored(subject: str) -> bool:

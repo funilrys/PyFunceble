@@ -71,8 +71,6 @@ class MinerWorker(WorkerBase):
     the mining of dataset to test.
     """
 
-    STD_NAME: str = "pyfunceble_miner_worker"
-
     INACTIVE_STATUSES: Tuple[str, ...] = (
         PyFunceble.storage.STATUS.down,
         PyFunceble.storage.STATUS.invalid,
@@ -123,6 +121,13 @@ class MinerWorker(WorkerBase):
         return result
 
     def target(self, consumed: Tuple[dict, CheckerStatusBase]) -> None:
+        """
+        The producer of the worker.
+
+        :param consumed:
+            The consumed data to work with.
+        """
+
         if not isinstance(consumed, tuple) or not isinstance(
             consumed[1], CheckerStatusBase
         ):
@@ -155,7 +160,7 @@ class MinerWorker(WorkerBase):
 
         print_single_line("M")
 
-        self.add_to_output_queue("pyfunceble")
+        self.push_to_output_queues("pyfunceble")
         self.share_waiting_message()
         mined = self.mine_from(subject)
 
@@ -184,7 +189,7 @@ class MinerWorker(WorkerBase):
                 )
                 continue
 
-            self.add_to_output_queue(to_send)
+            self.push_to_output_queues(to_send)
 
         # Returning None because we manually add into the queue.
         return None

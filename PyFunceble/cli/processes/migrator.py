@@ -89,7 +89,8 @@ class MigratorProcessesManager(ProcessesManagerBase):
     Provides the migrator manager.
     """
 
-    WORKER_OBJ: MigratorWorker = MigratorWorker
+    STD_NAME: str = "pyfunceble_migrator_worker"
+    WORKER_CLASS: MigratorWorker = MigratorWorker
 
     @staticmethod
     def json2csv_inactive_target(
@@ -430,27 +431,37 @@ class MigratorProcessesManager(ProcessesManagerBase):
                 "Stopped csv_file_add_registrar_column_target. File does not exist."
             )
 
-    def create(self) -> "ProcessesManagerBase":
+    def spawn_workers(self, *, start: bool = False) -> "ProcessesManagerBase":
+        """
+        Spawn the necessary workers.
+
+        :param bool start:
+            Whether we should start the workers or not.
+        """
+
         for method in dir(self):
             if not method.endswith("_target"):
                 continue
 
-            worker = MigratorWorker(
-                None,
-                name=f"pyfunceble_{method}",
-                daemon=True,
-                continuous_integration=self.continuous_integration,
-            )
-
+            worker = self.spawn_worker(start=False, daemon=True, force=True)
+            worker.name = f"pyfunceble_{method}"
             worker.target = getattr(self, method)
 
-            self._created_workers.append(worker)
+            if start:
+                worker.start()
+                self.running_workers.append(worker)
+
             PyFunceble.facility.Logger.info("Created worker for %r", method)
 
-    @ProcessesManagerBase.ensure_worker_obj_is_given
-    @ProcessesManagerBase.create_workers_if_missing
+    @ProcessesManagerBase.ensure_worker_class_is_set
+    @ProcessesManagerBase.ensure_worker_spawned
+    @ProcessesManagerBase.ignore_if_running
     def start(self) -> "ProcessesManagerBase":
+        """
+        Starts the migration process.
+        """
+
         # We start the migration (as a standalone)
-        Alembic(self._created_workers[0].db_session).upgrade()
+        Alembic(self.created_workers[0].db_session).upgrade()
 
         return super().start()

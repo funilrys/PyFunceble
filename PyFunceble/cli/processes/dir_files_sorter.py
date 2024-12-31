@@ -59,4 +59,5 @@ class DirFileSorterProcessesManager(ProcessesManagerBase):
     Provides the directory files sorter manager.
     """
 
-    WORKER_OBJ: DireFileSorterWorker = DireFileSorterWorker
+    STD_NAME: str = "pyfunceble_dir_files_sorter_worker"
+    WORKER_CLASS: DireFileSorterWorker = DireFileSorterWorker

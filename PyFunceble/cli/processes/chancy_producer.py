@@ -66,4 +66,5 @@ class ChancyProducerProcessesManager(ProcessesManagerBase):
         if you believe in your own luck.
     """
 
-    WORKER_OBJ: ChancyProducerWorker = ChancyProducerWorker
+    STD_NAME: str = "pyfunceble_chancy_producer_worker"
+    WORKER_CLASS: ChancyProducerWorker = ChancyProducerWorker
