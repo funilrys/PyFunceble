@@ -11,6 +11,6 @@ PyYAML
 requests[socks]<3
 setuptools>=65.5.1
 shtab
-SQLAlchemy[postgresql_psycopg2binary]~=2.0
+SQLAlchemy~=2.0
 # pyfunceble-process-manager==1.0.6
 pyfunceble-process-manager @ git+https://github.com/PyFunceble/process-manager.git@dev
