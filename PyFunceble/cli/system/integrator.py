@@ -300,6 +300,8 @@ class SystemIntegrator(SystemBase):
                     f"{exception}"
                 )
 
+            print(message)
+
             if PyFunceble.facility.Logger.authorized:
                 print(traceback.format_exc())
 
