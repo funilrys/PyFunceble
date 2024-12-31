@@ -86,6 +86,8 @@ class TesterWorker(WorkerBase):
     initiated_testing_objects: dict = {}
 
     def perform_external_poweron_checks(self) -> None:
+        result = super().perform_external_poweron_checks()
+
         self.continue_dataset = (
             PyFunceble.cli.utils.testing.get_continue_databaset_object(
                 db_session=self.db_session
@@ -121,7 +123,7 @@ class TesterWorker(WorkerBase):
             },
         }
 
-        return super().perform_external_poweron_checks()
+        return result
 
     @staticmethod
     def should_be_ignored(subject: str) -> bool:
