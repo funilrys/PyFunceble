@@ -1034,35 +1034,36 @@ class AvailabilityCheckerBase(CheckerBase):
         data = self.platform_query_tool.pull(self.idna_subject)
 
         if data and "status" in data:
-            if (
-                self.platform_query_tool.preferred_status_origin == "frequent"
-                and data["status"]["availability"]["frequent"]
-            ):
-                self.status.status = data["status"]["availability"]["frequent"]
-                self.status.status_source = "PLATFORM"
-            elif (
-                self.platform_query_tool.preferred_status_origin == "latest"
-                and data["status"]["availability"]["latest"]
-            ):
-                try:
-                    # legacy
-                    self.status.status = data["status"]["availability"]["latest"][
-                        "status"
-                    ]
-                except KeyError:
-                    self.status.status = data["status"]["availability"]["latest"]
-                self.status.status_source = "PLATFORM"
-            elif (
-                self.platform_query_tool.preferred_status_origin == "recommended"
-                and data["status"]["availability"]["recommended"]
-            ):
-                self.status.status = data["status"]["availability"]["recommended"]
-                self.status.status_source = "PLATFORM"
-
-            PyFunceble.facility.Logger.info(
-                "Could define the status of %r from: Platform Lookup",
-                self.status.idna_subject,
-            )
+            try:
+                if (
+                    self.platform_query_tool.preferred_status_origin == "frequent"
+                    and data["status"]["availability"]["frequent"]
+                ):
+                    self.status.status = data["status"]["availability"]["frequent"]
+                    self.status.status_source = "PLATFORM"
+                elif (
+                    self.platform_query_tool.preferred_status_origin == "latest"
+                    and data["status"]["availability"]["latest"]
+                ):
+                    try:
+                        # legacy
+                        self.status.status = data["status"]["availability"]["latest"][
+                            "status"
+                        ]
+                    except (KeyError, TypeError):
+                        self.status.status = data["status"]["availability"]["latest"]
+                    self.status.status_source = "PLATFORM"
+                elif (
+                    self.platform_query_tool.preferred_status_origin == "recommended"
+                    and data["status"]["availability"]["recommended"]
+                ):
+                    self.status.status = data["status"]["availability"]["recommended"]
+                    self.status.status_source = "PLATFORM"
+            except (KeyError, TypeError):
+                PyFunceble.facility.Logger.info(
+                    "Could define the status of %r from: Platform Lookup",
+                    self.status.idna_subject,
+                )
 
         PyFunceble.facility.Logger.info(
             "Finished to try to query the status of %r from: Platform Lookup",

@@ -89,7 +89,7 @@ class ExtraRuleHandlerBase:
         self.regex_helper = RegexHelper()
 
     def ensure_status_is_given(
-        func: Callable[..., "ExtraRuleHandlerBase"]
+        func: Callable[..., "ExtraRuleHandlerBase"],
     ):  # pylint: disable=no-self-argument
         """
         Ensures that the status is given before running the decorated method.
@@ -111,7 +111,7 @@ class ExtraRuleHandlerBase:
         return wrapper
 
     def setup_status_before(
-        func: Callable[..., "ExtraRuleHandlerBase"]
+        func: Callable[..., "ExtraRuleHandlerBase"],
     ):  # pylint: disable=no-self-argument
         """
         Ensures that the status is given before running the decorated method.
@@ -130,7 +130,7 @@ class ExtraRuleHandlerBase:
         return wrapper
 
     def setup_status_after(
-        func: Callable[..., "ExtraRuleHandlerBase"]
+        func: Callable[..., "ExtraRuleHandlerBase"],
     ):  # pylint: disable=no-self-argument
         """
         Ensures that the status is given before running the decorated method.

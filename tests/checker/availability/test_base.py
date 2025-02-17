@@ -63,6 +63,41 @@ from PyFunceble.query.dns.query_tool import DNSQueryTool
 from PyFunceble.query.whois.query_tool import WhoisQueryTool
 
 
+class FakeExtraRuleHandler:
+    """
+    A fake handler of extra rules.
+    """
+
+    def __init__(self, status=None):
+        if status is not None:
+            self.status = AvailabilityCheckerStatus()
+
+    def set_status(self, status):
+        """
+        Sets the status to work with.
+        """
+
+        self.status = status
+
+        return self
+
+    def start(self):
+        """
+        Starts the fake handler.
+        """
+
+        self.status.status_before_extra_rules = self.status.status
+        self.status.status_source_before_extra_rules = (
+            self.status.status_source_before_extra_rules
+        )
+
+        self.status.status_after_extra_rules = "INACTIVE"
+        self.status.status_source_after_extra_rules = "SPECIAL"
+
+        self.status.status = self.status.status_after_extra_rules
+        self.status.status_source = self.status.status_source_after_extra_rules
+
+
 class TestAvailabilityCheckerBase(unittest.TestCase):
     """
     The tests of our availability checker base.
@@ -74,6 +109,9 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         """
 
         self.checker = AvailabilityCheckerBase()
+        self.checker.extra_rules_handlers = [
+            FakeExtraRuleHandler(self.checker.status),
+        ]
 
     def tearDown(self) -> None:
         """
@@ -877,6 +915,35 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_should_we_continue_test_invalid(self) -> None:
+        """
+        Tests the method which let us check if we should continue to another
+        test method for the case that an invalid syntax has been catched - all
+        the way.
+        """
+
+        given = "INVALID"
+        self.checker.status.status = "INVALID"
+
+        expected = True
+        actual = self.checker.should_we_continue_test(given)
+
+        self.assertEqual(expected, actual)
+
+    def test_should_we_continue_test_no_result(self) -> None:
+        """
+        Tests the method which let us check if we should continue to another
+        test method for the case that no status has been gathered yet.
+        """
+
+        given = "VALID"
+        self.checker.status.status = None
+
+        expected = True
+        actual = self.checker.should_we_continue_test(given)
+
+        self.assertEqual(expected, actual)
+
     @unittest.mock.patch.object(DNSQueryTool, "query")
     def test_query_dns_record(self, dns_query_patch: unittest.mock.MagicMock) -> None:
         """
@@ -893,6 +960,24 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         actual = self.checker.query_dns_record()
 
         self.assertEqual(expected, actual)
+
+        ## Test the same but for the case that we temporarily switched subject.
+
+        self.assertEqual(self.checker.dns_query_tool.subject, given)
+        self.assertEqual(self.checker.domain_syntax_checker.subject, given)
+        self.assertEqual(self.checker.ip_syntax_checker.subject, given)
+
+        new_given = "example.com"
+        self.checker.dns_query_tool.subject = new_given
+
+        self.assertEqual(self.checker.dns_query_tool.subject, new_given)
+
+        actual = self.checker.query_dns_record()
+
+        self.assertEqual(expected, actual)
+        self.assertEqual(self.checker.dns_query_tool.subject, new_given)
+        self.assertEqual(self.checker.domain_syntax_checker.subject, given)
+        self.assertEqual(self.checker.ip_syntax_checker.subject, given)
 
     @unittest.mock.patch.object(DNSQueryTool, "query")
     def test_query_dns_record_no_response(
@@ -1219,6 +1304,19 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
 
         self.assertEqual(expected_source, actual_source)
 
+        # Now let's test the case that we are testing for a url, but the test
+        # has been made for a domain.
+
+        self.checker.subject = "http://example.org"
+        self.checker.status.url_syntax = True
+
+        self.assertIsInstance(
+            self.checker.try_to_query_status_from_http_status_code(
+                from_domain_test=True
+            ),
+            AvailabilityCheckerBase,
+        )
+
     def test_try_to_query_status_from_syntax_lookup(self) -> None:
         """
         Tests the method that tries to define the status from the syntax lookup.
@@ -1248,6 +1346,32 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         actual_source = self.checker.status.status_source
 
         self.assertEqual(expected_source, actual_source)
+
+        # Let's check the case that we are testing from a domain test workflow
+        # but the subject is a URL.
+
+        self.checker.subject = "http://example.com"
+        self.checker.status.url_syntax = True
+        self.checker.status.status = None
+
+        self.checker.try_to_query_status_from_syntax_lookup(from_domain_test=True)
+
+        expected_status = "INVALID"
+        actual_status = self.checker.status.status
+
+        self.assertEqual(expected_status, actual_status)
+
+        # Same but for URL test.
+        self.checker.subject = "example.com"
+        self.checker.status.url_syntax = False
+        self.checker.status.status = None
+
+        self.checker.try_to_query_status_from_syntax_lookup(from_url_test=True)
+
+        expected_status = "INVALID"
+        actual_status = self.checker.status.status
+
+        self.assertEqual(expected_status, actual_status)
 
     @staticmethod
     def fake_pull_response(subject: str) -> dict:
@@ -1282,6 +1406,75 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
                     "frequent": "ACTIVE",
                     "recommended": "ACTIVE",
                 },
+                "reputation": {
+                    "latest": {
+                        "status": "MALICIOUS",
+                        "status_source": "REPUTATION",
+                        "tested_at": "2021-09-28T19:32:07.167Z",
+                        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    },
+                    "frequent": "SANE",
+                    "recommended": "MALICIOUS",
+                },
+                "whois": {
+                    "expiration_date": "2021-09-28T19:32:07.167Z",
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "subject_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                },
+            },
+        }
+
+    @staticmethod
+    def fake_pull_undetailed_response(subject: str) -> dict:
+        """
+        Provides a fake pull response to work with.
+
+        :param subject:
+            The subject to work with.
+        """
+
+        return {
+            "subject": subject,
+            "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "status": {
+                "syntax": {
+                    "latest": "INVALID",
+                    "frequent": "VALID",
+                    "recommended": "VALID",
+                },
+                "availability": {
+                    "latest": "INACTIVE",
+                    "frequent": "ACTIVE",
+                    "recommended": "ACTIVE",
+                },
+                "reputation": {
+                    "latest": "MALICIOUS",
+                    "frequent": "SANE",
+                    "recommended": "MALICIOUS",
+                },
+                "whois": {
+                    "expiration_date": "2021-09-28T19:32:07.167Z",
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "subject_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                },
+            },
+        }
+
+    @staticmethod
+    def fake_partial_response(subject) -> dict:
+        """
+        Provides a fake pull response to work with.
+
+        :param subject:
+            The subject to work with.
+        """
+
+        return {
+            "subject": subject,
+            "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "status": {
+                "syntax": {},
+                "availability": {},
                 "reputation": {
                     "latest": {
                         "status": "MALICIOUS",
@@ -1365,6 +1558,49 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         expected_status_source = None
         actual_status_source = self.checker.status.status_source
         self.assertEqual(expected_status_source, actual_status_source)
+
+        # Let's check the case that we get partial response.
+        self.checker.subject = "example.com"
+        self.checker.platform_query_tool.pull = self.fake_partial_response
+
+        self.checker.try_to_query_status_from_platform()
+
+        expected_status = None
+        actual_status = self.checker.status.status
+        self.assertEqual(expected_status, actual_status)
+
+        # Let's check the case that we get undetailed response.
+        self.checker.subject = "example.org"
+        self.checker.platform_query_tool.preferred_status_origin = "latest"
+        self.checker.platform_query_tool.pull = self.fake_pull_undetailed_response
+
+        self.checker.try_to_query_status_from_platform()
+
+        expected_status = "INACTIVE"
+        actual_status = self.checker.status.status
+        self.assertEqual(expected_status, actual_status)
+
+    def test_try_to_query_status_from_extra_rules(self) -> None:
+        """
+        Tests the method that tries to define the status from the extra rules.
+        """
+
+        self.checker.subject = "example.com"
+        self.checker.platform_query_tool.pull = self.fake_pull_response
+
+        self.checker.try_to_query_status_from_platform()
+
+        expected_status = "ACTIVE"
+        actual_status = self.checker.status.status
+        self.assertEqual(expected_status, actual_status)
+
+        self.checker.try_to_query_status_from_extra_rules()
+
+        expected_status = "INACTIVE"
+        actual_status = self.checker.status.status
+
+        self.assertEqual(expected_status, actual_status)
+        self.assertEqual(self.checker.status.status_after_extra_rules, actual_status)
 
     def test_get_status(self) -> None:
         """

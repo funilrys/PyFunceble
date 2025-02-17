@@ -252,6 +252,44 @@ class TestInputLine2Subject(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_extract_base(self) -> None:
+        """
+        Tests the method which let us extract the base of a given subject.
+        """
+
+        given = "https://example.org"
+        expected = "example.org"
+
+        actual = self.converter.extract_base(given)
+
+        self.assertEqual(expected, actual)
+
+    def test_extract_base_no_url(self) -> None:
+        """
+        Tests the method which let us extract the base of a given subject for the
+        case that the given subject is not a URL.
+        """
+
+        given = "example.org"
+        expected = "example.org"
+
+        actual = self.converter.extract_base(given)
+
+        self.assertEqual(expected, actual)
+
+    def test_extract_base_empty_string(self) -> None:
+        """
+        Tests the method which let us extract the base of a given subject for the
+        case that the given subject is an empty string.
+        """
+
+        given = ""
+        expected = ""
+
+        actual = self.converter.extract_base(given)
+
+        self.assertEqual(expected, actual)
+
 
 if __name__ == "__main__":
     unittest.main()

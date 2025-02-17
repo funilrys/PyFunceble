@@ -1248,7 +1248,7 @@ def get_default_group_data() -> List[Tuple[List[str], dict]]:
 
 
 def platform_parser(
-    parser: Union[argparse.ArgumentParser, argparse._SubParsersAction]
+    parser: Union[argparse.ArgumentParser, argparse._SubParsersAction],
 ) -> None:
     """
     Adds the platform group to the given parser.

@@ -75,7 +75,7 @@ class SystemBase:
             self.args = args
 
     def ensure_args_is_given(
-        func: Callable[["SystemBase"], "SystemBase"]
+        func: Callable[["SystemBase"], "SystemBase"],
     ):  # pylint: disable=no-self-argument
         """
         Ensures that the :code:`self.args` attribute is given before launching

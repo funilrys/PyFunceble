@@ -160,6 +160,25 @@ class TestURLAvailabilityChecker(unittest.TestCase):
 
         self.assertEqual(expected_source, actual_source)
 
+    def test_try_to_query_status_from_http_status_code_from_domain(self) -> None:
+        """
+        Tests the method that tries to define the status from the status code
+        of a domain.
+        """
+
+        self.checker.subject = "http://example.org"
+
+        self.checker.http_status_code_query_tool.get_status_code = (
+            lambda: self.checker.http_status_code_query_tool.STD_UNKNOWN_STATUS_CODE
+        )
+
+        self.checker.try_to_query_status_from_http_status_code(from_domain_test=True)
+
+        expected_status = None
+        actual_status = self.checker.status.status
+
+        self.assertEqual(expected_status, actual_status)
+
     @unittest.mock.patch.object(URLReputationChecker, "get_status")
     def test_try_to_query_status_from_reputation(
         self, reputation_checker_path: unittest.mock.MagicMock
