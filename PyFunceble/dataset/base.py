@@ -142,4 +142,4 @@ class DatasetBase:
 
         setattr(PyFunceble.storage, self.STORAGE_INDEX, content)
 
-        return content
+        return content or {}
