@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ from dotenv import load_dotenv
 from PyFunceble.storage_facility import get_config_directory
 
 PROJECT_NAME: str = "PyFunceble"
-PROJECT_VERSION: str = "4.3.0a15.dev (Blue Duckling: Tulip)"
+PROJECT_VERSION: str = "4.3.0a16.dev (Blue Duckling: Tulip)"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
 
