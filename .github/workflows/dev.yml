@@ -546,6 +546,8 @@ jobs:
             newURL=$(curl -s https://pypi.org/pypi/PyFunceble/json | jq -r ".releases.\"${latest}\"[] | select(.filename | strings | test(\".tar\")).url")
           fi
 
+          genericURL='https://files.pythonhosted.org/packages/source/${upstreamName::1}/${upstreamName}/${upstreamName}-${pkgver}.tar.gz'
+
           git config --global --add safe.directory ${GITHUB_WORKSPACE}
           git config --global --add safe.directory ${aurRepoDir}
           git config --global --add safe.directory ${githubRepoDir}
@@ -567,7 +569,7 @@ jobs:
 
           sed "/^pkgver=/s/.*/pkgver=${latest}/" -i PKGBUILD
           sed "/^pkgrel=/s/.*/pkgrel=1/" -i PKGBUILD
-          sed "s,^source=(.*),source=('${newURL}' '${licenseURL}')," -i PKGBUILD
+          sed "s,^source=(.*),source=(\"${genericURL}\" '${licenseURL}')," -i PKGBUILD
 
           su makepkg -c "updpkgsums"
           su makepkg -c "makepkg --printsrcinfo" > .SRCINFO
