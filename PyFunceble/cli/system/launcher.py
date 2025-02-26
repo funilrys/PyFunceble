@@ -1147,10 +1147,8 @@ class SystemLauncher(SystemBase):
             # for more information about the markers.
             self.continuous_integration.bypass()
 
-            if self.args.files or self.args.url_files:
-                self.migrator_process_manager.start()
-
-                self.migrator_process_manager.wait()
+            self.migrator_process_manager.start()
+            self.migrator_process_manager.wait()
 
             del self.migrator_process_manager
 
