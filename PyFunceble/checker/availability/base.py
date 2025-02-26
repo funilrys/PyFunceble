@@ -786,9 +786,11 @@ class AvailabilityCheckerBase(CheckerBase):
                             "idna_subject": self.idna_subject,
                             "expiration_date": self.status.expiration_date,
                             "epoch": str(
-                                datetime.strptime(
-                                    self.status.expiration_date, "%d-%b-%Y"
-                                ).timestamp()
+                                int(
+                                    datetime.strptime(
+                                        self.status.expiration_date, "%d-%b-%Y"
+                                    ).timestamp()
+                                )
                             ),
                         }
                     )
