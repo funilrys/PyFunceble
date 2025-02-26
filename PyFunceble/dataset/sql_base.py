@@ -308,8 +308,7 @@ class SQLDBDatasetBase(DBDatasetBase):
             y2k38_limit = datetime(2035, 12, 31, 0, 0, tzinfo=timezone.utc)
             new_date = datetime.fromtimestamp(float(row["epoch"]), timezone.utc)
 
-            if new_date >= y2k38_limit:
-                new_date = y2k38_limit
+            new_date = min(new_date, y2k38_limit)
 
             row["epoch"] = new_date.timestamp()
             row["expiration_date"] = new_date.strftime("%d-%b-%Y")
