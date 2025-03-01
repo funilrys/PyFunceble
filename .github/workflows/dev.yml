@@ -569,7 +569,7 @@ jobs:
 
           sed "/^pkgver=/s/.*/pkgver=${latest}/" -i PKGBUILD
           sed "/^pkgrel=/s/.*/pkgrel=1/" -i PKGBUILD
-          sed "s,^source=(.*),source=(\"${genericURL}\" '${licenseURL}')," -i PKGBUILD
+          sed "s,^source=(.*),source=(\"${genericURL}\" \"${licenseURL}\")," -i PKGBUILD
 
           su makepkg -c "updpkgsums"
           su makepkg -c "makepkg --printsrcinfo" > .SRCINFO
