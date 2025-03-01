@@ -121,7 +121,7 @@ class WorkerBase(PyFunceble.ext.process_manager.WorkerCore):
             PyFunceble.facility.Logger.info("CI time exceeded. Stopping worker.")
 
             if not self.delay_shutdown:
-                self.exit_it.set()
+                self.exit_event.set()
 
             return False
 
