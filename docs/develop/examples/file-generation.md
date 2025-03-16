@@ -101,7 +101,7 @@ for domain in DOMAINS:
 producer_proc.push_stop_signal()
 
 # Now we wait until it's done.
-producer_proc.wait()
+producer_proc.terminate()
 
 # From here all files were generated we can do whatever we want with them.
 ```

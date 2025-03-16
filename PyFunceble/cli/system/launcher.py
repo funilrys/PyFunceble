@@ -1090,10 +1090,16 @@ class SystemLauncher(SystemBase):
         Sends our stop signal and wait until all managers are finished.
         """
 
-        # The idea out here is to propate the stop signal.
-        # Meaning that the tester will share it's stop signal to all
-        # subsequencial queues after all submitted tasks are done.
-        self.tester_process_manager.push_stop_signal(source_worker="main")
+        # We start the termination process of the tester.
+        #
+        # Please note that we do not explicitly wait for the tester to terminate
+        # through the `wait` method. The reason is that the `terminate` method
+        # will wait for the tester to finish before terminating itself.
+        #
+        # Please also note that any process depending on the tester will be
+        # terminated after the tester is done because we are setting the
+        # `spread_stop_signal` # attribute to `True` (cf: see __init__ method).
+        self.tester_process_manager.terminate()
 
         if self.miner_process_manager:
             self.miner_process_manager.wait()
@@ -1105,8 +1111,7 @@ class SystemLauncher(SystemBase):
             # From here, we are sure that every test and files are produced.
             # We now format the generated file(s).
             self.dir_files_sorter_process_manager.start()
-            self.dir_files_sorter_process_manager.push_stop_signal()
-            self.dir_files_sorter_process_manager.wait()
+            self.dir_files_sorter_process_manager.terminate()
         except AssertionError:
             # Example: Already started previously.
             pass

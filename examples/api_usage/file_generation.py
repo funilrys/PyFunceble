@@ -90,13 +90,8 @@ if __name__ == "__main__":
             (communication_dataset, test_result)
         )
 
-    # We are now done, it's time to send the stop signal.
-    # The stop signal will inform thhe producer thread that it needs to stop
-    # listening to new order (from the time it reads the stop signal).
-    producer_process_manager.push_stop_signal(source_worker="main")
-
-    # Now we wait until it's done.
-    producer_process_manager.wait()
+    # We are now done, it's time to wait and shutdown.
+    producer_process_manager.terminate()
 
     # From here all files were generated we can do whatever we want with them.
 
