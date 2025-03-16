@@ -12,4 +12,4 @@ requests[socks]<3
 setuptools>=65.5.1
 shtab
 SQLAlchemy~=2.0
-pyfunceble-process-manager==1.0.7
+pyfunceble-process-manager==1.0.9
