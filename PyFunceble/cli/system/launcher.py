@@ -66,6 +66,7 @@ from typing import List, Optional, Union
 
 import colorama
 import domain2idna
+import sqlalchemy.exc
 from sqlalchemy.orm import Session
 
 import PyFunceble.checker.utils.whois
@@ -312,7 +313,10 @@ class SystemLauncher(SystemBase):
 
     def __del__(self) -> None:
         if self.db_session is not None:
-            self.db_session.close()
+            try:
+                self.db_session.close()
+            except sqlalchemy.exc.OperationalError:
+                pass
 
     @staticmethod
     def print_home_ascii() -> None:

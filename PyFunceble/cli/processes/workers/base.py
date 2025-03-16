@@ -55,6 +55,8 @@ License:
 import multiprocessing
 from typing import Optional
 
+import sqlalchemy.exc
+
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
 import PyFunceble.ext.process_manager
@@ -79,7 +81,10 @@ class WorkerBase(PyFunceble.ext.process_manager.WorkerCore):
 
     def __del__(self) -> None:
         if self.db_session is not None:
-            self.db_session.close()
+            try:
+                self.db_session.close()
+            except sqlalchemy.exc.OperationalError:
+                pass
 
     def __post_init__(self) -> None:
         self.requester = Requester(config=PyFunceble.storage.CONFIGURATION)
