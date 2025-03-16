@@ -363,16 +363,21 @@ class DownloadHelper:
         :raise UnableToDownload: When could not unable to download the URL.
         """
 
-        req = self.session.get(self.url, verify=self.certificate_validation)
+        try:
+            req = self.session.get(self.url, verify=self.certificate_validation)
 
-        if req.status_code == 200:
-            response = req.text
+            if req.status_code == 200:
+                response = req.text
 
-            if destination and isinstance(destination, str):
-                FileHelper(destination).write(req.text, overwrite=True)
+                if destination and isinstance(destination, str):
+                    FileHelper(destination).write(req.text, overwrite=True)
 
-            return response
+                return response
 
-        raise PyFunceble.helpers.exceptions.UnableToDownload(
-            f"{req.url} (retries: {self.retries} | status code: {req.status_code})"
-        )
+            raise PyFunceble.helpers.exceptions.UnableToDownload(
+                f"{req.url} (retries: {self.retries} | status code: {req.status_code})"
+            )
+        except requests.exceptions.RequestException as exception:
+            raise PyFunceble.helpers.exceptions.UnableToDownload(
+                f"{self.url} (could not resolve?)"
+            ) from exception

@@ -55,7 +55,6 @@ import sys
 from datetime import datetime, timezone
 
 import colorama
-import requests
 from box import Box
 
 import PyFunceble.cli.storage
@@ -65,6 +64,7 @@ from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.converter.internal_url import InternalUrlConverter
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.download import DownloadHelper
+from PyFunceble.helpers.exceptions import UnableToDownload
 from PyFunceble.utils.version import VersionUtility
 
 
@@ -86,7 +86,7 @@ def get_upstream_version() -> Box:
                 else True
             ),
         ).download_text()
-    except requests.exceptions.RequestException:
+    except UnableToDownload:
         response = "{}"
 
     return Box(
