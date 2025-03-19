@@ -280,7 +280,8 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
         },
         {
             # unlikely, but we should be able to handle such weird cases.
-            "subject": 'example.com##a[href="https://example.org"][target="https://example.net"]',
+            "subject": 'example.com##a[href="https://example.org"]'
+            '[target="https://example.net"]',
             "expected": {
                 "aggressive": ["example.com", "example.net", "example.org"],
                 "standard": [],
