@@ -123,7 +123,9 @@ class AdblockInputLine2Subject(ConverterBase):
             Giving :code:`"hello.world/?is=beautiful"` returns :code:`"hello.world"`
         """
 
-        subject = subject.replace("*", "").replace("~", "")
+        subject = (
+            subject.replace("*", "").replace("~", "").replace('"', "").replace("'", "")
+        )
 
         try:
             return Url2Netloc(subject).get_converted()
@@ -175,11 +177,12 @@ class AdblockInputLine2Subject(ConverterBase):
 
             if "href" in rule:
                 matched = self._regex_helper.set_regex(
-                    r"((?:\"|\')(.*)(?:\"|\'))"
-                ).match(rule, return_match=True, rematch=True, group=1)
+                    r"((?:\"|\')(.*?)(?:\"|\'))"
+                ).match(rule, return_match=True, rematch=True)
 
                 if matched:
-                    result.add(self.extract_base(matched))
+                    result.update(self.extract_base(x) for x in matched)
+
                 continue
 
         return result

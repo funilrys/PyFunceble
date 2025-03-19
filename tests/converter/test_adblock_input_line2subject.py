@@ -274,6 +274,18 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
                 "aggressive": ["example.com", "example.net", "example.org"],
             },
         },
+        {
+            "subject": 'example.com##a[href="https://example.org"][target="_blank"]',
+            "expected": {"aggressive": ["example.com", "example.org"], "standard": []},
+        },
+        {
+            # unlikely, but we should be able to handle such weird cases.
+            "subject": 'example.com##a[href="https://example.org"][target="https://example.net"]',
+            "expected": {
+                "aggressive": ["example.com", "example.net", "example.org"],
+                "standard": [],
+            },
+        },
     ]
 
     def setUp(self) -> None:
