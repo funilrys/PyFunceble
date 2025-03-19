@@ -194,7 +194,7 @@ class SystemLauncher(SystemBase):
         if self.continuous_integration.authorized:
             self.continuous_integration.init()
 
-        self.stdout_printer.guess_allow_coloration()
+        self.stdout_printer.guess_allow_coloration().guess_allow_background_coloration()
 
         self.manager = multiprocessing.Manager()
 
