@@ -58,7 +58,6 @@ from typing import Dict, List, Optional
 
 from sqlalchemy.orm import Session
 
-import PyFunceble.checker.utils.whois
 import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
@@ -75,6 +74,7 @@ from PyFunceble.checker.base import CheckerBase
 from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
+from PyFunceble.checker.utils.whois import get_whois_dataset_object
 from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 from PyFunceble.query.http_status_code import HTTPStatusCode
@@ -758,9 +758,7 @@ class AvailabilityCheckerBase(CheckerBase):
         if (
             PyFunceble.facility.ConfigLoader.is_already_loaded() and self.use_whois_db
         ):  # pragma: no cover ## Not interesting enough to spend time on it.
-            whois_object = PyFunceble.checker.utils.whois.get_whois_dataset_object(
-                db_session=self.db_session
-            )
+            whois_object = get_whois_dataset_object(db_session=self.db_session)
             known_record = whois_object[self.subject]
 
             if known_record and not isinstance(known_record, dict):

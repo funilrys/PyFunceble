@@ -55,7 +55,6 @@ from typing import Optional
 import colorama
 from sqlalchemy.orm import Session
 
-import PyFunceble.checker.utils.whois
 import PyFunceble.cli.utils.stdout
 import PyFunceble.cli.utils.testing
 import PyFunceble.facility
