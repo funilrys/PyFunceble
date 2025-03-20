@@ -69,7 +69,6 @@ import domain2idna
 import sqlalchemy.exc
 from sqlalchemy.orm import Session
 
-import PyFunceble.checker.utils.whois
 import PyFunceble.cli.storage
 import PyFunceble.cli.utils.ascii_logo
 import PyFunceble.cli.utils.sort
@@ -78,6 +77,7 @@ import PyFunceble.facility
 import PyFunceble.helpers.exceptions
 import PyFunceble.storage
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
+from PyFunceble.checker.utils.whois import get_whois_dataset_object
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 from PyFunceble.cli.continuous_integration.exceptions import StopExecution
 from PyFunceble.cli.continuous_integration.utils import ci_object
@@ -119,6 +119,7 @@ from PyFunceble.converter.wildcard2subject import Wildcard2Subject
 from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
 from PyFunceble.dataset.autocontinue.csv import CSVContinueDataset
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
+from PyFunceble.dataset.whois.base import WhoisDatasetBase
 from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.helpers.download import DownloadHelper
 from PyFunceble.helpers.file import FileHelper
@@ -167,6 +168,7 @@ class SystemLauncher(SystemBase):
 
     continue_dataset: Optional[ContinueDatasetBase] = None
     inactive_dataset: Optional[InactiveDatasetBase] = None
+    whois_dataset: Optional[WhoisDatasetBase] = None
     continuous_integration: Optional[ContinuousIntegrationBase] = None
 
     db_session: Optional[Session] = None
@@ -189,6 +191,7 @@ class SystemLauncher(SystemBase):
             db_session=self.db_session
         )
         self.inactive_dataset = get_inactive_dataset_object(db_session=self.db_session)
+        self.whois_dataset = get_whois_dataset_object(db_session=self.db_session)
         self.continuous_integration = ci_object()
 
         if self.continuous_integration.authorized:
@@ -1019,6 +1022,7 @@ class SystemLauncher(SystemBase):
                 remove_continue_dataset(protocol)
                 remove_preload_dataset(protocol)
                 remove_inline_dest(protocol)
+                self.whois_dataset.cleanup()
 
         return self
 
