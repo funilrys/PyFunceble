@@ -134,13 +134,18 @@ def add_arguments_to_parser(
         if "dest" in opt_args:
             opt_args["dest"] = opt_args["dest"].replace(".", "__")
 
+        complete_value = opt_args.pop("complete", None)
+
         for index, value in enumerate(pos_args):
             if value.startswith("-") and "." not in value:
                 continue
 
             pos_args[index] = value.replace(".", "__")
 
-        parser.add_argument(*pos_args, **opt_args)
+        if not complete_value:
+            parser.add_argument(*pos_args, **opt_args)
+        else:
+            parser.add_argument(*pos_args, **opt_args).complete = complete_value
 
 
 def get_source_group_data() -> List[Tuple[List[str], dict]]:
@@ -188,6 +193,7 @@ def get_source_group_data() -> List[Tuple[List[str], dict]]:
                 "\nIf remote (RAW link) file is given, PyFunceble will download "
                 "it,\n and test the content of the given RAW link as if it was a"
                 " locally stored file.",
+                "complete": shtab.FILE,
             },
         ),
         (
@@ -206,6 +212,7 @@ def get_source_group_data() -> List[Tuple[List[str], dict]]:
                 " locally stored file. "
                 "\n\nThis argument test if an URL is available. It ONLY test "
                 "full URLs.",
+                "complete": shtab.FILE,
             },
         ),
     ]
@@ -1242,6 +1249,7 @@ def get_default_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Sets the configuration file to use. It can be a\n"
                 "local or remote file. Please note that this configuration can be\n"
                 "overwritten by your overwrite configuration file.",
+                "complete": shtab.FILE,
             },
         ),
         (
@@ -1252,6 +1260,7 @@ def get_default_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "config_dir",
                 "type": os.path.realpath,
                 "help": "Sets the configuration directory to use.",
+                "complete": shtab.DIRECTORY,
             },
         ),
     ]
