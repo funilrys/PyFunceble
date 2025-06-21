@@ -5,6 +5,7 @@
 [![image](https://img.shields.io/badge/code%20style-black-000000.png)](https://github.com/ambv/black)
 [![image](https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev)](https://coveralls.io/github/funilrys/PyFunceble?branch=dev)
 [![image](https://img.shields.io/github/license/funilrys/PyFunceble.png)](https://github.com/funilrys/PyFunceble/blob/dev/LICENSE)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffunilrys%2FPyFunceble.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffunilrys%2FPyFunceble?ref=badge_shield&issueType=license)
 [![image](https://img.shields.io/pypi/v/pyfunceble-dev.png)](https://pypi.org/project/pyfunceble-dev)
 [![image](https://img.shields.io/github/issues/funilrys/PyFunceble.png)](https://github.com/funilrys/PyFunceble/issues)
 

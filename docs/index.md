@@ -16,6 +16,9 @@
     <a href="https://github.com/funilrys/PyFunceble/blob/dev/LICENSE">
         <img src="https://img.shields.io/github/license/funilrys/PyFunceble.png" alt="image">
     </a>
+    <a href="https://app.fossa.com/projects/git%2Bgithub.com%2Ffunilrys%2FPyFunceble?ref=badge_shield&issueType=license">
+        <img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffunilrys%2FPyFunceble.svg?type=shield&issueType=license" alt="image">
+    </a>
     <a href="https://pypi.org/project/pyfunceble-dev">
         <img src="https://img.shields.io/pypi/v/pyfunceble-dev.png" alt="image">
     </a>
