@@ -51,7 +51,6 @@ License:
 """
 
 import socket
-from typing import Optional
 
 from PyFunceble.query.netinfo.base import NetInfoBase
 
@@ -62,13 +61,13 @@ class HostByAddrInfo(NetInfoBase):
     """
 
     @NetInfoBase.ensure_subject_is_given
-    def get_info(self) -> Optional[dict]:
+    def get_info(self) -> dict:
         """
         Fetch and provides the information of the given hosts.
 
         :return:
-            A dictionnary with the following format or :py:class:`None` if nothing
-            was found.
+            A dictionary with the following format or an empty :py:class:`dict`
+            if nothing was found.
 
             ::
 
@@ -83,7 +82,5 @@ class HostByAddrInfo(NetInfoBase):
             request = socket.gethostbyaddr(self.subject)
 
             return {"hostname": request[0], "aliases": request[1], "ips": request[2]}
-        except (socket.gaierror, socket.herror):
-            pass
-
-        return dict()  # pylint: disable=use-dict-literal
+        except (socket.gaierror, socket.herror, UnicodeError, OSError):
+            return {}

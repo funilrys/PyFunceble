@@ -133,4 +133,4 @@ class NetInfoBase:
         Provides the wanted network information.
         """
 
-        raise NotImplementedError()
+        raise NotImplementedError("Subclasses must implement.")

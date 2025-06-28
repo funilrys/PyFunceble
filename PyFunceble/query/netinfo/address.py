@@ -51,7 +51,7 @@ License:
 """
 
 import socket
-from typing import List, Optional
+from typing import List
 
 from PyFunceble.query.netinfo.base import NetInfoBase
 
@@ -62,12 +62,12 @@ class AddressInfo(NetInfoBase):
     """
 
     @NetInfoBase.ensure_subject_is_given
-    def get_info(self) -> Optional[List[str]]:
+    def get_info(self) -> List[str]:
         """
         Fetch and provides the information of the given hosts.
 
         :return:
-            A list of of IP related to the given host.
+            A list of IP related to the given host.
         """
 
         try:
@@ -76,6 +76,4 @@ class AddressInfo(NetInfoBase):
                 for x in socket.getaddrinfo(self.subject, 80, proto=socket.IPPROTO_TCP)
             ]
         except (socket.gaierror, socket.herror, UnicodeError, OSError):
-            pass
-
-        return []
+            return []
