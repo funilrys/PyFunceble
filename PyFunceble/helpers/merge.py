@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of dosubject, IP or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -164,7 +164,7 @@ class Merge:
 
     def into(self, origin: Any, strict: bool = True) -> Any:
         """
-        Process the mergin.
+        Process the merging.
 
         :param origin: The original data.
         :param strict:

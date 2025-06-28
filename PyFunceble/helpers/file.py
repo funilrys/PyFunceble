@@ -183,7 +183,7 @@ class FileHelper:
 
     def read_bytes(self) -> Optional[bytes]:
         """
-        Read the given file ath and returns it's bytes contetn.
+        Read the given file ath and returns it's bytes content.
         """
 
         data = None
@@ -203,7 +203,7 @@ class FileHelper:
 
     def copy(self, destination: str, *, create_parent: bool = False) -> "FileHelper":
         """
-        Copy the globaly given file path to the given destination.
+        Copy the globally given file path to the given destination.
 
         :param str destination: The destination of the copy.
         :param bool create_parent: Tell us if we have to create the parent directory.

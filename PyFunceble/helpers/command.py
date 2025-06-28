@@ -212,7 +212,7 @@ class CommandHelper:
             is that :func:`~PyFunceble.helpers.Command.execute` wait for the
             process to end in order to return its output while this method
             return each line one by one
-            - as they are outputed.
+            - as they are outputted.
 
         :param bool rstrip:
             Deactivates the rstrip of the output.
