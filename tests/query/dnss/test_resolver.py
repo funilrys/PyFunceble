@@ -125,7 +125,7 @@ class TestResolver(unittest.TestCase):
             "fe80::6b01:9045:a42a:fb5f",
             "fe80::6b01:9049:a42a:fb5f",
         ]
-        actual = self.resolver_provider.get_nameservers()
+        actual = self.resolver_provider.get_raw_nameservers()
 
         self.assertEqual(expected, actual)
 
@@ -135,7 +135,7 @@ class TestResolver(unittest.TestCase):
             "fe80::6b01:9045:a42a:fb5f": 53,
             "fe80::6b01:9049:a42a:fb5f": 53,
         }
-        actual = self.resolver_provider.get_nameserver_ports()
+        actual = self.resolver_provider.get_raw_nameserver_ports()
 
         self.assertEqual(expected, actual)
 
@@ -157,7 +157,7 @@ class TestResolver(unittest.TestCase):
             "fe80::6b01:9045:a42a:fb5f",
             "fe80::6b01:9049:a42a:fb5f",
         ]
-        actual = resolver_provider.get_nameservers()
+        actual = resolver_provider.get_raw_nameservers()
 
         self.assertEqual(expected, actual)
 
@@ -167,7 +167,7 @@ class TestResolver(unittest.TestCase):
             "fe80::6b01:9045:a42a:fb5f": 53,
             "fe80::6b01:9049:a42a:fb5f": 53,
         }
-        actual = resolver_provider.get_nameserver_ports()
+        actual = resolver_provider.get_raw_nameserver_ports()
 
         self.assertEqual(expected, actual)
 
@@ -181,7 +181,7 @@ class TestResolver(unittest.TestCase):
         self.resolver_provider.set_timeout(given)
 
         expected = 4.0
-        actual = self.resolver_provider.get_timeout()
+        actual = self.resolver_provider.timeout
 
         self.assertEqual(expected, actual)
 
@@ -198,7 +198,7 @@ class TestResolver(unittest.TestCase):
         resolver_provider = Resolver(timeout=given)
 
         expected = 4.0
-        actual = resolver_provider.get_timeout()
+        actual = resolver_provider.timeout
 
         self.assertEqual(expected, actual)
 
@@ -223,7 +223,7 @@ class TestResolver(unittest.TestCase):
         self.resolver_provider.guess_and_set_timeout()
 
         expected = 10.0
-        actual = self.resolver_provider.get_timeout()
+        actual = self.resolver_provider.timeout
 
         self.assertEqual(expected, actual)
 
@@ -235,7 +235,7 @@ class TestResolver(unittest.TestCase):
         self.resolver_provider.set_nameservers(["example.org"])
         self.resolver_provider.set_timeout(5.0)
 
-        the_resolver = self.resolver_provider.get_resolver()
+        the_resolver = self.resolver_provider.resolver
 
         expected_timeout = 5.0
         expected_lifetime = 7.0
@@ -259,7 +259,7 @@ class TestResolver(unittest.TestCase):
 
         # Let's test the recall :-)
 
-        the_second_resolver = self.resolver_provider.get_resolver()
+        the_second_resolver = self.resolver_provider.resolver
 
         self.assertEqual(id(the_resolver), id(the_second_resolver))
 

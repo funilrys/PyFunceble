@@ -150,25 +150,15 @@ class Nameservers:
             _ = ipaddress.ip_address(nameserver)
             result.append(nameserver)
         except ValueError:
-            try:
-                result.extend(
-                    [
-                        x.address
-                        for x in dns.resolver.Resolver().resolve(nameserver, "A")
-                    ]
-                )
-            except dns.exception.DNSException:
-                pass
+            resolver = dns.resolver.get_default_resolver()
 
-            try:
-                result.extend(
-                    [
-                        x.address
-                        for x in dns.resolver.Resolver().resolve(nameserver, "AAAA")
-                    ]
-                )
-            except dns.exception.DNSException:
-                pass
+            for record_type in ["A", "AAAA"]:
+                try:
+                    result.extend(
+                        [x.address for x in resolver.resolve(nameserver, record_type)]
+                    )
+                except dns.exception.DNSException:
+                    pass
 
         PyFunceble.facility.Logger.debug(
             "IP from nameserver (%r):\n%r", nameserver, result
@@ -203,7 +193,7 @@ class Nameservers:
         self.nameservers = []
 
         for nameserver in value:
-            if self.protocol.lower() == "https":
+            if isinstance(self.protocol, str) and self.protocol.lower() == "https":
                 if not nameserver.startswith("https://"):
                     netloc = self.url2netloc.set_data_to_convert(
                         nameserver
