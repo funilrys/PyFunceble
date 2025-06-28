@@ -57,7 +57,7 @@ from typing import Optional, Union
 from PyFunceble.dataset.iana import IanaDataset
 from PyFunceble.query.record.whois import WhoisQueryToolRecord
 from PyFunceble.query.whois.converter.expiration_date import ExpirationDateExtractor
-from PyFunceble.query.whois.converter.registrar import RegistarExtractor
+from PyFunceble.query.whois.converter.registrar import RegistrarExtractor
 
 # pylint: disable=protected-access
 
@@ -71,7 +71,7 @@ class WhoisQueryTool:
     STD_PORT: int = 43
 
     expiration_date_extractor: Optional[ExpirationDateExtractor] = None
-    registrar_extractor: Optional[RegistarExtractor] = None
+    registrar_extractor: Optional[RegistrarExtractor] = None
     iana_dataset: Optional[IanaDataset] = None
 
     _subject: Optional[str] = None
@@ -90,7 +90,7 @@ class WhoisQueryTool:
         server: Optional[str] = None,
         query_timeout: Optional[float] = None,
     ) -> None:
-        self.registrar_extractor = RegistarExtractor()
+        self.registrar_extractor = RegistrarExtractor()
         self.expiration_date_extractor = ExpirationDateExtractor()
         self.iana_dataset = IanaDataset()
 

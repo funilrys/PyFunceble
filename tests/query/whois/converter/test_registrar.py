@@ -53,7 +53,7 @@ License:
 import unittest
 from typing import List
 
-from PyFunceble.query.whois.converter.registrar import RegistarExtractor
+from PyFunceble.query.whois.converter.registrar import RegistrarExtractor
 
 
 class TestRegistrarExtractor(unittest.TestCase):
@@ -84,7 +84,7 @@ class TestRegistrarExtractor(unittest.TestCase):
         Setups everything needed for the tests.
         """
 
-        self.converter = RegistarExtractor()
+        self.converter = RegistrarExtractor()
 
     def tearDown(self) -> None:
         """
