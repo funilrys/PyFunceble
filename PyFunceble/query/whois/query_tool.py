@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides our interface for quering the WHOIS Record of a given subject.
+Provides our interface for querying the WHOIS Record of a given subject.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -297,7 +297,7 @@ class WhoisQueryTool:
             raise TypeError(f"<value> should be {int} or {float}, {type(value)} given.")
 
         if value < 0:
-            raise ValueError(f"<value> ({value!r}) should be less than 0.")
+            raise ValueError(f"<value> ({value!r}) should not be less than 0.")
 
         self._query_timeout = float(value)
 
@@ -365,7 +365,7 @@ class WhoisQueryTool:
         else:
             extension = self.subject
 
-        extension = extension[extension.rfind(".") + 1 :]
+        extension = extension.rsplit(".", 1)[-1]
 
         return self.iana_dataset.get_whois_server(extension)
 
@@ -419,24 +419,21 @@ class WhoisQueryTool:
                         if not data:
                             break
 
-                    req.close()
-
-                    try:
-                        self.lookup_record.record = self._record = response.decode()
-                    except UnicodeDecodeError:
-                        # Note: Because we don't want to deal with other issue, we
-                        # decided to use `replace` in order to automatically replace
-                        # all non utf-8 encoded characters.
-                        self.lookup_record.record = self._record = response.decode(
-                            "utf-8", "replace"
-                        )
+                    # Note: Because we don't want to deal with other issue, we
+                    # decided to use `replace` in order to automatically replace
+                    # all non utf-8 encoded characters.
+                    self.lookup_record.record = self._record = response.decode(
+                        "utf-8", "replace"
+                    )
                 except socket.error:
                     pass
+                finally:
+                    req.close()
 
             if self.lookup_record.record is None or not self.lookup_record.record:
                 self.lookup_record.record = self._record = ""
                 self.lookup_record.expiration_date = self._expiration_date = ""
-                self.lookup_record.registrar = self._record = ""
+                self.lookup_record.registrar = self._registrar = ""
             else:
                 self.lookup_record.expiration_date = self.expiration_date
                 self.lookup_record.registrar = self.registrar

@@ -63,7 +63,7 @@ from PyFunceble.query.dns.query_tool import DNSQueryTool
 
 class RequestAdapterBase(requests.adapters.HTTPAdapter):
     """
-    Extends the built-in HTTP adapater and acts as a base for all our own
+    Extends the built-in HTTP adapter and acts as a base for all our own
     adapter.
     """
 
@@ -286,7 +286,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
 
     def resolve(self, hostname: str) -> Optional[str]:
         """
-        Resolves with the prefered method.
+        Resolves with the preferred method.
         """
 
         if hostname:
@@ -301,7 +301,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
         use our own ssl context - when given.
         """
 
-        _ = pool_kwargs.pop("ssl_context", None)
+        pool_kwargs.pop("ssl_context", None)
 
         return super().init_poolmanager(
             connections, maxsize, block, ssl_context=self.ssl_context, **pool_kwargs

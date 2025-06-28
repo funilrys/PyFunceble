@@ -377,7 +377,7 @@ class Requester:
         """
 
         if not isinstance(value, bool):
-            raise TypeError(f"<value> shoule be {bool}, {type(value)} given.")
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
 
         self._verify_certificate = value
 
@@ -429,11 +429,11 @@ class Requester:
             When the given :code:`value` is not a :py:class`int` nor
             :py:class:`float`.
         :raise ValueError:
-            Whent the given :code:`value` is less than `1`.
+            Went the given :code:`value` is less than `1`.
         """
 
         if not isinstance(value, (int, float)):
-            raise TypeError(f"<value> shoule be {int} or {float}, {type(value)} given.")
+            raise TypeError(f"<value> should be {int} or {float}, {type(value)} given.")
 
         if value < 0:
             raise ValueError("<value> should not be less than 0.")
@@ -489,7 +489,7 @@ class Requester:
         """
 
         if not isinstance(value, dict):
-            raise TypeError(f"<value> shoule be {dict}, {type(value)} given.")
+            raise TypeError(f"<value> should be {dict}, {type(value)} given.")
 
         self._proxy_pattern = value
 
@@ -544,7 +544,7 @@ class Requester:
 
     def get_timeout(self) -> float:
         """
-        Provides the currently set timetout.
+        Provides the currently set timeout.
         """
 
         return self.timeout
@@ -595,7 +595,7 @@ class Requester:
     @request_factory("OPTIONS")
     def options(self, *args, **kwargs) -> requests.Response:
         """
-        Sends am OPTIONS request and get its response.
+        Sends an OPTIONS request and get its response.
         """
 
     @request_factory("HEAD")

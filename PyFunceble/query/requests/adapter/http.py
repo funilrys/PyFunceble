@@ -124,7 +124,6 @@ class RequestHTTPAdapter(RequestAdapterBase):
 
             return self.fake_response()
 
-        # raise Exception(hostname_ip, parsed_url, parsed_url.hostname, kwargs)
         response = super().send(request, **kwargs)
 
         if hostname_ip:
