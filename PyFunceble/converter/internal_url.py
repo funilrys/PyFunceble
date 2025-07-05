@@ -71,7 +71,7 @@ class InternalUrlConverter(ConverterBase):
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
         """
-        Overrites the default behavior.
+        Overrides the default behavior.
 
         :raise TypeError:
             When the given data to convert is not :py:class:`str`

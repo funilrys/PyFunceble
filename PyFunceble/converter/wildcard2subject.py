@@ -52,7 +52,7 @@ License:
 """
 # pylint: enable=line-too-long
 
-from typing import Any
+from typing import Any, Optional
 
 from PyFunceble.converter.base import ConverterBase
 
@@ -67,7 +67,7 @@ class Wildcard2Subject(ConverterBase):
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
         """
-        Overrites the default behavior.
+        Overrides the default behavior.
 
         :raise TypeError:
             When the given data to convert is not :py:class:`str`
@@ -86,7 +86,7 @@ class Wildcard2Subject(ConverterBase):
 
         return self.convert(self.data_to_convert)
 
-    def convert(self, data: Any, *, aggressive: bool = False) -> str:
+    def convert(self, data: Any, *, aggressive: bool = False) -> Optional[str]:
         """
         Converts the given dataset.
 

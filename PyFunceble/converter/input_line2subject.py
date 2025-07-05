@@ -60,7 +60,7 @@ from PyFunceble.converter.url2netloc import Url2Netloc
 
 class InputLine2Subject(ConverterBase):
     """
-    Converts/Extract the subjcts to test from an inputed line.
+    Converts/Extract the subjects to test from an imputed line.
     """
 
     COMMENT: str = "#"
@@ -72,7 +72,7 @@ class InputLine2Subject(ConverterBase):
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
         """
-        Overrites the default behavior.
+        Overrides the default behavior.
 
         :raise TypeError:
             When the given data to convert is not :py:class:`str`
