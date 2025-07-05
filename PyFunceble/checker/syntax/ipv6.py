@@ -69,19 +69,17 @@ class IPv6SyntaxChecker(CheckerBase):
         Validate the given subject.
         """
 
-        try:
+        for method in (
+            ipaddress.ip_address,
+            ipaddress.ip_interface,
+            lambda x: ipaddress.ip_network(x, strict=False),
+        ):
             try:
-                return ipaddress.ip_address(self.idna_subject).version == 6
+                return method(self.idna_subject).version == 6
             except ValueError:
-                try:
-                    return ipaddress.ip_interface(self.idna_subject).version == 6
-                except ValueError:
-                    return (
-                        ipaddress.ip_network(self.idna_subject, strict=False).version
-                        == 6
-                    )
-        except ValueError:
-            return False
+                continue
+
+        return False
 
     @CheckerBase.ensure_subject_is_given
     def is_valid_range(self) -> bool:

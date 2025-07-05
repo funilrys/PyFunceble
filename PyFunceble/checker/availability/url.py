@@ -53,6 +53,7 @@ License:
 import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.checker.availability.base import AvailabilityCheckerBase
+from PyFunceble.checker.availability.params import AvailabilityCheckerParams
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.reputation.url import URLReputationChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
@@ -111,7 +112,11 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
         self.url_syntax_checker.subject = self.idna_subject
 
         self.status = AvailabilityCheckerStatus()
+        self.params = AvailabilityCheckerParams()
         self.status.params = self.params
+
+        self.status.subject_kind = "url"
+
         self.status.dns_lookup_record = self.dns_query_tool.lookup_record
         self.status.whois_lookup_record = None
 
@@ -122,6 +127,7 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
         ).get_converted()
 
         self.status.status = None
+        self.status.status_source = None
 
         self.query_common_checker()
 

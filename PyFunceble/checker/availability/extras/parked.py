@@ -65,6 +65,25 @@ class ParkedRulesHandler(ExtraRuleHandlerBase):
         :class:`~PyFunceble.checker.availability.status.AvailabilityCheckerStatus`
     """
 
+    PARKED_CONTENT_PATTERNS = (
+        'class="parked-domains',
+        "buy-domain",
+        "this domain name is parked",
+        "this domain is parked",
+        "interested in this domain",
+        "really cool domain parked",
+        "domain is for sale",
+        '_trackpageview("/parked/[% parked_type %]/',
+        "| parked domain",
+        "parked banner",
+        "contact with domain owner",
+        "web page is parked",
+        "buy or lease this domain",
+        "parked domain name on ",
+        "it is currently parked by the owner",
+        "parked page for",
+    )
+
     def _switch_down_by_cookie(self) -> "ParkedRulesHandler":
         """
         Tries to switch the status to inactive if some special cookies where found.
@@ -75,31 +94,14 @@ class ParkedRulesHandler(ExtraRuleHandlerBase):
 
         return self
 
-    def _swith_down_by_content(self) -> "ParkedRulesHandler":
+    def _switch_down_by_content(self) -> "ParkedRulesHandler":
         """
         Tries to switch the status to inactive if some relative content were found.
         """
 
         content = self.req.text.lower()
 
-        if (  # pylint: disable=too-many-boolean-expressions
-            'class="parked-domains' in content
-            or "buy-domain" in content
-            or "this domain name is parked" in content
-            or "this domain is parked" in content
-            or "interested in this domain" in content
-            or "really cool domain parked" in content
-            or "domain is for sale" in content
-            or '_trackpageview("/parked/[% parked_type %]/' in content
-            or "| parked domain" in content
-            or "parked banner" in content
-            or "contact with domain owner" in content
-            or "web page is parked" in content
-            or "buy or lease this domain" in content
-            or "parked domain name on " in content
-            or "it is currently parked by the owner" in content
-            or "parked page for" in content
-        ):
+        if any(x in content for x in self.PARKED_CONTENT_PATTERNS):
             self.switch_to_down()
 
         return self
@@ -120,7 +122,7 @@ class ParkedRulesHandler(ExtraRuleHandlerBase):
                 self._switch_down_by_cookie()
 
             if not self.status.status_after_extra_rules:
-                self._swith_down_by_content()
+                self._switch_down_by_content()
 
             PyFunceble.facility.Logger.info(
                 "Finished to check %r against our own set of parked rules.",

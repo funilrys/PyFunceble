@@ -58,7 +58,6 @@ import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
-from PyFunceble.helpers.regex import RegexHelper
 
 
 class ExtraRulesHandler(ExtraRuleHandlerBase):
@@ -106,7 +105,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             r"\.translate\.goog$": [(self.switch_to_down_if_status_code, 403)],
             r"\.tumblr\.com$": [(self.switch_to_down_if_status_code, 404)],
             r"\.vercel\.app$": [
-                (self.switch_to_down_if_status_code, "451"),
+                (self.switch_to_down_if_status_code, 451),
                 self.handle_vercel_dot_app,
             ],
             r"\.web\.app$": [(self.switch_to_down_if_status_code, 404)],
@@ -119,8 +118,8 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
                 (self.switch_to_down_if_status_code, 410),
                 self.handle_wordpress_dot_com,
             ],
-            r"\.weebly\.com$": [(self.switch_to_down_if_status_code, {"404", "406"})],
-            r"\.zzz\.com\.ua$": [(self.switch_to_down_if_status_code, {"402"})],
+            r"\.weebly\.com$": [(self.switch_to_down_if_status_code, {404, 406})],
+            r"\.zzz\.com\.ua$": [(self.switch_to_down_if_status_code, {402})],
         }
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
@@ -135,15 +134,12 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
         Handles the standard regex lookup case.
         """
 
-        regex_helper = RegexHelper()
-
         for (
             regex,
             data,
         ) in regex_registry.items():
-            broken = False
             for element in data:
-                if not regex_helper.set_regex(regex).match(
+                if not self.regex_helper.set_regex(regex).match(
                     self.status.netloc, return_match=False
                 ):
                     continue
@@ -154,11 +150,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
                     element()
 
                 if self.status.status_after_extra_rules:
-                    broken = True
-                    break
-
-            if broken:
-                break
+                    return self
 
         return self
 

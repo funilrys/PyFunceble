@@ -59,5 +59,5 @@ from PyFunceble.checker.params_base import CheckerParamsBase
 @dataclasses.dataclass
 class SyntaxCheckerParams(CheckerParamsBase):
     """
-    Provides the description of a syntax checker paramaters.
+    Provides the description of a syntax checker parameters.
     """

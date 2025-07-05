@@ -511,8 +511,11 @@ class AvailabilityCheckerBase(CheckerBase):
         self.ip_syntax_checker.subject = self.idna_subject
         self.url_syntax_checker.subject = self.idna_subject
 
-        self.status = AvailabilityCheckerStatus()
-        self.status.params = self.params
+        if self.status.subject_kind is None:
+            self.status = AvailabilityCheckerStatus()
+            self.params = AvailabilityCheckerParams()
+            self.status.params = self.params
+
         self.status.dns_lookup_record = self.dns_query_tool.lookup_record
         self.status.whois_lookup_record = self.whois_query_tool.lookup_record
 

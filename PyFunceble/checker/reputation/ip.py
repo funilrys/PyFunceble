@@ -53,6 +53,8 @@ License:
 from typing import List, Optional
 
 from PyFunceble.checker.reputation.base import ReputationCheckerBase
+from PyFunceble.checker.reputation.params import ReputationCheckerParams
+from PyFunceble.checker.reputation.status import ReputationCheckerStatus
 
 
 class IPReputationChecker(ReputationCheckerBase):
@@ -65,6 +67,15 @@ class IPReputationChecker(ReputationCheckerBase):
         Optional, Activates/Disables the check of the status before the actual
         status gathering.
     """
+
+    def subject_propagator(self) -> "IPReputationChecker":
+        self.status = ReputationCheckerStatus()
+        self.params = ReputationCheckerParams()
+        self.status.params = self.params
+
+        self.status.subject_kind = "ip"
+
+        return super().subject_propagator()
 
     def query_a_record(self) -> Optional[List[str]]:
         result = set()

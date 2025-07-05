@@ -132,7 +132,7 @@ class DNSRulesHandler(ExtraRuleHandlerBase):
             if not self.regex_helper.set_regex(regex).match(
                 self.status.netloc, return_match=False
             ):
-                break
+                continue
 
             for ruler, params in rulesets:
                 if self.status.status_after_extra_rules:

@@ -62,7 +62,7 @@ from PyFunceble.query.record.dns import DNSQueryToolRecord
 @dataclasses.dataclass
 class ReputationCheckerStatus(CheckerStatusBase):
     """
-    Provides the description of an availablity status.
+    Provides the description of a reputation status.
     """
 
     # pylint: disable=too-many-instance-attributes

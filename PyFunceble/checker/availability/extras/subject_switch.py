@@ -116,10 +116,9 @@ class SubjectSwitchRulesHandler(ExtraRuleHandlerBase):
             if netloc == self.status.idna_subject and netloc not in variations:
                 continue
 
-            if not start_path:
-                if local_path != "/":
-                    continue
-            elif start_path != local_path:
+            if (not start_path and local_path != "/") or (
+                start_path and start_path != local_path
+            ):
                 continue
 
             self.switch_to_down()
@@ -141,7 +140,7 @@ class SubjectSwitchRulesHandler(ExtraRuleHandlerBase):
         )
 
         try:
-            if any(self.status.netloc.startswith(x) for x in ("www.", "m.")):
+            if self.status.netloc.startswith(("www.", "m.")):
                 self.do_request()
 
                 if not self.status.status_after_extra_rules:

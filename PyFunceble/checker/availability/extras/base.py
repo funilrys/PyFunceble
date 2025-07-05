@@ -67,7 +67,7 @@ class ExtraRuleHandlerBase:
     """
     Provides the base of all extra rules handler.
 
-    :param statatus:
+    :param status:
         The previously gathered status.
     :type status:
         :class:`~PyFunceble.checker.availability.status.AvailabilityCheckerStatus`
@@ -167,7 +167,7 @@ class ExtraRuleHandlerBase:
         Provides a viable request URL.
         """
 
-        if any(self.status.idna_subject.startswith(x) for x in ("http:", "https:")):
+        if self.status.idna_subject.startswith(("http:", "https:")):
             return self.status.idna_subject
         return f"http://{self.status.idna_subject}:80"
 
@@ -177,7 +177,7 @@ class ExtraRuleHandlerBase:
         Provides a viable request URL that default to an HTTPS URL.
         """
 
-        if any(self.status.idna_subject.startswith(x) for x in ("http:", "https:")):
+        if self.status.idna_subject.startswith(("http:", "https:")):
             return self.status.idna_subject
         return f"https://{self.status.idna_subject}:443"
 
@@ -226,7 +226,7 @@ class ExtraRuleHandlerBase:
         Do a request and store its response into the `req` attribute.
 
         :param bool allow_redirects:
-            Whether we shoold follow the redirection - or not.
+            Whether we should follow the redirection - or not.
         """
 
         self.req = self.requester.get(self.req_url, allow_redirects=allow_redirects)

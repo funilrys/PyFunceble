@@ -60,7 +60,7 @@ from PyFunceble.checker.params_base import CheckerParamsBase
 @dataclasses.dataclass
 class AvailabilityCheckerParams(CheckerParamsBase):
     """
-    Provides the description of an availability checker paramaters.
+    Provides the description of an availability checker parameters.
     """
 
     use_extra_rules: Optional[bool] = None

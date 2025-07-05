@@ -94,7 +94,10 @@ class SyntaxCheckerBase(CheckerBase):
             You are not invited to run this method directly.
         """
 
-        self.status = SyntaxCheckerStatus()
+        if self.status.subject_kind is None:
+            self.status = SyntaxCheckerStatus()
+            self.params = SyntaxCheckerParams()
+            self.status.params = self.params
 
         return super().subject_propagator()
 

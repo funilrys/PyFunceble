@@ -130,8 +130,11 @@ class ReputationCheckerBase(CheckerBase):
         self.ip_syntax_checker.subject = self.idna_subject
         self.url_syntax_checker.subject = self.idna_subject
 
-        self.status = ReputationCheckerStatus()
-        self.status.params = self.params
+        if self.status.subject_kind is None:
+            self.status = ReputationCheckerStatus()
+            self.params = ReputationCheckerParams()
+            self.status.params = self.params
+
         self.status.dns_lookup_record = self.dns_query_tool.lookup_record
 
         return super().subject_propagator()

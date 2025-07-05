@@ -56,6 +56,7 @@ from sqlalchemy.orm import Session
 
 from PyFunceble.checker.syntax.base import SyntaxCheckerBase
 from PyFunceble.checker.syntax.domain_base import DomainSyntaxCheckerBase
+from PyFunceble.checker.syntax.params import SyntaxCheckerParams
 from PyFunceble.checker.syntax.second_lvl_domain import SecondLvlDomainSyntaxChecker
 from PyFunceble.checker.syntax.status import SyntaxCheckerStatus
 from PyFunceble.checker.syntax.subdomain import SubDomainSyntaxChecker
@@ -95,6 +96,9 @@ class DomainSyntaxChecker(DomainSyntaxCheckerBase, SyntaxCheckerBase):
         self.subdomain_checker.subject = self.idna_subject
 
         self.status = SyntaxCheckerStatus()
+        self.params = SyntaxCheckerParams()
+        self.status.params = self.params
+
         self.status.subject_kind = "domain"
 
         return super().subject_propagator()

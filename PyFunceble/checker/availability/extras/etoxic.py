@@ -64,7 +64,7 @@ class EToxicHandler(ExtraRuleHandlerBase):
         :class:`~PyFunceble.checker.availability.status.AvailabilityCheckerStatus`
     """
 
-    MATCHES = [
+    MATCHES = (
         ".0wn0.com",
         ".123.st",
         ".1forum.biz",
@@ -282,7 +282,7 @@ class EToxicHandler(ExtraRuleHandlerBase):
         ".yoo7.com",
         ".ze-43eme.com",
         ".zxr7team.com",
-    ]
+    )
 
     @ExtraRuleHandlerBase.ensure_status_is_given
     @ExtraRuleHandlerBase.setup_status_before
@@ -294,7 +294,7 @@ class EToxicHandler(ExtraRuleHandlerBase):
         )
 
         if self.status.status_before_extra_rules == PyFunceble.storage.STATUS.up:
-            if any(self.status.netloc.endswith(x) for x in self.MATCHES):
+            if self.status.netloc.endswith(self.MATCHES):
                 self.do_on_header_match(
                     self.req_url,
                     matches={"location": [f"/{self.status.netloc}", "/search/"]},

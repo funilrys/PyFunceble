@@ -53,6 +53,8 @@ License:
 import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.checker.availability.base import AvailabilityCheckerBase
+from PyFunceble.checker.availability.params import AvailabilityCheckerParams
+from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.reputation.domain import DomainReputationChecker
 
 
@@ -86,6 +88,22 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
         Optional, Activates/Disable the usage of a local database to store the
         WHOIS datasets.
     """
+
+    def subject_propagator(self) -> "DomainAvailabilityChecker":
+        """
+        Propagate the currently set subject.
+
+        .. warning::
+            You are not invited to run this method directly.
+        """
+
+        self.status = AvailabilityCheckerStatus()
+        self.params = AvailabilityCheckerParams()
+        self.status.params = self.params
+
+        self.status.subject_kind = "domain"
+
+        return super().subject_propagator()
 
     def try_to_query_status_from_reputation(self) -> "DomainAvailabilityChecker":
         """
