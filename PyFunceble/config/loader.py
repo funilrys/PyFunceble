@@ -99,8 +99,8 @@ class ConfigLoader:
     _config_dir: Optional[str] = None
     __config_loaded: bool = False
 
-    file_helper: FileHelper = FileHelper()
-    dict_helper: DictHelper = DictHelper()
+    file_helper: Optional[FileHelper] = None
+    dict_helper: Optional[DictHelper] = None
 
     def __init__(
         self, merge_upstream: Optional[bool] = None, *, config_dir: Optional[str] = None
@@ -122,6 +122,9 @@ class ConfigLoader:
             self.merge_upstream = merge_upstream
         elif EnvironmentVariableHelper("PYFUNCEBLE_AUTO_CONFIGURATION").exists():
             self.merge_upstream = True
+
+        self.file_helper = FileHelper()
+        self.dict_helper = DictHelper()
 
     def __del__(self) -> None:
         self.destroy()
@@ -451,7 +454,7 @@ class ConfigLoader:
         self,
     ) -> "ConfigLoader":
         """
-        Downloads all the dynamicly (generated) infrastructure files.
+        Downloads all the dynamically (generated) infrastructure files.
 
         .. note::
             Downloaded if missing:
@@ -532,7 +535,7 @@ class ConfigLoader:
             or self.merge_upstream
             or is_3_x_version(config)
             or not config_comparer.is_local_identical()
-        ):  # pragma: no cover ## Testing the underlying comparison method is sufficent
+        ):  # pragma: no cover ## Testing the underlying comparison method is sufficient
             config = config_comparer.get_merged()
 
             self.dict_helper.set_subject(config).to_yaml_file(self.path_to_config)

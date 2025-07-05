@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the configuration comparision interface.
+Provides the configuration comparison interface.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -175,7 +175,7 @@ class ConfigComparison:
     }
 
     _local_config: dict = {}
-    _upsteam_config: dict = {}
+    _upstream_config: dict = {}
 
     dict_helper: DictHelper = DictHelper()
 
@@ -228,12 +228,12 @@ class ConfigComparison:
         Provides the current state of the :code:`_upstream_config`.
         """
 
-        return self._upsteam_config
+        return self._upstream_config
 
     @upstream_config.setter
     def upstream_config(self, value: dict) -> None:
         """
-        Sets the upstram configuration to work with.
+        Sets the upstream configuration to work with.
 
         :raise TypeError:
             When :code:`value` is not a :py:class:`dict`
@@ -242,11 +242,11 @@ class ConfigComparison:
         if not isinstance(value, dict):
             raise TypeError(f"<value> should be {dict}, {type(value)} given.")
 
-        self._upsteam_config = copy.deepcopy(value)
+        self._upstream_config = copy.deepcopy(value)
 
     def set_upstream_config(self, value: dict) -> "ConfigComparison":
         """
-        Sets the upstram configuration to work with.
+        Sets the upstream configuration to work with.
         """
 
         self.upstream_config = value
@@ -265,6 +265,7 @@ class ConfigComparison:
             )
             or "user_agent" not in self.local_config
             or not isinstance(self.local_config["user_agent"], dict)
+            or "http_codes" not in self.local_config
             or "active" in self.local_config["http_codes"]
             or "not_found_default" in self.local_config["http_codes"]
             or "self_managed" not in self.local_config["http_codes"]
@@ -281,7 +282,7 @@ class ConfigComparison:
             if index in self.DELETED_CORE:
                 return False
 
-        for index in self.local_config["links"]:
+        for index in self.local_config.get("links", {}):
             if index in self.DELETED_LINKS:
                 return False
 
@@ -369,10 +370,10 @@ class ConfigComparison:
                 del merged[index]
 
         for index in self.DELETED_LINKS:
-            if index in merged["links"]:
+            if index in merged.get("links", {}):
                 del merged["links"][index]
 
-        if not bool(merged["http_codes"]["self_managed"]):
+        if "http_codes" in merged and not bool(merged["http_codes"]["self_managed"]):
             for index, values in PyFunceble.storage.STD_HTTP_CODES.list.items():
                 merged["http_codes"]["list"][index] = list(values)
 
