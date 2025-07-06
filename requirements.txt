@@ -5,7 +5,7 @@ domain2idna~=1.12.0
 inflection
 packaging
 PyMySQL
-python-box[all]~=6.1.0
+python-box[all]~=7.3.2
 python-dotenv
 PyYAML
 requests[socks]<3
