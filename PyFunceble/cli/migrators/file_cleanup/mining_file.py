@@ -53,11 +53,10 @@ License:
 import os
 
 import PyFunceble.cli.storage
-import PyFunceble.storage
-from PyFunceble.cli.migrators.file_cleanup.base import FileClenupMigratorBase
+from PyFunceble.cli.migrators.file_cleanup.base import FileCleanupMigratorBase
 
 
-class MiningFileCleanupMigrator(FileClenupMigratorBase):
+class MiningFileCleanupMigrator(FileCleanupMigratorBase):
     """
     Provides the interface for the cleanup of the mining file.
     """

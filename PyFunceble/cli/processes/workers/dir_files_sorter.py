@@ -149,26 +149,18 @@ class DireFileSorterWorker(FileSorterWorkerBase):
         # Just for human brain :-)
         directory = consumed["directory"]
 
-        if "remove_duplicates" in consumed:
-            remove_duplicates = consumed["remove_duplicates"]
-        else:
-            remove_duplicates = True
-
-        if "write_header" in consumed:
-            write_header = consumed["write_header"]
-        else:
-            write_header = True
+        remove_duplicates = consumed.get("remove_duplicates", True)
+        write_header = consumed.get("write_header", True)
 
         with concurrent.futures.ThreadPoolExecutor(
             max_workers=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
         ) as executor:
-            submitted_list = []
-
-            for file in self.get_files_to_sort(directory):
-                submitted = executor.submit(
+            submitted_list = [
+                executor.submit(
                     self.process_file_sorting, file, remove_duplicates, write_header
                 )
-                submitted_list.append(submitted)
+                for file in self.get_files_to_sort(directory)
+            ]
 
             for submitted in concurrent.futures.as_completed(submitted_list):
                 # Ensure that everything is finished

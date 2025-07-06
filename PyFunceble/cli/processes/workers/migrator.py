@@ -53,7 +53,6 @@ License:
 import traceback
 
 import PyFunceble.facility
-import PyFunceble.storage
 from PyFunceble.cli.processes.workers.base import WorkerBase
 
 

@@ -57,7 +57,6 @@ import traceback
 
 import colorama
 
-import PyFunceble.cli.facility
 import PyFunceble.cli.storage
 import PyFunceble.cli.utils.ascii_logo
 import PyFunceble.facility

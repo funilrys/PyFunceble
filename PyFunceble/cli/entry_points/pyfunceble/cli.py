@@ -473,7 +473,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "self_contained.lookup.netinfo",
                 "action": "store_true",
-                "help": "Only perform a network information (or networket "
+                "help": "Only perform a network information (or network "
                 "socket) lookup.",
             },
         ),

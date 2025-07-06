@@ -56,8 +56,6 @@ from typing import Any, Generator, Tuple
 from sqlalchemy.sql import text
 
 import PyFunceble.cli.facility
-import PyFunceble.cli.factory
-import PyFunceble.sessions
 from PyFunceble.cli.migrators.db_base import DBMigratorBase
 
 
@@ -72,7 +70,7 @@ class MariaDBMigratorBase(DBMigratorBase):
         Otherwise, apply the given :code:`default`.
         """
 
-        def inner_metdhod(func):
+        def inner_method(func):
             @functools.wraps(func)
             def wrapper(self, *args, **kwargs):
                 if self.authorized:
@@ -81,7 +79,7 @@ class MariaDBMigratorBase(DBMigratorBase):
 
             return wrapper
 
-        return inner_metdhod
+        return inner_method
 
     def get_rows(
         self, statement: str, limit: int = 20

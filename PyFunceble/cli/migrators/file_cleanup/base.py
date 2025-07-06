@@ -59,7 +59,7 @@ from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.helpers.file import FileHelper
 
 
-class FileClenupMigratorBase(MigratorBase):
+class FileCleanupMigratorBase(MigratorBase):
     """
     Provides the base of all file cleanup related migration classes.
     """
@@ -85,7 +85,7 @@ class FileClenupMigratorBase(MigratorBase):
         return wrapper
 
     @ensure_source_file_is_given
-    def migrate(self) -> "FileClenupMigratorBase":
+    def migrate(self) -> "FileCleanupMigratorBase":
         """
         Provides the migrator (itself)
         """
@@ -98,7 +98,7 @@ class FileClenupMigratorBase(MigratorBase):
         if self.print_action_to_stdout:
             print_single_line()
 
-    def start(self) -> "FileClenupMigratorBase":
+    def start(self) -> "FileCleanupMigratorBase":
         """
         Starts the migration and everything related to it.
         """

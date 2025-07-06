@@ -52,9 +52,7 @@ License:
 
 import domain2idna
 
-import PyFunceble.cli.factory
 import PyFunceble.facility
-import PyFunceble.sessions
 from PyFunceble.cli.migrators.mariadb.base import MariaDBMigratorBase
 from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.database.sqlalchemy.all_schemas import WhoisRecord

@@ -71,7 +71,7 @@ def producer() -> None:  # pylint: disable=too-many-statements
     description = (
         f"{colorama.Style.BRIGHT}{colorama.Fore.GREEN}PyFunceble Production Preparator"
         f"{colorama.Style.RESET_ALL} - "
-        "The Production peparator for PyFunceble."
+        "The Production preparator for PyFunceble."
     )
 
     parser = argparse.ArgumentParser(

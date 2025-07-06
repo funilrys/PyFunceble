@@ -66,7 +66,6 @@ from PyFunceble.cli.filesystem.dir_structure.restore import (
     DirectoryStructureRestoration,
 )
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
-from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.utils.platform import PlatformUtility
 
 
@@ -535,7 +534,7 @@ class StatusFileGenerator(FilesystemDirBase):
 
         result = super().get_output_basedir()
 
-        if not DirectoryHelper(result).exists():
+        if not self.directory_helper.set_path(result).exists():
             DirectoryStructureRestoration(self.parent_dirname).start()
         return result
 
@@ -672,7 +671,7 @@ class StatusFileGenerator(FilesystemDirBase):
                 )
 
         if self.test_dataset and "from_inactive" in self.test_dataset:
-            # Let's generate the supicious file :-)
+            # Let's generate the suspicious file :-)
             if self.status.status in [
                 PyFunceble.storage.STATUS.up,
                 PyFunceble.storage.STATUS.valid,

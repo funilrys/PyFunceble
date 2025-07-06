@@ -101,7 +101,7 @@ from PyFunceble.cli.processes.producer import ProducerProcessesManager
 from PyFunceble.cli.processes.tester import TesterProcessesManager
 from PyFunceble.cli.system.base import SystemBase
 from PyFunceble.cli.utils.testing import (
-    get_continue_databaset_object,
+    get_continue_dataset_object,
     get_destination_from_origin,
     get_inactive_dataset_object,
     get_subjects_from_line,
@@ -187,9 +187,7 @@ class SystemLauncher(SystemBase):
 
         self.execution_time_holder = ExecutionTime().set_start_time()
         self.checker_type = get_testing_mode()
-        self.continue_dataset = get_continue_databaset_object(
-            db_session=self.db_session
-        )
+        self.continue_dataset = get_continue_dataset_object(db_session=self.db_session)
         self.inactive_dataset = get_inactive_dataset_object(db_session=self.db_session)
         self.whois_dataset = get_whois_dataset_object(db_session=self.db_session)
         self.continuous_integration = ci_object()
@@ -775,7 +773,7 @@ class SystemLauncher(SystemBase):
     def generate_waiting_files(self) -> "SystemLauncher":
         """
         Generates all the files that needs to be generated when all status
-        are proceeses.
+        are processes.
         """
 
         def generate_percentage_file(parent_dirname: Union[str, None]) -> None:
@@ -1001,18 +999,19 @@ class SystemLauncher(SystemBase):
             """
             Remove the inline destination - when necessary.
 
-            :param protocl:
+            :param protocol:
                 The protocol to work with.
             """
 
             if not protocol["destination"]:
-                DirectoryHelper(
+                directory_helper.set_path(
                     self.counter.set_differ_to_inline(True)
                     .set_parent_dirname(protocol["destination"])
                     .get_output_basedir()
                 ).delete()
 
         file_helper = FileHelper()
+        directory_helper = DirectoryHelper()
 
         for protocol in self.testing_protocol:
             if "destination" in protocol or "output_dir" in protocol:
@@ -1028,7 +1027,7 @@ class SystemLauncher(SystemBase):
 
     def run_standard_end_instructions(self) -> "SystemLauncher":
         """
-        Runns our standard "end" instructions.
+        Runs our standard "end" instructions.
 
         The instructions executed by this method are the one we execute normally.
 
@@ -1049,7 +1048,7 @@ class SystemLauncher(SystemBase):
 
     def run_ci_saving_instructions(self) -> "SystemLauncher":
         """
-        Runns our CI "saving" instructions.
+        Runs our CI "saving" instructions.
 
         The instructions executed by this method are the one we execute
         before ending a testing session under one of the supported CI engines.
@@ -1071,7 +1070,7 @@ class SystemLauncher(SystemBase):
 
     def run_ci_end_saving_instructions(self) -> "SystemLauncher":
         """
-        Runns our CI END "saving" instructions.
+        Runs our CI END "saving" instructions.
 
         The instructions executed by this method are the one we execute
         before ending a testing session under one of the supported CI engines.

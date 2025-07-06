@@ -103,15 +103,8 @@ class FileSorterWorker(FileSorterWorkerBase):
         # Just for human brain :-)
         file = consumed["file"]
 
-        if "remove_duplicates" in consumed:
-            remove_duplicates = consumed["remove_duplicates"]
-        else:
-            remove_duplicates = True
-
-        if "write_header" in consumed:
-            write_header = consumed["write_header"]
-        else:
-            write_header = True
+        remove_duplicates = consumed.get("remove_duplicates", True)
+        write_header = consumed.get("write_header", True)
 
         self.process_file_sorting(
             file, remove_duplicates=remove_duplicates, write_header=write_header

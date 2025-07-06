@@ -86,7 +86,7 @@ class PublicSuffixGenerator:
     An internal storage of our map.
     """
 
-    wildacrd2subject: Wildcard2Subject = Wildcard2Subject()
+    wildcard2subject: Wildcard2Subject = Wildcard2Subject()
 
     def __init__(self, destination: Optional[str] = None) -> None:
         if destination is not None:
@@ -147,7 +147,7 @@ class PublicSuffixGenerator:
         if not any(line.startswith(x) for x in self.COMMENT_SIGN) and "." in line:
             lines = [line, line.encode("idna").decode("utf-8")]
             lines = [
-                self.wildacrd2subject.set_data_to_convert(x).get_converted()
+                self.wildcard2subject.set_data_to_convert(x).get_converted()
                 for x in lines
             ]
             extension = lines[0].rsplit(".", 1)[-1]

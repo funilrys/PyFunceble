@@ -55,7 +55,6 @@ import os
 from typing import List
 
 import PyFunceble.cli.storage
-import PyFunceble.storage
 from PyFunceble.cli.migrators.csv_file.base import CSVFileMigratorBase
 
 

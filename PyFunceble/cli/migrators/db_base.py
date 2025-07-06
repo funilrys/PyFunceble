@@ -75,7 +75,7 @@ class DBMigratorBase(MigratorBase):
         Otherwise, apply the given :code:`default`.
         """
 
-        def inner_metdhod(func):
+        def inner_method(func):
             @functools.wraps(func)
             def wrapper(self, *args, **kwargs):
                 if self.authorized:
@@ -84,7 +84,7 @@ class DBMigratorBase(MigratorBase):
 
             return wrapper
 
-        return inner_metdhod
+        return inner_method
 
     @property
     def authorized(self):

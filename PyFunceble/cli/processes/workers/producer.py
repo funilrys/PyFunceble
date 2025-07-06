@@ -68,7 +68,7 @@ from PyFunceble.cli.filesystem.status_file import StatusFileGenerator
 from PyFunceble.cli.processes.workers.base import WorkerBase
 from PyFunceble.cli.utils.stdout import get_template_to_use, print_single_line
 from PyFunceble.cli.utils.testing import (
-    get_continue_databaset_object,
+    get_continue_dataset_object,
     get_inactive_dataset_object,
 )
 from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
@@ -127,9 +127,7 @@ class ProducerWorker(WorkerBase):
         )
         self.whois_dataset = get_whois_dataset_object(db_session=self.db_session)
         self.inactive_dataset = get_inactive_dataset_object(db_session=self.db_session)
-        self.continue_dataset = get_continue_databaset_object(
-            db_session=self.db_session
-        )
+        self.continue_dataset = get_continue_dataset_object(db_session=self.db_session)
         self.status_file_generator = StatusFileGenerator().guess_all_settings()
         self.counter = FilesystemCounter()
         self.registrar_counter = RegistrarCounter()

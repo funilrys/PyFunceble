@@ -52,12 +52,11 @@ License:
 
 import os
 
-import PyFunceble.cli.storage
 import PyFunceble.storage
-from PyFunceble.cli.migrators.file_cleanup.base import FileClenupMigratorBase
+from PyFunceble.cli.migrators.file_cleanup.base import FileCleanupMigratorBase
 
 
-class ProductionConfigFileCleanupMigrator(FileClenupMigratorBase):
+class ProductionConfigFileCleanupMigrator(FileCleanupMigratorBase):
     """
     Provides the interface for the cleanup of the
     :code:`.PyFunceble_production.yaml` file.

@@ -58,7 +58,6 @@ try:
 except ImportError:  # pragma: no cover ## Retro compatibility
     import importlib_resources as package_resources
 
-
 from PyFunceble.cli.filesystem.cleanup import FilesystemCleanup
 from PyFunceble.cli.filesystem.dir_base import FilesystemDirBase
 

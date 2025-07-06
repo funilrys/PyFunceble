@@ -89,7 +89,7 @@ class TesterWorker(WorkerBase):
         result = super().perform_external_poweron_checks()
 
         self.continue_dataset = (
-            PyFunceble.cli.utils.testing.get_continue_databaset_object(
+            PyFunceble.cli.utils.testing.get_continue_dataset_object(
                 db_session=self.db_session
             )
         )
@@ -215,8 +215,7 @@ class TesterWorker(WorkerBase):
 
         if not isinstance(consumed, dict):
             PyFunceble.facility.Logger.debug(
-                "Skipping latest dataset because consumed data was not "
-                "a dictionnary."
+                "Skipping latest dataset because consumed data was not a dictionary."
             )
             return None
 

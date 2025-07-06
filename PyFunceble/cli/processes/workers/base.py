@@ -61,7 +61,6 @@ import PyFunceble.cli.facility
 import PyFunceble.cli.factory
 import PyFunceble.ext.process_manager
 import PyFunceble.facility
-import PyFunceble.sessions
 import PyFunceble.storage
 from PyFunceble.query.requests.requester import Requester
 

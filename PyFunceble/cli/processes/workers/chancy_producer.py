@@ -53,7 +53,6 @@ License:
 from typing import Any, Optional, Tuple
 
 import PyFunceble.facility
-import PyFunceble.storage
 from PyFunceble.checker.status_base import CheckerStatusBase
 from PyFunceble.cli.processes.workers.producer import ProducerWorker
 
@@ -81,7 +80,7 @@ class ChancyProducerWorker(ProducerWorker):
 
         if not isinstance(test_dataset, dict):
             PyFunceble.facility.Logger.info(
-                "Skipping because test dataset is not a dictionnary."
+                "Skipping because test dataset is not a dictionary."
             )
             return None
 

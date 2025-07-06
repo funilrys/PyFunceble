@@ -388,10 +388,10 @@ class ProductionPrep:
         Updates all URL in the source code.
         """
 
-        to_ignore = [
+        to_ignore = {
             ".gitignore",
             ".keep",
-        ]
+        }
 
         self.update_urls(os.path.join(self.config_dir, "setup.py"))
 

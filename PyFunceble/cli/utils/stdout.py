@@ -136,6 +136,6 @@ def print_thanks() -> None:
                     )
                 else:
                     print(
-                        "Do you ave a feedback, an issue or an improvement idea? "
+                        "Do you have a feedback, an issue or an improvement idea? "
                         "Let us know on GitHub!"
                     )

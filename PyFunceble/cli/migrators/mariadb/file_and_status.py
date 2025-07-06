@@ -92,7 +92,7 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
         )
 
         inactive_dataset = PyFunceble.cli.utils.testing.get_inactive_dataset_object()
-        continue_dataset = PyFunceble.cli.utils.testing.get_continue_databaset_object()
+        continue_dataset = PyFunceble.cli.utils.testing.get_continue_dataset_object()
 
         drop_table = True
 

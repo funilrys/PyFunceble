@@ -55,7 +55,6 @@ import os
 import PyFunceble.facility
 from PyFunceble.cli.filesystem.dir_structure.base import DirectoryStructureBase
 from PyFunceble.helpers.dict import DictHelper
-from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.helpers.file import FileHelper
 from PyFunceble.helpers.hash import HashHelper
 
@@ -75,7 +74,7 @@ class DirectoryStructureBackup(DirectoryStructureBase):
         file_helper = FileHelper()
         hash_helper = HashHelper()
 
-        for file in DirectoryHelper(base_dir).list_all_files():
+        for file in self.directory_helper.set_path(base_dir).list_all_files():
             file_helper.set_path(file)
             reduced_path = self.get_path_without_base_dir(file)
 

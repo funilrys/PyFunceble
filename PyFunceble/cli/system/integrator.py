@@ -73,7 +73,7 @@ class SystemIntegrator(SystemBase):
     Provides our system integrator. The idea is that we given an argparse
     Namespace, we should be able to parse it into our system.
 
-    To simplify the trick and headache in the CLI management, I explicitely
+    To simplify the trick and headache in the CLI management, I explicitly
     mapped the :code:`dest` argument to what we are supposed to have in the
     flatten version of the configuration. That way, we only need to compare
     against the flatten version instead of looping over all possible levels
