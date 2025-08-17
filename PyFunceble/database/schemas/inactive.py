@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import Column, DateTime, String, Text
 
@@ -65,4 +65,6 @@ class Inactive(SchemaBase):
     idna_subject = Column(Text, nullable=False)
     checker_type = Column(String(length=50), nullable=False)
     destination = Column(Text, nullable=False)
-    tested_at = Column(DateTime(), default=datetime.utcnow, nullable=False)
+    tested_at = Column(
+        DateTime(), default=lambda: datetime.now(tz=timezone.utc), nullable=False
+    )

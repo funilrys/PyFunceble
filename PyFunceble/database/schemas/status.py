@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import Boolean, Column, DateTime, Integer, Text
 
@@ -83,4 +83,6 @@ class Status(SchemaBase):
     url_syntax_validation = Column(Boolean(), default=False, nullable=True)
     is_complement = Column(Boolean(), default=False, nullable=True)
     test_completed = Column(Boolean(), default=False, nullable=False)
-    tested_at = Column(DateTime(), default=datetime.utcnow, nullable=False)
+    tested_at = Column(
+        DateTime(), default=lambda: datetime.now(tz=timezone.utc), nullable=False
+    )

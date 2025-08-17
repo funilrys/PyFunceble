@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 import inflection
 from sqlalchemy import BigInteger, Column, DateTime
@@ -77,8 +77,14 @@ class OurSchemaBase:
         )
 
     id = Column(BigInteger, primary_key=True, nullable=False)
-    created_at = Column(DateTime(), default=datetime.utcnow, nullable=False)
-    modified_at = Column(DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(
+        DateTime(), default=lambda: datetime.now(tz=timezone.utc), nullable=False
+    )
+    modified_at = Column(
+        DateTime(),
+        default=lambda: datetime.now(tz=timezone.utc),
+        onupdate=lambda: datetime.now(tz=timezone.utc),
+    )
 
     def to_dict(self) -> dict:
         """
