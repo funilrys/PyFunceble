@@ -92,6 +92,10 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
             else:
                 date_of_inclusion = dataset["tested_at"]
 
+            if date_of_inclusion.tzinfo is None:  # pragma: no cover
+                # Ensure that timezone is set.
+                date_of_inclusion = date_of_inclusion.replace(tzinfo=timezone.utc)
+
             if date_of_inclusion > days_ago:
                 continue
 
