@@ -219,7 +219,7 @@ def get_version():
             open("../PyFunceble/storage.py", encoding="utf-8").read()
         )[0]
 
-    return extracted[: extracted.rfind(".")]
+    return extracted[: extracted.rfind(".")] if ".dev" in extracted else extracted
 
 
 def get_long_description():  # pragma: no cover
