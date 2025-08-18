@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -57,7 +57,6 @@ from typing import List, Optional, Tuple
 from domain2idna import domain2idna
 
 import PyFunceble.facility
-import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.status_base import CheckerStatusBase
 from PyFunceble.cli.processes.workers.base import WorkerBase
@@ -72,8 +71,6 @@ class MinerWorker(WorkerBase):
     the mining of dataset to test.
     """
 
-    STD_NAME: str = "pyfunceble_miner_worker"
-
     INACTIVE_STATUSES: Tuple[str, ...] = (
         PyFunceble.storage.STATUS.down,
         PyFunceble.storage.STATUS.invalid,
@@ -86,8 +83,7 @@ class MinerWorker(WorkerBase):
 
         return super().__post_init__()
 
-    @staticmethod
-    def mine_from(subject: str) -> Optional[List[str]]:
+    def mine_from(self, subject: str) -> Optional[List[str]]:
         """
         Given the subject to work from, try to get the related subjects.
 
@@ -99,7 +95,7 @@ class MinerWorker(WorkerBase):
         result = []
 
         try:
-            req = PyFunceble.factory.Requester.get(subject, allow_redirects=True)
+            req = self.requester.get(subject, allow_redirects=True)
 
             for element in req.history:
                 if "location" in element.headers:
@@ -107,11 +103,11 @@ class MinerWorker(WorkerBase):
 
             result.extend([x for x in req.history if isinstance(x, str)])
         except (
-            PyFunceble.factory.Requester.exceptions.RequestException,
-            PyFunceble.factory.Requester.exceptions.ConnectionError,
-            PyFunceble.factory.Requester.exceptions.Timeout,
-            PyFunceble.factory.Requester.exceptions.InvalidURL,
-            PyFunceble.factory.Requester.urllib3_exceptions.InvalidHeader,
+            self.requester.exceptions.RequestException,
+            self.requester.exceptions.ConnectionError,
+            self.requester.exceptions.Timeout,
+            self.requester.exceptions.InvalidURL,
+            self.requester.urllib3_exceptions.InvalidHeader,
             socket.timeout,
         ):
             PyFunceble.facility.Logger.error(
@@ -125,6 +121,13 @@ class MinerWorker(WorkerBase):
         return result
 
     def target(self, consumed: Tuple[dict, CheckerStatusBase]) -> None:
+        """
+        The producer of the worker.
+
+        :param consumed:
+            The consumed data to work with.
+        """
+
         if not isinstance(consumed, tuple) or not isinstance(
             consumed[1], CheckerStatusBase
         ):
@@ -157,7 +160,7 @@ class MinerWorker(WorkerBase):
 
         print_single_line("M")
 
-        self.add_to_output_queue("pyfunceble")
+        self.push_to_output_queues("pyfunceble")
         self.share_waiting_message()
         mined = self.mine_from(subject)
 
@@ -186,7 +189,7 @@ class MinerWorker(WorkerBase):
                 )
                 continue
 
-            self.add_to_output_queue(to_send)
+            self.push_to_output_queues(to_send)
 
         # Returning None because we manually add into the queue.
         return None

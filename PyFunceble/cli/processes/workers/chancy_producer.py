@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -53,7 +53,6 @@ License:
 from typing import Any, Optional, Tuple
 
 import PyFunceble.facility
-import PyFunceble.storage
 from PyFunceble.checker.status_base import CheckerStatusBase
 from PyFunceble.cli.processes.workers.producer import ProducerWorker
 
@@ -69,8 +68,6 @@ class ChancyProducerWorker(ProducerWorker):
         USE AT YOUR OWN RISK. GOOD LUCK!
     """
 
-    STD_NAME: str = "pyfunceble_chancy_producer_worker"
-
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
         if not isinstance(consumed, tuple):
             PyFunceble.facility.Logger.info(
@@ -83,7 +80,7 @@ class ChancyProducerWorker(ProducerWorker):
 
         if not isinstance(test_dataset, dict):
             PyFunceble.facility.Logger.info(
-                "Skipping because test dataset is not a dictionnary."
+                "Skipping because test dataset is not a dictionary."
             )
             return None
 

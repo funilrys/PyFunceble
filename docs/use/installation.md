@@ -24,13 +24,13 @@ you should prefer the `pyfunceble-dev` package.
 
 ## Overview: Installation Method
 
-| OS        | Technology                  | Tools        | Link                                 |
-| --------- | --------------------------- | ------------ | ------------------------------------ |
-| Any       | PyPi - Python Package Index | `pip3`       | [Link](#pypi---python-package-index) |
-| Any       | Container Image Registry    | `docker`     | [Link](#container-image-registry)    |
-| Any       | Git                         | `pip3`       | [Link](#git-repository)              |
-| Any       | Zip File                    | `pip3`       | [Link](#from-source)                 |
-| ArchLinux | AUR Helper                  | `aur-helper` | [Link](#arch-linux)                  |
+| OS        | Technology                  | Tools        | Link                               |
+| --------- | --------------------------- | ------------ | ---------------------------------- |
+| Any       | PyPi - Python Package Index | `pip3`       | [Link](#pypi-python-package-index) |
+| Any       | Container Image Registry    | `docker`     | [Link](#container-image-registry)  |
+| Any       | Git                         | `pip3`       | [Link](#git-repository)            |
+| Any       | Zip File                    | `pip3`       | [Link](#from-source)               |
+| ArchLinux | AUR Helper                  | `aur-helper` | [Link](#arch-linux)                |
 
 ## PyPi - Python Package Index
 
@@ -56,6 +56,33 @@ Here is an overview of the packages and where they are hosted.
     - are running PyFunceble within a CI engine or in an automated environment
 
     you shouldn't use it.
+
+
+### Optional Dependencies
+
+The following dependencies are optional and can be installed if you need them.
+
+| Dependency                         | Description                                                                                                                                                            |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `all`                              | Install all functional dependencies. Basically all but `dev`, `test` and `docs`. _When a binary and non binary version is available, the binary version is installed._ |
+| `full`                             | Install all dependencies listed below. _When a binary and non binary version is available, the binary version is installed._                                           |
+| `psql`, `postgresql`               | **Build** and install the dependencies required to interact with PostgreSQL.                                                                                           |
+| `psql-binary`, `postgresql-binary` | **Install** the dependencies required to interact with PostgreSQL - from binary.                                                                                       |
+| `docs`                             | Install the dependencies required to build the documentation.                                                                                                          |
+| `test`                             | Install the dependencies required to run the tests.                                                                                                                    |
+| `dev`                              | Install the dependencies required to develop PyFunceble.                                                                                                               |
+
+They are intended to be installed through the following syntax:
+
+```shell
+pip3 install --user {pkg}[{dependency}]
+```
+
+As an example if you want to install the `docs` and `test` dependencies, you should run:
+
+```shell
+pip3 install --user pyfunceble[docs,test]
+```
 
 ### pyfunceble
 

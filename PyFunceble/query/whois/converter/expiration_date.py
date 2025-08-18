@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.query.whois.converter.base import ConverterBase
@@ -226,13 +226,26 @@ class ExpirationDateExtractor(ConverterBase):
         },
     ]
     """
-    Our parsing map. Indeed, we hava a list of regex, but no way to know
+    Our parsing map. Indeed, we have a list of regex, but no way to know
     how to parse them. Especially when the order (month, day, year) are
     different from a format to another.
 
     This variable solve that problem by interpreting all regex we previously
     created.
     """
+
+    _regex_helper: Optional[RegexHelper] = None
+
+    @property
+    def regex_helper(self) -> "RegexHelper":
+        """
+        Provides the regex helper to use.
+        """
+
+        if self._regex_helper is None:
+            self._regex_helper = RegexHelper()
+
+        return self._regex_helper
 
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: str) -> None:
@@ -263,7 +276,7 @@ class ExpirationDateExtractor(ConverterBase):
         """
 
         for regex in self.PATTERNS:
-            expiration_date_line = RegexHelper(r"(?i)" + regex).match(
+            expiration_date_line = self.regex_helper.set_regex(r"(?i)" + regex).match(
                 self.data_to_convert, return_match=True, rematch=True, group=0
             )
 
@@ -273,15 +286,13 @@ class ExpirationDateExtractor(ConverterBase):
             return expiration_date_line
         return None
 
-    def __get_actual_expiration_date(
-        self, extracted: str
-    ) -> Optional[Tuple[str, str, str]]:
+    def __get_actual_expiration_date(self, extracted: str) -> Optional[str]:
         """
         Tries to extract the actual expiration date.
         """
 
         for index, date_regex in self.MARKER2DATE_REGEX.items():
-            matched = RegexHelper(date_regex).match(
+            matched = self.regex_helper.set_regex(date_regex).match(
                 extracted, return_match=True, rematch=True
             )
             date_parts = tuple()
@@ -318,7 +329,7 @@ class ExpirationDateExtractor(ConverterBase):
         if expiration_date_line:
             expiration_date = expiration_date_line[0].strip()
 
-            if RegexHelper(self.REGEX_DIGITS).match(
+            if self.regex_helper.set_regex(self.REGEX_DIGITS).match(
                 expiration_date, return_match=False
             ):
                 return self.__get_actual_expiration_date(expiration_date)

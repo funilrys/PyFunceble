@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -55,7 +55,6 @@ import os
 import PyFunceble.cli.storage
 from PyFunceble.cli.filesystem.dir_structure.base import DirectoryStructureBase
 from PyFunceble.helpers.dict import DictHelper
-from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.helpers.file import FileHelper
 from PyFunceble.utils.platform import PlatformUtility
 
@@ -99,15 +98,14 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
         backup = self.get_backup_data()
 
         base_dir = self.get_output_basedir()
-        dir_helper = DirectoryHelper()
         file_helper = FileHelper()
 
-        if dir_helper.set_path(base_dir).exists():
-            for root, _, files in os.walk(dir_helper.path):
+        if self.directory_helper.set_path(base_dir).exists():
+            for root, _, files in os.walk(self.directory_helper.path):
                 reduced_path = self.get_path_without_base_dir(root)
 
                 if reduced_path not in backup and root != reduced_path:
-                    dir_helper.set_path(root).delete()
+                    self.directory_helper.set_path(root).delete()
 
                     PyFunceble.facility.Logger.debug(
                         "Added %r into the list of directories to delete. "
@@ -117,10 +115,10 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
                     continue
 
         for directory, files in backup.items():
-            dir_helper.set_path(os.path.join(base_dir, directory)).create()
+            self.directory_helper.set_path(os.path.join(base_dir, directory)).create()
 
             for file, dataset in files.items():
-                file_full_path = os.path.join(dir_helper.path, file)
+                file_full_path = os.path.join(self.directory_helper.path, file)
 
                 if (
                     file == ".gitignore"

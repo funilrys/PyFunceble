@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -52,9 +52,7 @@ License:
 
 import domain2idna
 
-import PyFunceble.cli.factory
 import PyFunceble.facility
-import PyFunceble.sessions
 from PyFunceble.cli.migrators.mariadb.base import MariaDBMigratorBase
 from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.database.sqlalchemy.all_schemas import WhoisRecord

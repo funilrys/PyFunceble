@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -63,6 +63,7 @@ class RegexHelper:
     """
 
     _regex: Optional[str] = None
+    _compiled: Optional[re.Pattern] = None
     escape_regex: bool = False
 
     def __init__(self, regex: Optional[str] = None, escape_regex: bool = False):
@@ -99,6 +100,8 @@ class RegexHelper:
         else:
             self._regex = re.escape(value)
 
+        self._compiled = re.compile(self._regex)
+
     def set_regex(self, value: str) -> "RegexHelper":
         """
         Sets the regex to work with.
@@ -120,9 +123,7 @@ class RegexHelper:
         in the given data.
         """
 
-        pre_result = re.compile(self.regex)
-
-        return [x for x in data if not pre_result.search(str(x))]
+        return [x for x in data if not self._compiled.search(str(x))]
 
     def get_matching_list(self, data: List[str]) -> List[str]:
         """
@@ -130,9 +131,7 @@ class RegexHelper:
         in the given data.
         """
 
-        pre_result = re.compile(self.regex)
-
-        return [x for x in data if pre_result.search(str(x))]
+        return [x for x in data if self._compiled.search(str(x))]
 
     def match(
         self,
@@ -157,12 +156,11 @@ class RegexHelper:
         """
 
         result = []
-        to_match = re.compile(self.regex)
 
         if rematch:
-            pre_result = to_match.findall(data)
+            pre_result = self._compiled.findall(data)
         else:
-            pre_result = to_match.search(data)
+            pre_result = self._compiled.search(data)
 
         if return_match and pre_result:
             if rematch:
@@ -209,7 +207,7 @@ class RegexHelper:
                 self.regex,
                 replacement,
                 data,
-                occurences,
+                count=occurences,
                 flags=re.MULTILINE if multiline else 0,
             )
         return data
@@ -222,4 +220,4 @@ class RegexHelper:
         :rtype: list
         """
 
-        return re.split(self.regex, data)
+        return self._compiled.split(data)

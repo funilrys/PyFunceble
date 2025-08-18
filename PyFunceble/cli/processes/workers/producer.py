@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ from PyFunceble.cli.filesystem.status_file import StatusFileGenerator
 from PyFunceble.cli.processes.workers.base import WorkerBase
 from PyFunceble.cli.utils.stdout import get_template_to_use, print_single_line
 from PyFunceble.cli.utils.testing import (
-    get_continue_databaset_object,
+    get_continue_dataset_object,
     get_inactive_dataset_object,
 )
 from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
@@ -84,8 +84,6 @@ class ProducerWorker(WorkerBase):
     a single worker (or process if you prefer) which will be used to handle
     the production of output to stdout or files.
     """
-
-    STD_NAME: str = "pyfunceble_producer_worker"
 
     stdout_printer: Optional[StdoutPrinter] = None
     file_printer: Optional[FilePrinter] = None
@@ -104,19 +102,32 @@ class ProducerWorker(WorkerBase):
         PyFunceble.storage.STATUS.invalid,
     )
 
-    def __post_init__(self) -> None:
+    def perform_external_poweron_checks(self) -> None:
+        result = super().perform_external_poweron_checks()
+
         skip_columns = []
+        extra_formatters = {}
 
         if not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.registrar:
             skip_columns.append("registrar")
 
-        self.stdout_printer = StdoutPrinter(skip_column=skip_columns)
-        self.file_printer = FilePrinter(skip_column=skip_columns)
+        if not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.datetime:
+            skip_columns.append("tested_at")
+        else:
+            # pylint: disable=line-too-long
+            extra_formatters["tested_at"] = lambda x: x.strftime(
+                PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.datetime_format
+            )
+
+        self.stdout_printer = StdoutPrinter(
+            skip_column=skip_columns, extra_formatters=extra_formatters
+        )
+        self.file_printer = FilePrinter(
+            skip_column=skip_columns, extra_formatters=extra_formatters
+        )
         self.whois_dataset = get_whois_dataset_object(db_session=self.db_session)
         self.inactive_dataset = get_inactive_dataset_object(db_session=self.db_session)
-        self.continue_dataset = get_continue_databaset_object(
-            db_session=self.db_session
-        )
+        self.continue_dataset = get_continue_dataset_object(db_session=self.db_session)
         self.status_file_generator = StatusFileGenerator().guess_all_settings()
         self.counter = FilesystemCounter()
         self.registrar_counter = RegistrarCounter()
@@ -124,7 +135,7 @@ class ProducerWorker(WorkerBase):
 
         self.header_already_printed = False
 
-        return super().__post_init__()
+        return result
 
     @staticmethod
     def should_we_ignore(test_result: CheckerStatusBase) -> bool:
@@ -164,7 +175,7 @@ class ProducerWorker(WorkerBase):
         """
         Checks if we should block the file printer.
 
-        The reason behindn this is that we don't want to generate an output
+        The reason behind this is that we don't want to generate an output
         when a subject was already into the inactive database.
         """
 
@@ -290,7 +301,7 @@ class ProducerWorker(WorkerBase):
         Runs the analytic behind the file printer.
 
         .. warning::
-            Thie method assume that the givne dataset is ignored from the normal
+            Thie method assume that the given dataset is ignored from the normal
             file printer.
         """
 
@@ -375,6 +386,13 @@ class ProducerWorker(WorkerBase):
                 ).count(test_result.registrar)
 
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
+        """
+        The producer of the worker.
+
+        :param consumed:
+            The consumed data to work with.
+        """
+
         if not isinstance(consumed, tuple):
             PyFunceble.facility.Logger.info(
                 "Skipping latest dataset because consumed data was not a tuple."
@@ -386,7 +404,7 @@ class ProducerWorker(WorkerBase):
 
         if not isinstance(test_dataset, dict):
             PyFunceble.facility.Logger.info(
-                "Skipping because test dataset is not a dictionnary."
+                "Skipping because test dataset is not a dictionary."
             )
             return None
 

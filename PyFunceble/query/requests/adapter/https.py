@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -125,10 +125,10 @@ class RequestHTTPSAdapter(RequestAdapterBase):
             request.headers["Host"] = parsed_url.hostname
         else:
             self.poolmanager.connection_pool_kw.pop(
-                "server_hostname", PyFunceble.storage.NOT_RESOLVED_STD_HOSTNAME
+                "server_hostname", self.NOT_RESOLVED_STD_HOSTNAME
             )
             self.poolmanager.connection_pool_kw.pop(
-                "assert_hostname", PyFunceble.storage.NOT_RESOLVED_STD_HOSTNAME
+                "assert_hostname", self.NOT_RESOLVED_STD_HOSTNAME
             )
 
             self.poolmanager.connection_pool_kw.pop(

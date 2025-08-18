@@ -195,9 +195,28 @@ class TestListHelper(unittest.TestCase):
         given = copy.deepcopy(self.str_test_subject)
 
         expected = ["hello", "world", "", "!", " ", "world!", "Hello"]
-        actual = self.helper.set_subject(given).remove_duplicates().subject
+        actual = (
+            self.helper.set_subject(given).remove_duplicates(efficient=False).subject
+        )
 
         self.assertEqual(expected, actual)
+
+    def test_remove_duplicates_efficient(self) -> None:
+        """
+        Tests the method which let us remove the duplicates from a given list
+        for the case that we want the best possible performance.
+        """
+
+        given = copy.deepcopy(self.str_test_subject)
+
+        expected = ["", "hello", "world!", "world", "!", " ", "Hello"]
+        actual = (
+            self.helper.set_subject(given).remove_duplicates(efficient=True).subject
+        )
+
+        self.assertTrue(isinstance(actual, list))
+        self.assertTrue(len(actual) == len(expected))
+        self.assertTrue(all(x in actual for x in expected))
 
     def test_sort(self) -> None:
         """

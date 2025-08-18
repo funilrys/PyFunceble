@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -249,6 +249,44 @@ class TestInputLine2Subject(unittest.TestCase):
 
         self.converter.data_to_convert = given
         actual = self.converter.get_converted()
+
+        self.assertEqual(expected, actual)
+
+    def test_extract_base(self) -> None:
+        """
+        Tests the method which let us extract the base of a given subject.
+        """
+
+        given = "https://example.org"
+        expected = "example.org"
+
+        actual = self.converter.extract_base(given)
+
+        self.assertEqual(expected, actual)
+
+    def test_extract_base_no_url(self) -> None:
+        """
+        Tests the method which let us extract the base of a given subject for the
+        case that the given subject is not a URL.
+        """
+
+        given = "example.org"
+        expected = "example.org"
+
+        actual = self.converter.extract_base(given)
+
+        self.assertEqual(expected, actual)
+
+    def test_extract_base_empty_string(self) -> None:
+        """
+        Tests the method which let us extract the base of a given subject for the
+        case that the given subject is an empty string.
+        """
+
+        given = ""
+        expected = ""
+
+        actual = self.converter.extract_base(given)
 
         self.assertEqual(expected, actual)
 

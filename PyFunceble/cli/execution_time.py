@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -90,7 +90,7 @@ class ExecutionTime:
         Otherwise, apply the given :code:`default`.
         """
 
-        def inner_metdhod(func):
+        def inner_method(func):
             @functools.wraps(func)
             def wrapper(self, *args, **kwargs):
                 if self.authorized:
@@ -99,7 +99,7 @@ class ExecutionTime:
 
             return wrapper
 
-        return inner_metdhod
+        return inner_method
 
     @staticmethod
     def split_difference(start: datetime.datetime, end: datetime.datetime) -> dict:

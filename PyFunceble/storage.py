@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -52,8 +52,7 @@ License:
 """
 
 import os
-import secrets
-from typing import Optional
+from typing import List, Optional
 
 from box import Box
 from dotenv import load_dotenv
@@ -61,36 +60,17 @@ from dotenv import load_dotenv
 from PyFunceble.storage_facility import get_config_directory
 
 PROJECT_NAME: str = "PyFunceble"
-PROJECT_VERSION: str = "4.2.28. (Blue Duckling: Tulip)"
+PROJECT_VERSION: str = "4.3.0.dev (Blue Duckling: Tulip)"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
-DISTRIBUTED_DIR_STRUCTURE_FILENAME: str = "dir_structure_production.json"
 
-IANA_DUMP_FILENAME: str = "iana-domains-db.json"
-PUBLIC_SUFFIX_DUMP_FILENAME: str = "public-suffix.json"
 CONFIGURATION_FILENAME: str = ".PyFunceble.yaml"
-CONFIGURATION_OVERWRITE_FILENAME: str = ".PyFunceble.overwrite.yaml"
 ENV_FILENAME: str = ".pyfunceble-env"
-DOWN_FILENAME: str = ".pyfunceble_intern_downtime.json"
-USER_AGENT_FILENAME: str = "user_agents.json"
-IPV4_REPUTATION_FILENAME: str = "ipv4_reputation.data"
 
 # pylint: disable=line-too-long
-IANA_DUMP_LINK: str = (
-    "https://raw.githubusercontent.com/PyFunceble/iana/master/iana-domains-db.json"
-)
-PUBLIC_SUFFIX_DUMP_LINK: str = (
-    "https://raw.githubusercontent.com/PyFunceble/public-suffix/master/public-suffix.json"
-)
-USER_AGENT_DUMP_LINK: str = (
-    "https://raw.githubusercontent.com/PyFunceble/user_agents/master/user_agents.json"
-)
-IPV4_REPUTATION_DUMP_LINK: str = "https://reputation.alienvault.com/reputation.data"
 
 SHORT_REPO_LINK: str = "https://pyfunceble.github.io"
 REPO_LINK: str = "https://github.com/funilrys/PyFunceble"
-
-NOT_RESOLVED_STD_HOSTNAME: str = f"pyfunceble-{secrets.token_hex(12)}.com"
 
 IANA: Optional[dict] = {}
 PUBLIC_SUFFIX: Optional[dict] = {}
@@ -127,6 +107,7 @@ STATUS: Optional[Box] = Box(
 )
 HTTP_CODES: Optional[Box] = Box({})
 PLATFORM: Optional[Box] = Box({})
+SPECIAL_RULES: Optional[List[dict]] = []
 LINKS: Optional[Box] = Box({})
 PROXY: Optional[Box] = Box({})
 

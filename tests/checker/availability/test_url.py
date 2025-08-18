@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -159,6 +159,25 @@ class TestURLAvailabilityChecker(unittest.TestCase):
         actual_source = self.checker.status.status_source
 
         self.assertEqual(expected_source, actual_source)
+
+    def test_try_to_query_status_from_http_status_code_from_domain(self) -> None:
+        """
+        Tests the method that tries to define the status from the status code
+        of a domain.
+        """
+
+        self.checker.subject = "http://example.org"
+
+        self.checker.http_status_code_query_tool.get_status_code = (
+            lambda: self.checker.http_status_code_query_tool.STD_UNKNOWN_STATUS_CODE
+        )
+
+        self.checker.try_to_query_status_from_http_status_code(from_domain_test=True)
+
+        expected_status = None
+        actual_status = self.checker.status.status
+
+        self.assertEqual(expected_status, actual_status)
 
     @unittest.mock.patch.object(URLReputationChecker, "get_status")
     def test_try_to_query_status_from_reputation(

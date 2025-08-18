@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ from PyFunceble.converter.input_line2subject import InputLine2Subject
 
 class RPZInputLine2Subject(InputLine2Subject):
     """
-    Converts/Extracts the subject from the given RPZ inputline.
+    Converts/Extracts the subject from the given RPZ input line.
     """
 
     COMMENT: list = [";", "//", "#"]
@@ -96,9 +96,7 @@ class RPZInputLine2Subject(InputLine2Subject):
             if self.SPACE in subject or self.TAB in subject:
                 subject = subject.split()[0]
 
-                if not subject.isdigit():
-                    result.append(subject)
-            elif not subject.isdigit():
+            if not subject.isdigit():
                 result.append(subject)
 
         return result

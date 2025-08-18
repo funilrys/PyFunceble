@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -103,6 +103,9 @@ def get_configured_value(
     else:
         result = PyFunceble.facility.ConfigLoader.get_configured_value(entry)
 
+    if isinstance(result, str) and "%" in result:
+        result = result.replace("%", "%%")
+
     if negate:
         result = not result
 
@@ -131,13 +134,18 @@ def add_arguments_to_parser(
         if "dest" in opt_args:
             opt_args["dest"] = opt_args["dest"].replace(".", "__")
 
+        complete_value = opt_args.pop("complete", None)
+
         for index, value in enumerate(pos_args):
             if value.startswith("-") and "." not in value:
                 continue
 
             pos_args[index] = value.replace(".", "__")
 
-        parser.add_argument(*pos_args, **opt_args)
+        if not complete_value:
+            parser.add_argument(*pos_args, **opt_args)
+        else:
+            parser.add_argument(*pos_args, **opt_args).complete = complete_value
 
 
 def get_source_group_data() -> List[Tuple[List[str], dict]]:
@@ -185,6 +193,7 @@ def get_source_group_data() -> List[Tuple[List[str], dict]]:
                 "\nIf remote (RAW link) file is given, PyFunceble will download "
                 "it,\n and test the content of the given RAW link as if it was a"
                 " locally stored file.",
+                "complete": shtab.FILE,
             },
         ),
         (
@@ -203,6 +212,7 @@ def get_source_group_data() -> List[Tuple[List[str], dict]]:
                 " locally stored file. "
                 "\n\nThis argument test if an URL is available. It ONLY test "
                 "full URLs.",
+                "complete": shtab.FILE,
             },
         ),
     ]
@@ -463,7 +473,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "self_contained.lookup.netinfo",
                 "action": "store_true",
-                "help": "Only perform a network information (or networket "
+                "help": "Only perform a network information (or network "
                 "socket) lookup.",
             },
         ),
@@ -585,6 +595,18 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "type": str,
                 "help": "Sets the user agent to use.\n\nIf not given, we try to "
                 "get the latest (automatically) for you.",
+            },
+        ),
+        (
+            [
+                "--user-agent-reference",
+            ],
+            {
+                "dest": "user_agent.reference",
+                "type": str,
+                "help": "Sets the reference to append to the user agent.\n\n"
+                "This is useful when you want to add a reference to the "
+                "user agent. %s" % get_configured_value("user_agent.reference"),
             },
         ),
         (
@@ -821,6 +843,16 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--background-colour", "--background-color"],
+            {
+                "dest": "cli_testing.display_mode.background_colour",
+                "action": "store_true",
+                "help": "Activates or disables the background coloration to\n"
+                "STDOUT. %s"
+                % get_configured_value("cli_testing.display_mode.background_colour"),
+            },
+        ),
+        (
             ["--display-status"],
             {
                 "dest": "cli_testing.display_mode.status",
@@ -831,6 +863,16 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "Multiple space separated statuses can be given."
                 "%s" % get_configured_value("cli_testing.display_mode.status"),
                 "default": "all",
+            },
+        ),
+        (
+            ["--display-datetime-fmt"],
+            {
+                "dest": "cli_testing.display_mode.datetime_format",
+                "type": str,
+                "help": "Sets the datetime format to use when displaying the\n"
+                "datetime of the test. %s"
+                % get_configured_value("cli_testing.display_mode.datetime_format"),
             },
         ),
         (
@@ -1197,11 +1239,35 @@ def get_default_group_data() -> List[Tuple[List[str], dict]]:
                 "version": "%(prog)s " + PyFunceble.storage.PROJECT_VERSION,
             },
         ),
+        (
+            [
+                "--config-file",
+            ],
+            {
+                "dest": "config_file",
+                "type": str,
+                "help": "Sets the configuration file to use. It can be a\n"
+                "local or remote file. Please note that this configuration can be\n"
+                "overwritten by your overwrite configuration file.",
+                "complete": shtab.FILE,
+            },
+        ),
+        (
+            [
+                "--config-dir",
+            ],
+            {
+                "dest": "config_dir",
+                "type": os.path.realpath,
+                "help": "Sets the configuration directory to use.",
+                "complete": shtab.DIRECTORY,
+            },
+        ),
     ]
 
 
 def platform_parser(
-    parser: Union[argparse.ArgumentParser, argparse._SubParsersAction]
+    parser: Union[argparse.ArgumentParser, argparse._SubParsersAction],
 ) -> None:
     """
     Adds the platform group to the given parser.

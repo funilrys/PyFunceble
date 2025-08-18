@@ -507,6 +507,35 @@ class TestUserAgentDataset(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_latest_from_config_with_reference(self) -> None:
+        """
+        Tests the method which let us get the latest user agent known based
+        on the settings from the configuration file.
+
+        We also ensure that the reference is correctly appended.
+        """
+
+        given_browser = "firefox"
+        given_platform = "win10"
+        given_reference = "https://example.org"
+
+        self.config_loader.custom_config = {
+            "user_agent": {
+                "platform": given_platform,
+                "browser": given_browser,
+                "reference": given_reference,
+            }
+        }
+        self.config_loader.start()
+
+        expected = (
+            self.our_dataset[given_browser][given_platform] + "; +" + given_reference
+        )
+
+        actual = self.user_agent_dataset.get_latest()
+
+        self.assertEqual(expected, actual)
+
     def test_get_latest_from_config_custom(self) -> None:
         """
         Tests the method which let us get the latest user agent known based
@@ -517,6 +546,28 @@ class TestUserAgentDataset(unittest.TestCase):
         self.config_loader.start()
 
         expected = "Hello, World!"
+
+        actual = self.user_agent_dataset.get_latest()
+
+        self.assertEqual(expected, actual)
+
+    def test_get_latest_from_custom_config_with_reference(self) -> None:
+        """
+        Tests the method which let us get the latest user agent known based
+        on the settings from the configuration file.
+
+        In this test, we check the case that the given reference is set.
+        """
+
+        self.config_loader.custom_config = {
+            "user_agent": {
+                "custom": "Hello, World!",
+                "reference": "https://example.org",
+            }
+        }
+        self.config_loader.start()
+
+        expected = "Hello, World!; +https://example.org"
 
         actual = self.user_agent_dataset.get_latest()
 

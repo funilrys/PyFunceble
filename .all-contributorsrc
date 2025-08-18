@@ -395,9 +395,19 @@
         "ideas",
         "financial"
       ]
+    },
+    {
+      "login": "techdragon",
+      "name": "Samuel Bishop",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2115079?v=4",
+      "profile": "https://github.com/techdragon",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
-  "contributorsPerLine": 7,
+  "contributorsPerLine": 5,
   "contributorsSortAlphabetically": true,
   "linkToUsage": false
 }

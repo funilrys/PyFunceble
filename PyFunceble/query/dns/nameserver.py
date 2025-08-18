@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import ipaddress
 from typing import List, Optional, Tuple
 
 import dns.exception
@@ -79,14 +80,18 @@ class Nameservers:
 
     protocol: Optional[str] = None
 
-    domain_syntax_checker: DomainSyntaxChecker = DomainSyntaxChecker()
-    url_syntax_checker: URLSyntaxChecker = URLSyntaxChecker()
-    url2netloc: Url2Netloc = Url2Netloc()
+    domain_syntax_checker: Optional[DomainSyntaxChecker] = None
+    url_syntax_checker: Optional[URLSyntaxChecker] = None
+    url2netloc: Optional[Url2Netloc] = None
 
     def __init__(
         self, nameserver: Optional[List[str]] = None, protocol: str = "TCP"
     ) -> None:
         self.protocol = protocol
+
+        self.domain_syntax_checker = DomainSyntaxChecker()
+        self.url_syntax_checker = URLSyntaxChecker()
+        self.url2netloc = Url2Netloc()
 
         if nameserver is not None:
             self.set_nameservers(nameserver)
@@ -141,28 +146,19 @@ class Nameservers:
 
         result = []
 
-        if cls.domain_syntax_checker.set_subject(nameserver).is_valid():
-            try:
-                result.extend(
-                    [
-                        x.address
-                        for x in dns.resolver.Resolver().resolve(nameserver, "A")
-                    ]
-                )
-            except dns.exception.DNSException:
-                pass
-
-            try:
-                result.extend(
-                    [
-                        x.address
-                        for x in dns.resolver.Resolver().resolve(nameserver, "AAAA")
-                    ]
-                )
-            except dns.exception.DNSException:
-                pass
-        else:
+        try:
+            _ = ipaddress.ip_address(nameserver)
             result.append(nameserver)
+        except ValueError:
+            resolver = dns.resolver.get_default_resolver()
+
+            for record_type in ["A", "AAAA"]:
+                try:
+                    result.extend(
+                        [x.address for x in resolver.resolve(nameserver, record_type)]
+                    )
+                except dns.exception.DNSException:
+                    pass
 
         PyFunceble.facility.Logger.debug(
             "IP from nameserver (%r):\n%r", nameserver, result
@@ -197,7 +193,7 @@ class Nameservers:
         self.nameservers = []
 
         for nameserver in value:
-            if self.protocol.lower() == "https":
+            if isinstance(self.protocol, str) and self.protocol.lower() == "https":
                 if not nameserver.startswith("https://"):
                     netloc = self.url2netloc.set_data_to_convert(
                         nameserver

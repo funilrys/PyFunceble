@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -54,7 +54,6 @@ from typing import Any, Optional, Tuple
 
 import PyFunceble.cli.storage
 import PyFunceble.facility
-import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.cli.processes.workers.file_sorter_base import FileSorterWorkerBase
 
@@ -82,9 +81,14 @@ class FileSorterWorker(FileSorterWorkerBase):
         None
     """
 
-    STD_NAME: str = "pyfunceble_file_sorter_worker"
-
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
+        """
+        The producer of the worker.
+
+        :param consumed:
+            The consumed data to work with.
+        """
+
         if (
             not isinstance(consumed, dict)
             and "file" not in consumed
@@ -99,15 +103,8 @@ class FileSorterWorker(FileSorterWorkerBase):
         # Just for human brain :-)
         file = consumed["file"]
 
-        if "remove_duplicates" in consumed:
-            remove_duplicates = consumed["remove_duplicates"]
-        else:
-            remove_duplicates = True
-
-        if "write_header" in consumed:
-            write_header = consumed["write_header"]
-        else:
-            write_header = True
+        remove_duplicates = consumed.get("remove_duplicates", True)
+        write_header = consumed.get("write_header", True)
 
         self.process_file_sorting(
             file, remove_duplicates=remove_duplicates, write_header=write_header

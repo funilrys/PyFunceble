@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ class DNSRulesHandler(ExtraRuleHandlerBase):
             if not self.regex_helper.set_regex(regex).match(
                 self.status.netloc, return_match=False
             ):
-                break
+                continue
 
             for ruler, params in rulesets:
                 if self.status.status_after_extra_rules:

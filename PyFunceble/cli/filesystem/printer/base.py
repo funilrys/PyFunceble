@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ License:
 import copy
 import functools
 import string
-from typing import Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 
 class PrinterBase:
@@ -81,14 +81,15 @@ class PrinterBase:
         "minutes": 2,
         "seconds": 6,
         "registrar": 30,
+        "tested_at": 19,
     }
 
     TEMPLATES: Dict[str, string.Template] = {
         "all": string.Template(
             "$idna_subject $status $status_source $expiration_date $registrar "
-            "$http_status_code $checker_type"
+            "$http_status_code $checker_type $tested_at"
         ),
-        "less": string.Template("$idna_subject $status $status_source"),
+        "less": string.Template("$idna_subject $status $status_source $tested_at"),
         "simple": string.Template("$idna_subject $status"),
         "percentage": string.Template("$status $percentage $amount"),
         "hosts": string.Template("$ip $idna_subject"),
@@ -114,7 +115,10 @@ class PrinterBase:
         "minutes": "Minutes",
         "seconds": "Seconds",
         "registrar": "Registrar",
+        "tested_at": "Tested At",
     }
+
+    extra_formatters: Dict[str, Callable[..., Any]] = {}
 
     _template_to_use: Optional[str] = None
     _dataset: Optional[Dict[str, str]] = None
@@ -126,6 +130,7 @@ class PrinterBase:
         *,
         dataset: Optional[Dict[str, str]] = None,
         skip_column: Optional[List[str]] = None,
+        extra_formatters: Optional[Dict[str, Callable[..., Any]]] = None,
     ) -> None:
         if template_to_use is not None:
             self.template_to_use = template_to_use
@@ -135,6 +140,9 @@ class PrinterBase:
 
         if skip_column is not None:
             self.skip_column = skip_column
+
+        if extra_formatters is not None:
+            self.extra_formatters.update(extra_formatters)
 
     def ensure_template_to_use_is_given(func):  # pylint: disable=no-self-argument
         """
@@ -315,9 +323,11 @@ class PrinterBase:
                     continue
 
                 if key in self.skip_column:
-                    self.TEMPLATES[self.template_to_use].template = self.TEMPLATES[
-                        self.template_to_use
-                    ].template.replace(f"${key} ", "")
+                    self.TEMPLATES[self.template_to_use].template = (
+                        self.TEMPLATES[self.template_to_use]
+                        .template.replace(f"${key} ", "")
+                        .replace(f" ${key}", "")
+                    )
                     continue
 
                 to_print_data[0][key] = f"{value:<{self.STD_LENGTH[key]}}"
@@ -353,6 +363,9 @@ class PrinterBase:
 
             if not value and value != 0:
                 value = self.STD_UNKNOWN
+
+            if key in self.extra_formatters:
+                value = self.extra_formatters[key](value)
 
             if self.template_to_use not in ignore_length:
                 to_print[key] = f"{value:<{self.STD_LENGTH[key]}}"

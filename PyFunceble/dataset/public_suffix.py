@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,10 +50,8 @@ License:
     limitations under the License.
 """
 
-import os
-from typing import Any, List
+from typing import Any, List, Optional
 
-import PyFunceble.storage
 from PyFunceble.dataset.base import DatasetBase
 from PyFunceble.downloader.public_suffix import PublicSuffixDownloader
 
@@ -64,13 +62,11 @@ class PublicSuffixDataset(DatasetBase):
     """
 
     STORAGE_INDEX: str = "PUBLIC_SUFFIX"
-    DOWNLOADER: PublicSuffixDownloader = PublicSuffixDownloader()
+    downloader: Optional[PublicSuffixDownloader] = None
 
     def __init__(self) -> None:
-        self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
-            PyFunceble.storage.PUBLIC_SUFFIX_DUMP_FILENAME,
-        )
+        self.downloader = PublicSuffixDownloader()
+        self.source_file = self.downloader.destination
 
     def __contains__(self, value: Any) -> bool:
         if value.startswith("."):

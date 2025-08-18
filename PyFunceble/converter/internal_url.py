@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ class InternalUrlConverter(ConverterBase):
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
         """
-        Overrites the default behavior.
+        Overrides the default behavior.
 
         :raise TypeError:
             When the given data to convert is not :py:class:`str`

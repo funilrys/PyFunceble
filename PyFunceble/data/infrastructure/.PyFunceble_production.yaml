@@ -358,6 +358,11 @@ cli_testing:
     # CLI Argument: --colour | --color
     colour: yes
 
+    # Enable/Disable the printing of background colors.
+    #
+    # CLI Argument: --background-colour | --background-color
+    background_colour: yes
+
     # Set the status to display to STDOUT.
     #
     # WARNING:
@@ -376,6 +381,20 @@ cli_testing:
     #
     # CLI Argument: --max-registrar
     max_registrar: 15
+
+    # Enable/Disable the printing of the datetime of the test.
+    #
+    # CLI Argument: --display-datetime
+    datetime: no
+
+    # The format to use when displaying the datetime of the test.
+    #
+    # WARNING:
+    #   This parameter is only taken into consideration when `datetime` is set
+    #   to `yes`.
+    #
+    # CLI Argument: --display-datetime-fmt
+    datetime_format: "%Y-%m-%d %H:%M:%S"
 
   testing_mode:
     # Provides and select the testing mode.
@@ -615,6 +634,17 @@ user_agent:
   # CLI Argument: -ua | --user-agent
   custom: null
 
+  # Set the reference to add to the User-Agent.
+  # This is useful when you want to add a reference (e.g. a link) to the User-Agent.
+  #
+  # The reference will be added at the end of the User-Agent in the following format:
+  # {user_agent}; +{reference}
+  #
+  # When set to `null`, no reference will be added.
+  #
+  # CLI Argument: --user-agent-reference
+  reference: null
+
 proxy:
   # Provides everything related to the proxy usage and configuration.
   #
@@ -750,14 +780,8 @@ http_codes:
       - 510
       - 511
 
-links:
-  # Provides some of the non hard-coded URLs.
-
-  # WARNING:
-  #     The parameters listed bellow are not implemented yet as the
-  #     underlaying infrastructure will be rewritten.
-  api_date_format: "https://pyfunceble.funilrys.com/api/date-format"
-  api_no_referrer: "https://pyfunceble.funilrys.com/api/no-referrer"
+# Not Implemented yet. Reserved for future usage and implementation.
+links: {}
 
 platform:
   # Provides everything related to the platform.
@@ -833,3 +857,86 @@ platform:
   # CLI Argument: none
   checker_exclude:
     - none
+
+special_rules:
+  # Let end-user define or integrate their own special rules.
+  #
+  # The idea: We want to give the end-user the possibility to define their own
+  # rules. This is useful when they want to switch the status of a subject based
+  # on a specific pattern, header, body, or status code.
+  #
+  # The structure:
+  #    subject_pattern:
+  #      -> The pattern to match against the subject.
+  #    validation_type:
+  #      -> The type of validation to perform. It can be one of the following:
+  #         - all: A combination of everything (first match wins).
+  #         - status_code: Only the status code.
+  #         - headers: Only the headers.
+  #         - body: Only the body.
+  #         - headers+body: Match against the headers and the body.
+  #    state_transition:
+  #      -> The state to switch to when the validation is successful.
+  #         When set to `down`, the status will be switched to INACTIVE. When set
+  #         to `up`, the status will be switched to ACTIVE.
+  #    required_status_code:
+  #      -> A list of status code to match against.
+  #    required_headers_patterns:
+  #      -> A dictionary of headers to match against. The key is the header name
+  #         and the value is a list of patterns to match against.
+  #    required_body_patterns:
+  #      -> A list of patterns to match against the body.
+  #
+  # Examples:
+  #    When testing httpbin.org, we want to switch the status to down when the
+  #    status code is 403 and the server header contains "gunicorn".
+  #
+  #    - subject_pattern: "^httpbin\\.org$"
+  #      validation_type: all
+  #      state_transition: down
+  #      required_status_code:
+  #        - 403
+  #      required_headers_patterns:
+  #        server:
+  #          - gunicorn
+  #
+  #    When testing example.org, we want to switch the status to down when the
+  #    status code is 404.
+  #
+  #    - subject_pattern: "^example\\.org$"
+  #      validation_type: status_code
+  #      state_transition: down
+  #      required_status_code:
+  #        - 404
+  #
+  #    When testing example.com, we want to switch The body and headers.the status to down when the
+  #    header `server` contains `nginx`.
+  #
+  #    - subject_pattern: "^example\\.com$"
+  #      validation_type: headers
+  #      state_transition: down
+  #      required_headers_patterns:
+  #        server:
+  #          - nginx
+  #
+  #    When testing example.net, we want to switch the status to down when the
+  #    body contains "Hello, World!".
+  #
+  #    - subject_pattern: "^example\\.net$"
+  #      validation_type: body
+  #      state_transition: down
+  #      required_body_patterns:
+  #        - Hello, World!
+  #
+  #    When testing example.dev, we want to switch the status to down when the
+  #    headers server contains `nginx` or the body contains "Hello, World!".
+  #
+  #    - subject_pattern: "^example\\.dev$"
+  #      validation_type: headers+body
+  #      state_transition: down
+  #      required_headers_patterns:
+  #        server:
+  #          - nginx
+  #      required_body_patterns:
+  #        - Hello, World!
+  []

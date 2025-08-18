@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ from PyFunceble.query.record.whois import WhoisQueryToolRecord
 @dataclasses.dataclass
 class AvailabilityCheckerStatus(CheckerStatusBase):
     """
-    Provides the description of an availablity status.
+    Provides the description of an availability status.
     """
 
     # pylint: disable=too-many-instance-attributes
@@ -100,9 +100,14 @@ class AvailabilityCheckerStatus(CheckerStatusBase):
     http_status_code: Optional[int] = None
 
     def __post_init__(self) -> None:
-        self.dns_lookup_record = DNSQueryToolRecord()
-        self.whois_lookup_record = WhoisQueryToolRecord()
-        self.params = AvailabilityCheckerParams()
+        if self.dns_lookup_record is None:
+            self.dns_lookup_record = DNSQueryToolRecord()
+
+        if self.whois_lookup_record is None:
+            self.whois_lookup_record = WhoisQueryToolRecord()
+
+        if not hasattr(self, "params") or self.params is None:
+            self.params = AvailabilityCheckerParams()
 
     def is_special(self) -> bool:
         """

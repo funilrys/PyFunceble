@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -58,13 +58,12 @@ from typing import Dict, List, Optional
 
 from sqlalchemy.orm import Session
 
-import PyFunceble.checker.utils.whois
 import PyFunceble.facility
-import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
 from PyFunceble.checker.availability.extras.dns import DNSRulesHandler
 from PyFunceble.checker.availability.extras.etoxic import EToxicHandler
+from PyFunceble.checker.availability.extras.external import ExternalRulesHandler
 from PyFunceble.checker.availability.extras.rules import ExtraRulesHandler
 from PyFunceble.checker.availability.extras.subject_switch import (
     SubjectSwitchRulesHandler,
@@ -75,6 +74,7 @@ from PyFunceble.checker.base import CheckerBase
 from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
+from PyFunceble.checker.utils.whois import get_whois_dataset_object
 from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 from PyFunceble.query.http_status_code import HTTPStatusCode
@@ -175,6 +175,7 @@ class AvailabilityCheckerBase(CheckerBase):
             DNSRulesHandler(),
             EToxicHandler(),
             ExtraRulesHandler(),
+            ExternalRulesHandler(rulesets=PyFunceble.storage.SPECIAL_RULES),
         ]
         self.db_session = db_session
 
@@ -510,8 +511,11 @@ class AvailabilityCheckerBase(CheckerBase):
         self.ip_syntax_checker.subject = self.idna_subject
         self.url_syntax_checker.subject = self.idna_subject
 
-        self.status = AvailabilityCheckerStatus()
-        self.status.params = self.params
+        if self.status.subject_kind is None:
+            self.status = AvailabilityCheckerStatus()
+            self.params = AvailabilityCheckerParams()
+            self.status.params = self.params
+
         self.status.dns_lookup_record = self.dns_query_tool.lookup_record
         self.status.whois_lookup_record = self.whois_query_tool.lookup_record
 
@@ -757,9 +761,7 @@ class AvailabilityCheckerBase(CheckerBase):
         if (
             PyFunceble.facility.ConfigLoader.is_already_loaded() and self.use_whois_db
         ):  # pragma: no cover ## Not interesting enough to spend time on it.
-            whois_object = PyFunceble.checker.utils.whois.get_whois_dataset_object(
-                db_session=self.db_session
-            )
+            whois_object = get_whois_dataset_object(db_session=self.db_session)
             known_record = whois_object[self.subject]
 
             if known_record and not isinstance(known_record, dict):
@@ -785,9 +787,11 @@ class AvailabilityCheckerBase(CheckerBase):
                             "idna_subject": self.idna_subject,
                             "expiration_date": self.status.expiration_date,
                             "epoch": str(
-                                datetime.strptime(
-                                    self.status.expiration_date, "%d-%b-%Y"
-                                ).timestamp()
+                                int(
+                                    datetime.strptime(
+                                        self.status.expiration_date, "%d-%b-%Y"
+                                    ).timestamp()
+                                )
                             ),
                         }
                     )
@@ -1033,35 +1037,36 @@ class AvailabilityCheckerBase(CheckerBase):
         data = self.platform_query_tool.pull(self.idna_subject)
 
         if data and "status" in data:
-            if (
-                self.platform_query_tool.preferred_status_origin == "frequent"
-                and data["status"]["availability"]["frequent"]
-            ):
-                self.status.status = data["status"]["availability"]["frequent"]
-                self.status.status_source = "PLATFORM"
-            elif (
-                self.platform_query_tool.preferred_status_origin == "latest"
-                and data["status"]["availability"]["latest"]
-            ):
-                try:
-                    # legacy
-                    self.status.status = data["status"]["availability"]["latest"][
-                        "status"
-                    ]
-                except KeyError:
-                    self.status.status = data["status"]["availability"]["latest"]
-                self.status.status_source = "PLATFORM"
-            elif (
-                self.platform_query_tool.preferred_status_origin == "recommended"
-                and data["status"]["availability"]["recommended"]
-            ):
-                self.status.status = data["status"]["availability"]["recommended"]
-                self.status.status_source = "PLATFORM"
-
-            PyFunceble.facility.Logger.info(
-                "Could define the status of %r from: Platform Lookup",
-                self.status.idna_subject,
-            )
+            try:
+                if (
+                    self.platform_query_tool.preferred_status_origin == "frequent"
+                    and data["status"]["availability"]["frequent"]
+                ):
+                    self.status.status = data["status"]["availability"]["frequent"]
+                    self.status.status_source = "PLATFORM"
+                elif (
+                    self.platform_query_tool.preferred_status_origin == "latest"
+                    and data["status"]["availability"]["latest"]
+                ):
+                    try:
+                        # legacy
+                        self.status.status = data["status"]["availability"]["latest"][
+                            "status"
+                        ]
+                    except (KeyError, TypeError):
+                        self.status.status = data["status"]["availability"]["latest"]
+                    self.status.status_source = "PLATFORM"
+                elif (
+                    self.platform_query_tool.preferred_status_origin == "recommended"
+                    and data["status"]["availability"]["recommended"]
+                ):
+                    self.status.status = data["status"]["availability"]["recommended"]
+                    self.status.status_source = "PLATFORM"
+            except (KeyError, TypeError):
+                PyFunceble.facility.Logger.info(
+                    "Could define the status of %r from: Platform Lookup",
+                    self.status.idna_subject,
+                )
 
         PyFunceble.facility.Logger.info(
             "Finished to try to query the status of %r from: Platform Lookup",

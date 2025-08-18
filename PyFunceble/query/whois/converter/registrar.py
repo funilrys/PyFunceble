@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides our registrar extrator.
+Provides our registrar extractor.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -56,9 +56,9 @@ from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.query.whois.converter.base import ConverterBase
 
 
-class RegistarExtractor(ConverterBase):
+class RegistrarExtractor(ConverterBase):
     """
-    Provides an interface for the extration of the registrar.
+    Provides an interface for the extraction of the registrar.
     """
 
     PATTERNS: List[str] = [
@@ -72,6 +72,19 @@ class RegistarExtractor(ConverterBase):
         r"sponsoring\s+registrar(\s+|):(.*)",
         r"sponsoring\s+registrar\s+organization(\s+|):(.*)",
     ]
+
+    _regex_helper: Optional[RegexHelper] = None
+
+    @property
+    def regex_helper(self) -> "RegexHelper":
+        """
+        Provides the regex helper to use.
+        """
+
+        if self._regex_helper is None:
+            self._regex_helper = RegexHelper()
+
+        return self._regex_helper
 
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
@@ -94,7 +107,7 @@ class RegistarExtractor(ConverterBase):
             raise ValueError("<value> should not be empty.")
 
         # pylint: disable=no-member
-        super(RegistarExtractor, self.__class__).data_to_convert.fset(self, value)
+        super(RegistrarExtractor, self.__class__).data_to_convert.fset(self, value)
 
     def __get_line(self) -> Optional[str]:
         """
@@ -102,7 +115,7 @@ class RegistarExtractor(ConverterBase):
         """
 
         for regex in self.PATTERNS:
-            registrar_line = RegexHelper(r"(?i)" + regex).match(
+            registrar_line = self.regex_helper.set_regex(r"(?i)" + regex).match(
                 self.data_to_convert, return_match=True, rematch=True, group=0
             )
 

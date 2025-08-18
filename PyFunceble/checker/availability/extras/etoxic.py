@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
 
@@ -65,7 +64,7 @@ class EToxicHandler(ExtraRuleHandlerBase):
         :class:`~PyFunceble.checker.availability.status.AvailabilityCheckerStatus`
     """
 
-    MATCHES = [
+    MATCHES = (
         ".0wn0.com",
         ".123.st",
         ".1forum.biz",
@@ -283,7 +282,7 @@ class EToxicHandler(ExtraRuleHandlerBase):
         ".yoo7.com",
         ".ze-43eme.com",
         ".zxr7team.com",
-    ]
+    )
 
     @ExtraRuleHandlerBase.ensure_status_is_given
     @ExtraRuleHandlerBase.setup_status_before
@@ -295,7 +294,7 @@ class EToxicHandler(ExtraRuleHandlerBase):
         )
 
         if self.status.status_before_extra_rules == PyFunceble.storage.STATUS.up:
-            if any(self.status.netloc.endswith(x) for x in self.MATCHES):
+            if self.status.netloc.endswith(self.MATCHES):
                 self.do_on_header_match(
                     self.req_url,
                     matches={"location": [f"/{self.status.netloc}", "/search/"]},

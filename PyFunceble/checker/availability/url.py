@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,9 +51,9 @@ License:
 """
 
 import PyFunceble.facility
-import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.availability.base import AvailabilityCheckerBase
+from PyFunceble.checker.availability.params import AvailabilityCheckerParams
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.reputation.url import URLReputationChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
@@ -112,7 +112,11 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
         self.url_syntax_checker.subject = self.idna_subject
 
         self.status = AvailabilityCheckerStatus()
+        self.params = AvailabilityCheckerParams()
         self.status.params = self.params
+
+        self.status.subject_kind = "url"
+
         self.status.dns_lookup_record = self.dns_query_tool.lookup_record
         self.status.whois_lookup_record = None
 
@@ -123,6 +127,7 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
         ).get_converted()
 
         self.status.status = None
+        self.status.status_source = None
 
         self.query_common_checker()
 

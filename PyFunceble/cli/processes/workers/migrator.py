@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -53,8 +53,6 @@ License:
 import traceback
 
 import PyFunceble.facility
-import PyFunceble.factory
-import PyFunceble.storage
 from PyFunceble.cli.processes.workers.base import WorkerBase
 
 
@@ -65,9 +63,11 @@ class MigratorWorker(WorkerBase):
     to handle the mining of dataset to test.
     """
 
-    STD_NAME: str = "pyfunceble_migrator_worker"
-
     def run(self) -> None:
+        """
+        This is the brain of the worker.
+        """
+
         try:
             try:
                 self.target(self.continuous_integration, db_session=self.db_session)

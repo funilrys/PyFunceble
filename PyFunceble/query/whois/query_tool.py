@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides our interface for quering the WHOIS Record of a given subject.
+Provides our interface for querying the WHOIS Record of a given subject.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ from typing import Optional, Union
 from PyFunceble.dataset.iana import IanaDataset
 from PyFunceble.query.record.whois import WhoisQueryToolRecord
 from PyFunceble.query.whois.converter.expiration_date import ExpirationDateExtractor
-from PyFunceble.query.whois.converter.registrar import RegistarExtractor
+from PyFunceble.query.whois.converter.registrar import RegistrarExtractor
 
 # pylint: disable=protected-access
 
@@ -71,7 +71,7 @@ class WhoisQueryTool:
     STD_PORT: int = 43
 
     expiration_date_extractor: Optional[ExpirationDateExtractor] = None
-    registrar_extractor: Optional[RegistarExtractor] = None
+    registrar_extractor: Optional[RegistrarExtractor] = None
     iana_dataset: Optional[IanaDataset] = None
 
     _subject: Optional[str] = None
@@ -90,7 +90,7 @@ class WhoisQueryTool:
         server: Optional[str] = None,
         query_timeout: Optional[float] = None,
     ) -> None:
-        self.registrar_extractor = RegistarExtractor()
+        self.registrar_extractor = RegistrarExtractor()
         self.expiration_date_extractor = ExpirationDateExtractor()
         self.iana_dataset = IanaDataset()
 
@@ -297,7 +297,7 @@ class WhoisQueryTool:
             raise TypeError(f"<value> should be {int} or {float}, {type(value)} given.")
 
         if value < 0:
-            raise ValueError(f"<value> ({value!r}) should be less than 0.")
+            raise ValueError(f"<value> ({value!r}) should not be less than 0.")
 
         self._query_timeout = float(value)
 
@@ -365,10 +365,11 @@ class WhoisQueryTool:
         else:
             extension = self.subject
 
-        extension = extension[extension.rfind(".") + 1 :]
+        extension = extension.rsplit(".", 1)[-1]
 
         return self.iana_dataset.get_whois_server(extension)
 
+    @update_lookup_record
     def get_lookup_record(
         self,
     ) -> Optional[WhoisQueryToolRecord]:
@@ -418,24 +419,21 @@ class WhoisQueryTool:
                         if not data:
                             break
 
-                    req.close()
-
-                    try:
-                        self.lookup_record.record = self._record = response.decode()
-                    except UnicodeDecodeError:
-                        # Note: Because we don't want to deal with other issue, we
-                        # decided to use `replace` in order to automatically replace
-                        # all non utf-8 encoded characters.
-                        self.lookup_record.record = self._record = response.decode(
-                            "utf-8", "replace"
-                        )
+                    # Note: Because we don't want to deal with other issue, we
+                    # decided to use `replace` in order to automatically replace
+                    # all non utf-8 encoded characters.
+                    self.lookup_record.record = self._record = response.decode(
+                        "utf-8", "replace"
+                    )
                 except socket.error:
                     pass
+                finally:
+                    req.close()
 
             if self.lookup_record.record is None or not self.lookup_record.record:
                 self.lookup_record.record = self._record = ""
                 self.lookup_record.expiration_date = self._expiration_date = ""
-                self.lookup_record.registrar = self._record = ""
+                self.lookup_record.registrar = self._registrar = ""
             else:
                 self.lookup_record.expiration_date = self.expiration_date
                 self.lookup_record.registrar = self.registrar

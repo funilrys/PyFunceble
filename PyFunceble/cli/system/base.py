@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ class SystemBase:
             self.args = args
 
     def ensure_args_is_given(
-        func: Callable[["SystemBase"], "SystemBase"]
+        func: Callable[["SystemBase"], "SystemBase"],
     ):  # pylint: disable=no-self-argument
         """
         Ensures that the :code:`self.args` attribute is given before launching

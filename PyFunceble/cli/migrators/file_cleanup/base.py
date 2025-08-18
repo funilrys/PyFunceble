@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.helpers.file import FileHelper
 
 
-class FileClenupMigratorBase(MigratorBase):
+class FileCleanupMigratorBase(MigratorBase):
     """
     Provides the base of all file cleanup related migration classes.
     """
@@ -85,7 +85,7 @@ class FileClenupMigratorBase(MigratorBase):
         return wrapper
 
     @ensure_source_file_is_given
-    def migrate(self) -> "FileClenupMigratorBase":
+    def migrate(self) -> "FileCleanupMigratorBase":
         """
         Provides the migrator (itself)
         """
@@ -98,7 +98,7 @@ class FileClenupMigratorBase(MigratorBase):
         if self.print_action_to_stdout:
             print_single_line()
 
-    def start(self) -> "FileClenupMigratorBase":
+    def start(self) -> "FileCleanupMigratorBase":
         """
         Starts the migration and everything related to it.
         """

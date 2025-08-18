@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -53,7 +53,6 @@ License:
 import ipaddress
 
 from PyFunceble.checker.base import CheckerBase
-from PyFunceble.helpers.regex import RegexHelper
 
 
 class IPv4SyntaxChecker(CheckerBase):
@@ -121,19 +120,17 @@ class IPv4SyntaxChecker(CheckerBase):
         Validate the given subject.
         """
 
-        try:
+        for method in (
+            ipaddress.ip_address,
+            ipaddress.ip_interface,
+            lambda x: ipaddress.ip_network(x, strict=False),
+        ):
             try:
-                return ipaddress.ip_address(self.idna_subject).version == 4
+                return method(self.idna_subject).version == 4
             except ValueError:
-                try:
-                    return ipaddress.ip_interface(self.idna_subject).version == 4
-                except ValueError:
-                    return (
-                        ipaddress.ip_network(self.idna_subject, strict=False).version
-                        == 4
-                    )
-        except ValueError:
-            return False
+                continue
+
+        return False
 
     @CheckerBase.ensure_subject_is_given
     def is_valid_range(self) -> bool:
@@ -163,7 +160,7 @@ class IPv4SyntaxChecker(CheckerBase):
                     or address.is_loopback
                     or address.is_link_local
                     or not address.is_global
-                    or RegexHelper(self._get_regex_reserved_ip()).match(
+                    or self.regex_helper.set_regex(self._get_regex_reserved_ip()).match(
                         self.idna_subject, return_match=False
                     )
                 )

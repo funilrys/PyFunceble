@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -94,7 +94,10 @@ class SyntaxCheckerBase(CheckerBase):
             You are not invited to run this method directly.
         """
 
-        self.status = SyntaxCheckerStatus()
+        if self.status.subject_kind is None:
+            self.status = SyntaxCheckerStatus()
+            self.params = SyntaxCheckerParams()
+            self.status.params = self.params
 
         return super().subject_propagator()
 

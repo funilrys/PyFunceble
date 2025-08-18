@@ -1,0 +1,179 @@
+name: Bug Report
+description: Report a but or issue.
+title: BUG | My Awesome Bug
+labels:
+  - bug
+projects:
+  - funilrys/6
+assignees:
+  - funilrys
+body:
+  - type: markdown
+    attributes:
+      value: |+
+        Thanks for taking the time to fill out this bug report!
+
+        Please be patient and rest assured that we will get back to you as soon as possible.
+        To help us understand and reproduce the issue, please provide as much information as possible.
+
+        If you have a question or need help, please ask in our [Discussions](https://github.com/funilrys/PyFunceble/discussions) section.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is the problem you are experiencing?
+      description: Please describe the problem you are experiencing.
+      placeholder: |
+        I am experiencing a problem where...
+      value: |
+        I am experiencing a problem where...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How can we reproduce the problem?
+      description: Please describe how we can reproduce the problem.
+      placeholder: |
+        To reproduce the problem:
+
+        1.
+        2.
+        3.
+        4.
+      value: |
+        To reproduce the problem:
+
+        1.
+        2.
+        3.
+        4.
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Do you have a screenshot?
+      description: |
+        If applicable to the problem, please provide some screenshots to help explain the problem.
+      placeholder: |
+        <details><summary>Screenshot</summary>
+
+
+        </details>
+      value: |
+        <details><summary>Screenshot</summary>
+        </details>
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      description: Please describe what you expected to happen.
+      placeholder: |
+        I expected that...
+      value: |
+        I expected that...
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Is there a workaround?
+      description: Please describe if there is a workaround.
+      placeholder: |
+        I found a workaround...
+      value: |
+        I found a workaround...
+    validations:
+      required: false
+
+  - type: textarea
+    id: configuration
+    attributes:
+      label: How did you configure PyFunceble?
+      description: |
+        Please provide a representation of the non-default configuration you used or the content of your `.PyFunceble.overwrite.yaml` file.
+      placeholder: |
+        ```yaml
+        # .PyFunceble.overwrite.yaml
+
+        # Your configuration here.
+        ```
+      value: |
+        ```yaml
+        .PyFunceble.overwrite.yaml
+
+        # Your configuration here
+        ```
+    validations:
+      required: false
+
+  - type: dropdown
+    id: OS
+    attributes:
+      label: Which Operating System did you use?
+      description: |
+        Please select the operating system you used.
+      multiple: true
+      options:
+        - Arch Linux
+        - Debian 12
+        - Debian 11
+        - Debian 10
+        - Ubuntu 24.04 LTS
+        - Ubuntu 23.10
+        - Ubuntu 22.04 LTS
+        - Ubuntu 20.04 LTS
+        - Linux Other
+        - Unix or *BSD like OS
+        - MacOS
+        - Windows 10
+        - Windows 11
+        - Windows Server 2016
+        - Windows Server 2019
+        - Windows Server 2022
+    validations:
+      required: false
+
+  - type: dropdown
+    id: python_version
+    attributes:
+      label: Which Python Version did you use?
+      description: |
+        Please select the Python version you used.
+      multiple: true
+      options:
+        - "3.9"
+        - "3.10"
+        - "3.11"
+        - "3.12"
+        - "3.13"
+    validations:
+      required: false
+
+  - type: input
+    id: pyFunceble_version
+    attributes:
+      label: Which PyFunceble Version did you use?
+      description: |
+        Please provides the output of the `pyfunceble --version` command.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Please provide any additional context related to the problem.
+      placeholder: |
+        I would like to add...
+      value: |
+        I would like to add...
+    validations:
+      required: false

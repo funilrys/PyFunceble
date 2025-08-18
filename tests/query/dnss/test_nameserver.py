@@ -251,19 +251,6 @@ class TestNameserver(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_get_ip_from_nameserver_not_valid_domain(self) -> None:
-        """
-        Tests the method which let us get the IP from a nameserver for the
-        case that a private domain is given.
-        """
-
-        given = "example.funilrys"
-
-        expected = ["example.funilrys"]
-        actual = self.nameserver_provider.get_ip_from_nameserver(given)
-
-        self.assertEqual(expected, actual)
-
     @unittest.mock.patch.object(dns.resolver.Resolver, "resolve")
     def test_set_nameservers(self, resolver_patch) -> None:
         """

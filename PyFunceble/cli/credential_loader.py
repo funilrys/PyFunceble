@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 
 class CredentialLoader:
     """
-    Provides our creadential loader.
+    Provides our credentials loader.
 
     The idea is to have an interface which provides the credential to use
     but at the same time load and initiate the credential interface after
@@ -123,7 +123,7 @@ class CredentialLoader:
         Otherwise, apply the given :code:`default`.
         """
 
-        def inner_metdhod(func):
+        def inner_method(func):
             @functools.wraps(func)
             def wrapper(self, *args, **kwargs):
                 if self.authorized:
@@ -132,7 +132,7 @@ class CredentialLoader:
 
             return wrapper
 
-        return inner_metdhod
+        return inner_method
 
     def start_if_not_started(func):  # pylint: disable=no-self-argument
         """
@@ -248,9 +248,7 @@ class CredentialLoader:
         else:
             user_input = input(message)
 
-        if user_input:
-            return user_input
-        return default
+        return user_input or default
 
     @execute_if_authorized(None)
     @ensure_db_type_is_given

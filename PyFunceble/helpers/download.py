@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -65,13 +65,29 @@ class DownloadHelper:
     Simplification of the downloads.
 
     :param str url:
-    :param int retry:
+    :param int retries:
         The number of time we have to retry before raising an exception.
+    :param bool certificate_validation:
+        The state of the certificate validation.
+    :param bool own_proxy_handler:
+        Whether we should use our own proxy handler or not.
+    :param dict proxies:
+        The proxy to use.
+
+        When :code:`own_proxy_handler` is set to :code:`True`, the proxies
+        are expected to come from the global configuration.
+        Otherwise, the proxies are expected to be a dictionary as defined
+        by the requests library.
     """
 
     _url: Optional[str] = None
     _certificate_validation: bool = True
     _retries: int = 3
+    _proxies: Optional[dict] = None
+
+    _session = None
+    _own_proxy_handler: Optional[bool] = True
+    _proxies: Optional[dict] = None
 
     def __init__(
         self,
@@ -79,15 +95,42 @@ class DownloadHelper:
         *,
         certificate_validation: bool = True,
         retries: int = 3,
+        own_proxy_handler: Optional[bool] = True,
+        proxies: Optional[dict] = None,
     ) -> None:
-        if url:
+        if url is not None:
             self.url = url
 
-        if certificate_validation:
-            self.certificate_validation = certificate_validation
+        if proxies is not None:
+            self.proxies = proxies
 
-        if retries:
-            self.retries = retries
+        self.retries = retries
+        self.certificate_validation = bool(certificate_validation)
+        self.own_proxy_handler = own_proxy_handler
+
+    @property
+    def session(self) -> requests.Session:
+        """
+        Provides the current state of the :code:`_session` attribute.
+        """
+
+        if not self._session:
+            if self.own_proxy_handler:
+                # pylint: disable=import-outside-toplevel
+                from PyFunceble.query.requests.requester import Requester
+
+                self._session = Requester(proxy_pattern=self.proxies)
+            else:
+                self._session = requests.Session()
+                self._session.proxies = self.proxies
+
+                retries = Retry(total=self.retries, backoff_factor=3)
+                adapter = HTTPAdapter(max_retries=retries)
+
+                self._session.mount("http://", adapter)
+                self._session.mount("https://", adapter)
+
+        return self._session
 
     @property
     def url(self) -> Optional[str]:
@@ -208,7 +251,103 @@ class DownloadHelper:
 
         return self
 
-    def download_text(self, *, destination: Optional[str] = None) -> str:
+    @property
+    def own_proxy_handler(self) -> Optional[bool]:
+        """
+        Provides the current state of the :code:`own_proxy_handler` attribute.
+        """
+
+        return self._own_proxy_handler
+
+    @own_proxy_handler.setter
+    def own_proxy_handler(self, value: bool) -> None:
+        """
+        Sets the state of the own proxy handler.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`bool`.
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._own_proxy_handler = value
+
+        if value:
+            # We force the recreation of the session.
+            self._session = None
+
+    def set_own_proxy_handler(self, value: bool) -> "DownloadHelper":
+        """
+        Sets the state of the own proxy handler.
+
+        :param value:
+            The value to set.
+        """
+
+        self.own_proxy_handler = value
+
+        return self
+
+    @property
+    def proxies(self) -> Optional[dict]:
+        """
+        Provides the current state of the :code:`_proxies` attribute.
+        """
+
+        return self._proxies
+
+    @proxies.setter
+    def proxies(self, value: Optional[dict]) -> None:
+        """
+        Sets the proxy to use.
+
+        :param value:
+            The proxy to use.
+
+            When :code:`own_proxy_handler` is set to :code:`True`, the proxies
+            are expected to come from the global configuration.
+            Otherwise, the proxies are expected to be a dictionary as defined
+            by the requests library.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`dict`.
+        """
+
+        if not isinstance(value, dict):
+            raise TypeError(f"<value> should be {dict}, {type(value)} given.")
+
+        self._proxies = value
+
+        if value:
+            # We force the recreation of the session.
+            self._session = None
+
+    def set_proxies(self, value: Optional[dict]) -> "DownloadHelper":
+        """
+        Sets the proxy to use.
+
+        :param value:
+            The proxy to use.
+
+            When :code:`own_proxy_handler` is set to :code:`True`, the proxies
+            are expected to come from the global configuration.
+            Otherwise, the proxies are expected to be a dictionary as defined
+            by the requests library.
+        """
+
+        self.proxies = value
+
+        return self
+
+    def download_text(
+        self,
+        *,
+        destination: Optional[str] = None,
+    ) -> str:
         """
         Download the body of the set url.
 
@@ -224,28 +363,21 @@ class DownloadHelper:
         :raise UnableToDownload: When could not unable to download the URL.
         """
 
-        session = requests.Session()
+        try:
+            req = self.session.get(self.url, verify=self.certificate_validation)
 
-        retries = Retry(total=self.retries, backoff_factor=3)
-        adapter = HTTPAdapter(max_retries=retries)
+            if req.status_code == 200:
+                response = req.text
 
-        session.mount("http://", adapter)
-        session.mount("https://", adapter)
+                if destination and isinstance(destination, str):
+                    FileHelper(destination).write(req.text, overwrite=True)
 
-        req = session.get(self.url, verify=self.certificate_validation)
+                return response
 
-        if req.status_code == 200:
-            response = req.text
-
-            if destination and isinstance(destination, str):
-                FileHelper(destination).write(req.text, overwrite=True)
-
-            adapter.close()
-            req.close()
-            return response
-
-        adapter.close()
-        session.close()
-        raise PyFunceble.helpers.exceptions.UnableToDownload(
-            f"{req.url} (retries: {self.retries} | status code: {req.status_code})"
-        )
+            raise PyFunceble.helpers.exceptions.UnableToDownload(
+                f"{req.url} (retries: {self.retries} | status code: {req.status_code})"
+            )
+        except requests.exceptions.RequestException as exception:
+            raise PyFunceble.helpers.exceptions.UnableToDownload(
+                f"{self.url} (could not resolve?)"
+            ) from exception

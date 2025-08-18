@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -56,17 +56,18 @@ from typing import Callable, Dict, List, Optional, Union
 
 import requests
 
-import PyFunceble.factory
+import PyFunceble.storage
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.query.dns.query_tool import DNSQueryTool
+from PyFunceble.query.requests.requester import Requester
 
 
 class ExtraRuleHandlerBase:
     """
     Provides the base of all extra rules handler.
 
-    :param statatus:
+    :param status:
         The previously gathered status.
     :type status:
         :class:`~PyFunceble.checker.availability.status.AvailabilityCheckerStatus`
@@ -76,18 +77,19 @@ class ExtraRuleHandlerBase:
     req: Optional[requests.Response] = None
     dns_query_tool: Optional[DNSQueryTool] = None
     regex_helper: Optional[RegexHelper] = None
+    requester: Optional[Requester] = None
 
     def __init__(self, status: Optional[AvailabilityCheckerStatus] = None) -> None:
         if status is not None:
             self.status = status
 
-        # Be sure that all settings are loaded proprely!!
-        PyFunceble.factory.Requester.guess_all_settings()
+        self.requester = Requester(config=PyFunceble.storage.CONFIGURATION)
+
         self.dns_query_tool = DNSQueryTool()
         self.regex_helper = RegexHelper()
 
     def ensure_status_is_given(
-        func: Callable[..., "ExtraRuleHandlerBase"]
+        func: Callable[..., "ExtraRuleHandlerBase"],
     ):  # pylint: disable=no-self-argument
         """
         Ensures that the status is given before running the decorated method.
@@ -109,7 +111,7 @@ class ExtraRuleHandlerBase:
         return wrapper
 
     def setup_status_before(
-        func: Callable[..., "ExtraRuleHandlerBase"]
+        func: Callable[..., "ExtraRuleHandlerBase"],
     ):  # pylint: disable=no-self-argument
         """
         Ensures that the status is given before running the decorated method.
@@ -128,7 +130,7 @@ class ExtraRuleHandlerBase:
         return wrapper
 
     def setup_status_after(
-        func: Callable[..., "ExtraRuleHandlerBase"]
+        func: Callable[..., "ExtraRuleHandlerBase"],
     ):  # pylint: disable=no-self-argument
         """
         Ensures that the status is given before running the decorated method.
@@ -165,7 +167,7 @@ class ExtraRuleHandlerBase:
         Provides a viable request URL.
         """
 
-        if any(self.status.idna_subject.startswith(x) for x in ("http:", "https:")):
+        if self.status.idna_subject.startswith(("http:", "https:")):
             return self.status.idna_subject
         return f"http://{self.status.idna_subject}:80"
 
@@ -175,7 +177,7 @@ class ExtraRuleHandlerBase:
         Provides a viable request URL that default to an HTTPS URL.
         """
 
-        if any(self.status.idna_subject.startswith(x) for x in ("http:", "https:")):
+        if self.status.idna_subject.startswith(("http:", "https:")):
             return self.status.idna_subject
         return f"https://{self.status.idna_subject}:443"
 
@@ -224,12 +226,10 @@ class ExtraRuleHandlerBase:
         Do a request and store its response into the `req` attribute.
 
         :param bool allow_redirects:
-            Whether we shoold follow the redirection - or not.
+            Whether we should follow the redirection - or not.
         """
 
-        self.req = PyFunceble.factory.Requester.get(
-            self.req_url, allow_redirects=allow_redirects
-        )
+        self.req = self.requester.get(self.req_url, allow_redirects=allow_redirects)
 
         return self
 
@@ -272,18 +272,18 @@ class ExtraRuleHandlerBase:
                 method()
 
         try:
-            req = PyFunceble.factory.Requester.get(url, allow_redirects=allow_redirects)
+            req = self.requester.get(url, allow_redirects=allow_redirects)
 
             if match_mode == "regex":
                 handle_regex_match_mode(req)
             else:
                 handle_string_match_mode(req)
         except (
-            PyFunceble.factory.Requester.exceptions.RequestException,
-            PyFunceble.factory.Requester.exceptions.InvalidURL,
-            PyFunceble.factory.Requester.exceptions.Timeout,
-            PyFunceble.factory.Requester.exceptions.ConnectionError,
-            PyFunceble.factory.Requester.urllib3_exceptions.InvalidHeader,
+            self.requester.exceptions.RequestException,
+            self.requester.exceptions.InvalidURL,
+            self.requester.exceptions.Timeout,
+            self.requester.exceptions.ConnectionError,
+            self.requester.urllib3_exceptions.InvalidHeader,
             socket.timeout,
         ):
             pass
@@ -328,7 +328,7 @@ class ExtraRuleHandlerBase:
         def handle_regex_match_mode(_req: requests.Response):
             matches2search_result = {}
 
-            for header, loc_matches in matches:
+            for header, loc_matches in matches.items():
                 matches2search_result[header] = False
 
                 if header not in _req.headers:
@@ -363,18 +363,18 @@ class ExtraRuleHandlerBase:
                 method()
 
         try:
-            req = PyFunceble.factory.Requester.get(url, allow_redirects=allow_redirects)
+            req = self.requester.get(url, allow_redirects=allow_redirects)
 
             if match_mode == "regex":
                 handle_regex_match_mode(req)
             else:
                 handle_string_match_mode(req)
         except (
-            PyFunceble.factory.Requester.exceptions.RequestException,
-            PyFunceble.factory.Requester.exceptions.InvalidURL,
-            PyFunceble.factory.Requester.exceptions.Timeout,
-            PyFunceble.factory.Requester.exceptions.ConnectionError,
-            PyFunceble.factory.Requester.urllib3_exceptions.InvalidHeader,
+            self.requester.exceptions.RequestException,
+            self.requester.exceptions.InvalidURL,
+            self.requester.exceptions.Timeout,
+            self.requester.exceptions.ConnectionError,
+            self.requester.urllib3_exceptions.InvalidHeader,
             socket.timeout,
         ):
             pass

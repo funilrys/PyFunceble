@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,7 +51,6 @@ License:
 """
 
 from PyFunceble.checker.syntax.domain_base import DomainSyntaxCheckerBase
-from PyFunceble.helpers.regex import RegexHelper
 
 
 class SubDomainSyntaxChecker(DomainSyntaxCheckerBase):
@@ -89,19 +88,19 @@ class SubDomainSyntaxChecker(DomainSyntaxCheckerBase):
 
         if subject_without_suffix:
             if suffix.count(".") >= 2:
-                return RegexHelper(self.REGEX_VALID_SUBDOMAIN).match(
+                return self.regex_helper.set_regex(self.REGEX_VALID_SUBDOMAIN).match(
                     subject_without_extension, return_match=False
                 )
 
             if "." in subject_without_suffix:
-                return RegexHelper(self.REGEX_VALID_SUBDOMAIN).match(
+                return self.regex_helper.set_regex(self.REGEX_VALID_SUBDOMAIN).match(
                     self.idna_subject, return_match=False
                 )
 
             return False
 
         if "." in subject_without_extension:
-            return RegexHelper(self.REGEX_VALID_SUBDOMAIN).match(
+            return self.regex_helper.set_regex(self.REGEX_VALID_SUBDOMAIN).match(
                 subject_without_extension, return_match=False
             )
 

@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides a way to provides the nameserver to use.
+Provides a way to provide the nameserver to use.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-import functools
 from typing import List, Optional, Union
 
 import dns.resolver
@@ -70,83 +69,113 @@ class Resolver:
 
     STD_TIMEOUT: float = 5.0
 
-    timeout: float = 3.0
+    _timeout: float = 3.0
 
-    nameservers: Nameservers = Nameservers()
-    internal_resolver: Optional[dns.resolver.Resolver] = None
+    _nameservers: Nameservers = None
+    _internal_resolver: Optional[dns.resolver.Resolver] = None
 
     def __init__(
         self, nameservers: Optional[List[str]] = None, timeout: Optional[float] = None
     ) -> None:
+        self._nameservers = Nameservers()
+
         if nameservers is not None:
-            self.set_nameservers(nameservers)
+            self.nameservers = nameservers
         else:
             self.nameservers.guess_and_set_nameservers()
 
         if timeout is not None:
-            self.set_timeout(timeout)
+            self.timeout = timeout
         else:
             self.guess_and_set_timeout()
 
-    def configure_resolver(func):  # pylint: disable=no-self-argument
+    @property
+    def resolver(self) -> dns.resolver.Resolver:
         """
-        Configures the resolvers after calling the decorated method.
+        Provides the resolver to work with.
         """
 
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):
-            result = func(self, *args, **kwargs)  # pylint: disable=not-callable
+        if not self._internal_resolver:
+            if self.get_raw_nameservers():
+                self._internal_resolver = dns.resolver.Resolver(configure=False)
+            else:  # pragma: no cover ## I don't want to play with the default resolver.
+                self._internal_resolver = dns.resolver.Resolver()
 
-            self.internal_resolver.lifetime = self.timeout + 2.0
-            self.internal_resolver.timeout = self.timeout
-            self.internal_resolver.nameservers = self.nameservers.get_nameservers()
-            self.internal_resolver.nameserver_ports = (
-                self.nameservers.get_nameserver_ports()
-            )
+            self._internal_resolver.lifetime = self.timeout + 2.0
+            self._internal_resolver.timeout = self.timeout
+            self._internal_resolver.nameservers = self.get_raw_nameservers()
+            self._internal_resolver.nameserver_ports = self.get_raw_nameserver_ports()
 
-            return result
+        return self._internal_resolver
 
-        return wrapper
+    @property
+    def nameservers(self) -> Nameservers:
+        """
+        Provides the nameservers to use.
+        """
+
+        return self._nameservers
+
+    @nameservers.setter
+    def nameservers(self, value: List[str]) -> None:
+        """
+        Sets the nameservers to use.
+        """
+
+        self.nameservers.set_nameservers(value)
+        self._internal_resolver = None  # Invalidate
 
     def set_nameservers(self, value: List[str]) -> "Resolver":
         """
         Sets the given nameserver.
         """
 
-        self.nameservers.set_nameservers(value)
+        self.nameservers = value
+
+        return self
+
+    @property
+    def timeout(self) -> float:
+        """
+        Provides the timeout to use.
+        """
+
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, value: float) -> None:
+        """
+        Sets the timeout to use.
+        """
+
+        if not isinstance(value, (float, int)):
+            raise TypeError(f"<value> should be {float}, {type(value)} given.")
+
+        self._timeout = float(value)
+        self._internal_resolver = None  # Invalidate
 
     def set_timeout(self, value: Union[float, int]) -> "Resolver":
         """
         Sets the timeout of a query.
         """
 
-        if not isinstance(value, (float, int)):
-            raise TypeError(f"<value> should be {float}, {type(value)} given.")
-
-        self.timeout = float(value)
+        self.timeout = value
 
         return self
 
-    def get_nameservers(self) -> Optional[List[str]]:
+    def get_raw_nameservers(self) -> Optional[List[str]]:
         """
         Provides the currently set list of nameserver.
         """
 
         return self.nameservers.get_nameservers()
 
-    def get_nameserver_ports(self) -> Optional[dict]:
+    def get_raw_nameserver_ports(self) -> Optional[dict]:
         """
         Provides the currently set list of nameserver ports.
         """
 
         return self.nameservers.get_nameserver_ports()
-
-    def get_timeout(self) -> Optional[float]:
-        """
-        Provides the currently set query timeout.
-        """
-
-        return self.timeout
 
     def guess_and_set_timeout(self) -> "Resolver":
         """
@@ -154,9 +183,9 @@ class Resolver:
         """
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            self.set_timeout(float(PyFunceble.storage.CONFIGURATION.lookup.timeout))
+            self.timeout = PyFunceble.storage.CONFIGURATION.lookup.timeout
         else:
-            self.set_timeout(self.STD_TIMEOUT)
+            self.timeout = self.STD_TIMEOUT
 
         return self
 
@@ -176,19 +205,3 @@ class Resolver:
             getattr(self, method)()
 
         return self
-
-    @configure_resolver
-    def get_resolver(self) -> dns.resolver.Resolver:
-        """
-        Provides the resolver to work with.
-        """
-
-        if self.internal_resolver:
-            return self.internal_resolver
-
-        if self.nameservers.get_nameservers():
-            self.internal_resolver = dns.resolver.Resolver(configure=False)
-        else:  # pragma: no cover ## I don't want to play with the default resolver.
-            self.internal_resolver = dns.resolver.Resolver()
-
-        return self.internal_resolver

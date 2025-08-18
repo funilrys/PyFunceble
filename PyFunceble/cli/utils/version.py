@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -64,6 +64,7 @@ from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.converter.internal_url import InternalUrlConverter
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.download import DownloadHelper
+from PyFunceble.helpers.exceptions import UnableToDownload
 from PyFunceble.utils.version import VersionUtility
 
 
@@ -72,14 +73,24 @@ def get_upstream_version() -> Box:
     Provides the state of the upstream version.
     """
 
+    try:
+        response = DownloadHelper(
+            InternalUrlConverter(
+                PyFunceble.cli.storage.VERSION_DUMP_LINK,
+            ).get_converted(),
+            own_proxy_handler=True,
+            proxies=PyFunceble.storage.PROXY,
+            certificate_validation=(
+                PyFunceble.storage.CONFIGURATION.verify_ssl_certificate
+                if PyFunceble.storage.CONFIGURATION
+                else True
+            ),
+        ).download_text()
+    except UnableToDownload:
+        response = "{}"
+
     return Box(
-        DictHelper().from_yaml(
-            DownloadHelper(
-                InternalUrlConverter(
-                    PyFunceble.cli.storage.VERSION_DUMP_LINK
-                ).get_converted()
-            ).download_text()
-        ),
+        DictHelper().from_yaml(response),
         frozen_box=True,
     )
 
@@ -346,16 +357,17 @@ def print_central_messages(check_force_update: bool = False) -> None:
 
     upstream_version = get_upstream_version()
 
-    if check_force_update:
-        handle_force_update(upstream_version)
+    if upstream_version:
+        if check_force_update:
+            handle_force_update(upstream_version)
 
-    _ = (
-        not handle_deprecated_version(upstream_version)
-        and not handle_greater_version(upstream_version)
-        and not handle_older_version(upstream_version)
-    )
+        _ = (
+            not handle_deprecated_version(upstream_version)
+            and not handle_greater_version(upstream_version)
+            and not handle_older_version(upstream_version)
+        )
 
-    handle_messages(upstream_version)
+        handle_messages(upstream_version)
 
     prefix = " - " if len(PyFunceble.cli.storage.EXTRA_MESSAGES) > 1 else ""
 

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -55,9 +55,9 @@ import socket
 from typing import Optional, Union
 
 import PyFunceble.facility
-import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.converter.url2netloc import Url2Netloc
+from PyFunceble.query.requests.requester import Requester
 
 
 class HTTPStatusCode:
@@ -75,6 +75,7 @@ class HTTPStatusCode:
     _verify_certificate: bool = True
     _allow_redirects: bool = False
     _url2netloc: Optional[Url2Netloc] = None
+    requester: Optional[Requester] = None
 
     def __init__(
         self,
@@ -103,6 +104,7 @@ class HTTPStatusCode:
             self.allow_redirects = self.STD_ALLOW_REDIRECTS
 
         self._url2netloc = Url2Netloc()
+        self.requester = Requester(config=PyFunceble.storage.CONFIGURATION)
 
     def ensure_subject_is_given(func):  # pylint: disable=no-self-argument
         """
@@ -334,7 +336,7 @@ class HTTPStatusCode:
         """  # pylint: disable=line-too-long
 
         try:
-            req = PyFunceble.factory.Requester.get(
+            req = self.requester.get(
                 self.subject,
                 timeout=self.timeout,
                 verify=self.verify_certificate,
@@ -363,12 +365,12 @@ class HTTPStatusCode:
 
             return req.status_code
         except (
-            PyFunceble.factory.Requester.exceptions.RequestException,
-            PyFunceble.factory.Requester.exceptions.InvalidSchema,
-            PyFunceble.factory.Requester.exceptions.InvalidURL,
-            PyFunceble.factory.Requester.exceptions.MissingSchema,
+            self.requester.exceptions.RequestException,
+            self.requester.exceptions.InvalidSchema,
+            self.requester.exceptions.InvalidURL,
+            self.requester.exceptions.MissingSchema,
             socket.timeout,
-            PyFunceble.factory.Requester.urllib3_exceptions.InvalidHeader,
+            self.requester.urllib3_exceptions.InvalidHeader,
         ):
             pass
 

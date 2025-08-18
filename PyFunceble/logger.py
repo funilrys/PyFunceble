@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -112,6 +112,7 @@ class Logger:
     fatal_logger: Optional[logging.Logger] = None
     critical_logger: Optional[logging.Logger] = None
     sqlalchemy_logger: Optional[logging.Logger] = None
+    extensions_logger: Optional[logging.Logger] = None
 
     env_var_helper: EnvironmentVariableHelper = EnvironmentVariableHelper()
 
@@ -311,7 +312,7 @@ class Logger:
     @staticmethod
     def get_origin() -> dict:
         """
-        Provides the informatioon about where the logger was triggered.
+        Provides the information about where the logger was triggered.
 
         :return:
             A tuple, which is composed of the following.
@@ -430,6 +431,9 @@ class Logger:
         """
 
         for logger, level in self.get_next_logger():
+            if not logger:
+                continue
+
             logger.handlers.clear()
 
             delattr(self, f"{level}_logger")
@@ -448,10 +452,17 @@ class Logger:
             ):
                 continue
 
-            level = logger_var_name.split("_", 1)[0]
+            if "extensions" in logger_var_name:
+                level = "extensions"
+            else:
+                level = logger_var_name.split("_", 1)[0]
 
-            if not getattr(self, logger_var_name):
-                setattr(self, logger_var_name, logging.getLogger(f"PyFunceble.{level}"))
+                if not getattr(self, logger_var_name):
+                    setattr(
+                        self,
+                        logger_var_name,
+                        logging.getLogger(f"PyFunceble.logging.{level}"),
+                    )
 
             yield getattr(self, logger_var_name), level
 
@@ -463,6 +474,9 @@ class Logger:
         if self.authorized:
             self.destroy_loggers()
 
+            if not self.extensions_logger:
+                self.extensions_logger = logging.getLogger("PyFunceble.ext")
+
             if not self.sqlalchemy_logger:
                 self.sqlalchemy_logger = logging.getLogger("sqlalchemy")
 
@@ -473,7 +487,13 @@ class Logger:
                 logger.propagate = False
 
                 # pylint: disable=protected-access
-                logger.setLevel(logging._nameToLevel[level.upper()])
+                try:
+                    logger.setLevel(logging._nameToLevel[level.upper()])
+                except AttributeError:
+                    logger.setLevel(logging._levelToName[level].upper())
+                except KeyError:
+                    logger.setLevel(self.min_level)
+
                 logger.addHandler(self.get_handler(level))
 
         return self
@@ -485,8 +505,13 @@ class Logger:
         Given a level name, this method provides the right handler for it!
         """
 
-        level_name = level_name.upper()
-        specials = ["SQLALCHEMY"]
+        try:
+            level_name = level_name.upper()
+        except AttributeError:
+            level_name = logging.getLevelName(level_name).upper()
+
+        handler = None
+        specials = ["SQLALCHEMY", "EXTENSIONS"]
 
         if hasattr(logging, level_name) or level_name in specials:
             if self.on_screen:
@@ -505,9 +530,7 @@ class Logger:
                 handler.setLevel(getattr(logging, level_name))
                 handler.setFormatter(self.own_formatter)
 
-            return handler
-
-        return None
+        return handler
 
     @single_logger_factory("info")
     def info(self, *args, **kwargs):

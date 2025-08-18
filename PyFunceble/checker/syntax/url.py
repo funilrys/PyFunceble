@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -57,6 +57,8 @@ from PyFunceble.checker.base import CheckerBase
 from PyFunceble.checker.syntax.base import SyntaxCheckerBase
 from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
+from PyFunceble.checker.syntax.params import SyntaxCheckerParams
+from PyFunceble.checker.syntax.status import SyntaxCheckerStatus
 
 
 class URLSyntaxChecker(SyntaxCheckerBase):
@@ -67,7 +69,11 @@ class URLSyntaxChecker(SyntaxCheckerBase):
         Optional, The subject to work with.
     """
 
-    def subject_propagator(self) -> CheckerBase:
+    def subject_propagator(self) -> "URLSyntaxChecker":
+        self.status = SyntaxCheckerStatus()
+        self.params = SyntaxCheckerParams()
+        self.status.params = self.params
+
         self.status.subject_kind = "url"
 
         return super().subject_propagator()
@@ -112,10 +118,7 @@ class URLSyntaxChecker(SyntaxCheckerBase):
         if not hostname:
             return False
 
-        if (
+        return (
             DomainSyntaxChecker(hostname).is_valid()
             or IPSyntaxChecker(hostname).is_valid()
-        ):
-            return True
-
-        return False
+        )

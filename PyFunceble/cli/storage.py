@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -147,7 +147,7 @@ else:
     ERROR: str = f"{colorama.Fore.RED}ERROR"
 
 VERSION_DUMP_LINK: str = (
-    "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"
+    "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
 )
 
 HASHES_FILENAME: str = "hashes_tracker.json"

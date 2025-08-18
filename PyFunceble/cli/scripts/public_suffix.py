@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ class PublicSuffixGenerator:
     An internal storage of our map.
     """
 
-    wildacrd2subject: Wildcard2Subject = Wildcard2Subject()
+    wildcard2subject: Wildcard2Subject = Wildcard2Subject()
 
     def __init__(self, destination: Optional[str] = None) -> None:
         if destination is not None:
@@ -147,7 +147,7 @@ class PublicSuffixGenerator:
         if not any(line.startswith(x) for x in self.COMMENT_SIGN) and "." in line:
             lines = [line, line.encode("idna").decode("utf-8")]
             lines = [
-                self.wildacrd2subject.set_data_to_convert(x).get_converted()
+                self.wildcard2subject.set_data_to_convert(x).get_converted()
                 for x in lines
             ]
             extension = lines[0].rsplit(".", 1)[-1]
@@ -165,7 +165,20 @@ class PublicSuffixGenerator:
         Starts the generation of the dataset file.
         """
 
-        raw_data = DownloadHelper(self.UPSTREAM_LINK).download_text().split("\n")
+        raw_data = (
+            DownloadHelper(
+                self.UPSTREAM_LINK,
+                certificate_validation=(
+                    PyFunceble.storage.CONFIGURATION.verify_ssl_certificate
+                    if PyFunceble.storage.CONFIGURATION
+                    else True
+                ),
+                own_proxy_handler=True,
+                proxies=PyFunceble.storage.PROXY,
+            )
+            .download_text()
+            .split("\n")
+        )
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             for result in executor.map(self.parse_line, raw_data):

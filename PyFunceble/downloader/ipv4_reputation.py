@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,9 +50,6 @@ License:
     limitations under the License.
 """
 
-import os
-
-import PyFunceble.storage
 from PyFunceble.downloader.base import DownloaderBase
 
 
@@ -64,14 +61,8 @@ class IPV4ReputationDownloader(DownloaderBase):
     DOWNTIME_INDEX: str = "ipv4_reputation"
     DOWNLOAD_FREQUENCY: int = 1
 
-    def __init__(self) -> None:
-        self.destination = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
-            PyFunceble.storage.IPV4_REPUTATION_FILENAME,
-        )
-        self.download_link = PyFunceble.storage.IPV4_REPUTATION_DUMP_LINK
-
-        super().__init__()
+    DEFAULT_DOWNLOAD_URL: str = "https://reputation.alienvault.com/reputation.data"
+    DEFAULT_FILENAME: str = "ipv4_reputation.data"
 
     @property
     def authorized(self) -> bool:  # pragma: no cover ## Always True.

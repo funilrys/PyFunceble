@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -56,8 +56,6 @@ from typing import Any, Generator, Tuple
 from sqlalchemy.sql import text
 
 import PyFunceble.cli.facility
-import PyFunceble.cli.factory
-import PyFunceble.sessions
 from PyFunceble.cli.migrators.db_base import DBMigratorBase
 
 
@@ -72,7 +70,7 @@ class MariaDBMigratorBase(DBMigratorBase):
         Otherwise, apply the given :code:`default`.
         """
 
-        def inner_metdhod(func):
+        def inner_method(func):
             @functools.wraps(func)
             def wrapper(self, *args, **kwargs):
                 if self.authorized:
@@ -81,7 +79,7 @@ class MariaDBMigratorBase(DBMigratorBase):
 
             return wrapper
 
-        return inner_metdhod
+        return inner_method
 
     def get_rows(
         self, statement: str, limit: int = 20

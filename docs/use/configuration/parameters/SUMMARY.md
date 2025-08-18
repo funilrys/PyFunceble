@@ -10,5 +10,6 @@
   - [`platform`](platform.md)
   - [`proxy`](proxy.md)
   - [`share_logs`](share-logs.md)
+  - [`special_rules`](special-rules.md)
   - [`user_agent`](user-agent.md)
   - [`verify_ssl_certificates`](verify-ssl-certificates.md)

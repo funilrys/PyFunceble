@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -90,7 +90,7 @@ def get_testing_mode() -> str:
     return "UNKNOWN"
 
 
-def get_continue_databaset_object(
+def get_continue_dataset_object(
     db_session: Optional[Session] = None,
 ) -> Union[DatasetBase, CSVDatasetBase, DBDatasetBase]:
     """
@@ -199,35 +199,25 @@ def get_subjects_from_line(
     result = []
 
     if adblock_inputline2subject is None:
-        adblock_inputline2subject = AdblockInputLine2Subject(
-            aggressive=bool(PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive)
-        )
+        adblock_inputline2subject = AdblockInputLine2Subject()
 
     if wildcard2subject is None:
-        wildcard2subject = Wildcard2Subject(
-            aggressive=bool(PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive)
-        )
+        wildcard2subject = Wildcard2Subject()
 
     if rpz_policy2subject is None:
         rpz_policy2subject = RPZPolicy2Subject()
 
     if rpz_inputline2subject is None:
-        rpz_inputline2subject = RPZInputLine2Subject(
-            aggressive=bool(PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive)
-        )
+        rpz_inputline2subject = RPZInputLine2Subject()
 
     if inputline2subject is None:
-        inputline2subject = InputLine2Subject(
-            aggressive=bool(PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive)
-        )
+        inputline2subject = InputLine2Subject()
 
     if subject2complements is None:
         subject2complements = Subject2Complements()
 
     if url2netloc is None:
-        url2netloc = Url2Netloc(
-            aggressive=bool(PyFunceble.storage.CONFIGURATION.cli_decoding.aggressive)
-        )
+        url2netloc = Url2Netloc()
 
     if cidr2subject is None:
         cidr2subject = CIDR2Subject()

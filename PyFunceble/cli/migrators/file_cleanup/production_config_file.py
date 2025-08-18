@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -52,12 +52,11 @@ License:
 
 import os
 
-import PyFunceble.cli.storage
 import PyFunceble.storage
-from PyFunceble.cli.migrators.file_cleanup.base import FileClenupMigratorBase
+from PyFunceble.cli.migrators.file_cleanup.base import FileCleanupMigratorBase
 
 
-class ProductionConfigFileCleanupMigrator(FileClenupMigratorBase):
+class ProductionConfigFileCleanupMigrator(FileCleanupMigratorBase):
     """
     Provides the interface for the cleanup of the
     :code:`.PyFunceble_production.yaml` file.
@@ -65,7 +64,7 @@ class ProductionConfigFileCleanupMigrator(FileClenupMigratorBase):
 
     def __post_init__(self) -> None:
         self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
+            self.config_dir,
             PyFunceble.storage.DISTRIBUTED_CONFIGURATION_FILENAME,
         )
 

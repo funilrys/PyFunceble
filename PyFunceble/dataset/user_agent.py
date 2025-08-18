@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,9 +50,8 @@ License:
     limitations under the License.
 """
 
-import os
 import secrets
-from typing import Any
+from typing import Any, Optional
 from warnings import warn
 
 import PyFunceble.storage
@@ -66,16 +65,14 @@ class UserAgentDataset(DatasetBase):
     """
 
     STORAGE_INDEX: str = "USER_AGENTS"
-    DOWNLOADER: UserAgentsDownloader = UserAgentsDownloader()
+    downloader: Optional[UserAgentsDownloader] = None
 
     preferred_browser: str = "chrome"
     preferred_platform: str = "linux"
 
     def __init__(self) -> None:
-        self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
-            PyFunceble.storage.USER_AGENT_FILENAME,
-        )
+        self.downloader = UserAgentsDownloader()
+        self.source_file = self.downloader.destination
 
     def __contains__(self, value: Any) -> bool:
         content = self.get_content()
@@ -199,6 +196,30 @@ class UserAgentDataset(DatasetBase):
             and bool(self[browser_short_name.lower()][platform.lower()])
         )
 
+    def format_user_agent(
+        self, user_agent: str, *, reference: Optional[str] = None
+    ) -> str:
+        """
+        Given a user agent and a reference, it returns the formatted user agent
+        that we have to use.
+
+        :param user_agent:
+            The user agent to format.
+        :param reference:
+            The reference to append to the user agent.
+
+        :return:
+            The formatted user agent.
+        """
+
+        user_agent = user_agent.strip()
+
+        if reference:
+            if user_agent.endswith(";"):
+                return f"{user_agent} +{reference}"
+            return f"{user_agent}; +{reference}"
+        return user_agent
+
     def get_latest(self) -> str:
         """
         Provides the latest user agent for the given platform.
@@ -208,12 +229,19 @@ class UserAgentDataset(DatasetBase):
             (if exists).
         """
 
+        reference = None
+
         if PyFunceble.storage.CONFIGURATION:
+            reference = PyFunceble.storage.CONFIGURATION.user_agent.reference
+
             if (
                 PyFunceble.storage.CONFIGURATION.user_agent
                 and PyFunceble.storage.CONFIGURATION.user_agent.custom
             ):
-                return PyFunceble.storage.CONFIGURATION.user_agent.custom
+                return self.format_user_agent(
+                    PyFunceble.storage.CONFIGURATION.user_agent.custom,
+                    reference=reference,
+                )
 
             self.set_preferred(
                 PyFunceble.storage.CONFIGURATION.user_agent.browser,
@@ -223,6 +251,9 @@ class UserAgentDataset(DatasetBase):
         result = self[self.preferred_browser][self.preferred_platform]
 
         if isinstance(result, (list, tuple)):
-            return secrets.choice(result)
+            return self.format_user_agent(
+                secrets.choice(result),
+                reference=reference,
+            )
 
-        return result
+        return self.format_user_agent(result, reference=reference)

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -60,15 +60,18 @@ except ImportError:  # pragma: no cover ## Retro compatibility
     import importlib_resources as package_resources
 
 from box import Box
+from dotenv import load_dotenv
 from yaml.error import MarkedYAMLError
 
 import PyFunceble.cli.storage
 import PyFunceble.storage
 from PyFunceble.config.compare import ConfigComparison
+from PyFunceble.dataset.user_agent import UserAgentDataset
 from PyFunceble.downloader.iana import IANADownloader
 from PyFunceble.downloader.public_suffix import PublicSuffixDownloader
 from PyFunceble.downloader.user_agents import UserAgentsDownloader
 from PyFunceble.helpers.dict import DictHelper
+from PyFunceble.helpers.download import DownloadHelper
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 from PyFunceble.helpers.file import FileHelper
 from PyFunceble.helpers.merge import Merge
@@ -86,37 +89,42 @@ class ConfigLoader:
             :code:`PYFUNCEBLE_AUTO_CONFIGURATION` environment variable.
     """
 
-    path_to_config: Optional[str] = None
+    _path_to_config: Optional[str] = None
+    _remote_config_location: Optional[str] = None
     path_to_default_config: Optional[str] = None
-    path_to_overwrite_config: Optional[str] = None
+    _path_to_overwrite_config: Optional[str] = None
 
     _custom_config: dict = {}
     _merge_upstream: bool = False
+    _config_dir: Optional[str] = None
+    __config_loaded: bool = False
 
-    file_helper: FileHelper = FileHelper()
-    dict_helper: DictHelper = DictHelper()
+    file_helper: Optional[FileHelper] = None
+    dict_helper: Optional[DictHelper] = None
 
-    def __init__(self, merge_upstream: Optional[bool] = None) -> None:
+    def __init__(
+        self, merge_upstream: Optional[bool] = None, *, config_dir: Optional[str] = None
+    ) -> None:
         with package_resources.path(
             "PyFunceble.data.infrastructure",
             PyFunceble.storage.DISTRIBUTED_CONFIGURATION_FILENAME,
         ) as file_path:
             self.path_to_default_config = str(file_path)
 
-        self.path_to_config = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
-            PyFunceble.storage.CONFIGURATION_FILENAME,
-        )
+        if config_dir is not None:
+            self.config_dir = config_dir
+        else:
+            self.config_dir = PyFunceble.storage.CONFIG_DIRECTORY
 
-        self.path_to_overwrite_config = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY,
-            PyFunceble.storage.CONFIGURATION_OVERWRITE_FILENAME,
-        )
+        self.path_to_remote_config = None
 
         if merge_upstream is not None:
             self.merge_upstream = merge_upstream
         elif EnvironmentVariableHelper("PYFUNCEBLE_AUTO_CONFIGURATION").exists():
             self.merge_upstream = True
+
+        self.file_helper = FileHelper()
+        self.dict_helper = DictHelper()
 
     def __del__(self) -> None:
         self.destroy()
@@ -132,7 +140,7 @@ class ConfigLoader:
             result = func(self, *args, **kwargs)  # pylint: disable=not-callable
 
             if self.is_already_loaded():
-                self.start()
+                self.reload(keep_custom=True)
 
             return result
 
@@ -192,13 +200,122 @@ class ConfigLoader:
 
         return config
 
-    @staticmethod
-    def is_already_loaded() -> bool:
+    def is_already_loaded(self) -> bool:
         """
         Checks if the configuration was already loaded.
         """
 
         return bool(PyFunceble.storage.CONFIGURATION)
+
+    def __is_completely_loaded(self) -> bool:
+        """
+        Checks if the configuration was completely loaded.
+        """
+
+        return self.is_already_loaded() and bool(self.__config_loaded)
+
+    @property
+    def path_to_config(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_path_to_config` attribute.
+        """
+
+        if self._path_to_config is None:
+            self._path_to_config = os.path.join(
+                self.config_dir,
+                PyFunceble.storage.CONFIGURATION_FILENAME,
+            )
+
+        return self._path_to_config
+
+    @path_to_config.setter
+    def path_to_config(self, value: str) -> None:
+        """
+        Sets the path to the configuration file.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._path_to_config = value
+
+    @property
+    def path_to_overwrite_config(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_path_to_overwrite_config` attribute.
+        """
+
+        if self._path_to_overwrite_config is None:
+            self._path_to_overwrite_config = os.path.join(
+                self.config_dir,
+                ".PyFunceble.overwrite.yaml",
+            )
+
+        return self._path_to_overwrite_config
+
+    @path_to_overwrite_config.setter
+    def path_to_overwrite_config(self, value: str) -> None:
+        """
+        Sets the path to the overwrite configuration file.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._path_to_overwrite_config = value
+
+    @property
+    def config_dir(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_config_dir` attribute.
+        """
+
+        return self._config_dir
+
+    @config_dir.setter
+    @reload_config
+    def config_dir(self, value: str) -> None:
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._config_dir = value
+        # Reset the path to the configuration file.
+        self._path_to_config = None
+        self._path_to_overwrite_config = None
+
+    def set_config_dir(self, value: str) -> "ConfigLoader":
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+        """
+
+        self.config_dir = value
+
+        return self
 
     @property
     def custom_config(self) -> dict:
@@ -274,23 +391,44 @@ class ConfigLoader:
 
         return self
 
-    def config_file_exist(
-        self,
-    ) -> bool:  # pragma: no cover ## Existance checker already tested.
+    @property
+    def remote_config_location(self) -> Optional[str]:
         """
-        Checks if the config file exists.
-        """
-
-        return FileHelper(self.path_to_config).exists()
-
-    def default_config_file_exist(
-        self,
-    ) -> bool:  # pragma: no cover ## Existance checker already tested.
-        """
-        Checks if the default configuration file exists.
+        Provides the current state of the :code:`_remote_config_location` attribute.
         """
 
-        return self.file_helper.set_path(self.path_to_default_config).exists()
+        return self._remote_config_location
+
+    @remote_config_location.setter
+    def remote_config_location(self, value: Optional[str]) -> None:
+        """
+        Updates the value of :code:`_remote_config_location` attribute.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`str`.
+        """
+
+        if value is not None and not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        if not value.startswith("http") and not value.startswith("https"):
+            self.path_to_remote_config = os.path.realpath(value)
+        else:
+            self.path_to_remote_config = os.path.join(
+                self.config_dir,
+                ".PyFunceble.remote.yaml",
+            )
+
+        self._remote_config_location = value
+
+    def set_remote_config_location(self, value: Optional[str]) -> "ConfigLoader":
+        """
+        Updates the value of :code:`_remote_config_location` attribute.
+        """
+
+        self.remote_config_location = value
+
+        return self
 
     def install_missing_infrastructure_files(
         self,
@@ -307,17 +445,16 @@ class ConfigLoader:
         if not self.is_already_loaded():
             if not self.file_helper.set_path(self.path_to_config).exists():
                 self.file_helper.set_path(self.path_to_default_config).copy(
-                    self.path_to_config
+                    self.path_to_config, create_parent=True
                 )
 
         return self
 
-    @classmethod
     def download_dynamic_infrastructure_files(
-        cls,
+        self,
     ) -> "ConfigLoader":
         """
-        Downloads all the dynamicly (generated) infrastructure files.
+        Downloads all the dynamically (generated) infrastructure files.
 
         .. note::
             Downloaded if missing:
@@ -327,7 +464,7 @@ class ConfigLoader:
 
         ## pragma: no cover ## Underlying download methods already tested.
 
-        if not cls.is_already_loaded():
+        if not self.is_already_loaded():
             IANADownloader().start()
             PublicSuffixDownloader().start()
             UserAgentsDownloader().start()
@@ -347,15 +484,41 @@ class ConfigLoader:
 
             return config and "days_between_inactive_db_clean" in config
 
-        if not self.is_already_loaded():
-            self.install_missing_infrastructure_files()
-            self.download_dynamic_infrastructure_files()
+        def download_remote_config(src: str, dest: str = None) -> None:
+            """
+            Downloads the remote configuration.
+
+            :param src:
+                The source to download from.
+            :param dest:
+                The destination to download
+            """
+
+            if src and (src.startswith("http") or src.startswith("https")):
+                if dest is None:
+                    destination = os.path.join(
+                        self.config_dir,
+                        os.path.basename(dest),
+                    )
+                else:
+                    destination = dest
+
+                DownloadHelper(
+                    src,
+                    certificate_validation=(
+                        PyFunceble.storage.CONFIGURATION.verify_ssl_certificate
+                        if PyFunceble.storage.CONFIGURATION
+                        else True
+                    ),
+                    own_proxy_handler=True,
+                    proxies=config["proxies"],
+                ).download_text(destination=destination)
 
         try:
             config = self.dict_helper.from_yaml_file(self.path_to_config)
-        except MarkedYAMLError:
+        except (MarkedYAMLError, FileNotFoundError):
             self.file_helper.set_path(self.path_to_default_config).copy(
-                self.path_to_config
+                self.path_to_config, create_parent=True
             )
             config = self.dict_helper.from_yaml_file(self.path_to_config)
 
@@ -372,22 +535,55 @@ class ConfigLoader:
             or self.merge_upstream
             or is_3_x_version(config)
             or not config_comparer.is_local_identical()
-        ):  # pragma: no cover ## Testing the underlying comparison method is sufficent
+        ):  # pragma: no cover ## Testing the underlying comparison method is sufficient
             config = config_comparer.get_merged()
 
             self.dict_helper.set_subject(config).to_yaml_file(self.path_to_config)
 
         if self.file_helper.set_path(self.path_to_overwrite_config).exists():
+            # Early load of the overwrite configuration to allow usage of defined
+            # proxy settings.
             overwrite_data = self.dict_helper.from_yaml_file(
                 self.path_to_overwrite_config
             )
 
             if isinstance(overwrite_data, dict):
-                config = Merge(
-                    self.dict_helper.from_yaml_file(self.path_to_overwrite_config)
-                ).into(config)
+                config = Merge(overwrite_data).into(config)
         else:  # pragma: no cover  ## Just make it visible to end-user.
             self.file_helper.write("")
+
+        # Now we preset the storage to enforce the usage of the configuration
+        # in any downloads.
+        PyFunceble.storage.CONFIGURATION = Box(
+            config,
+        )
+
+        if not self.__is_completely_loaded():
+            self.install_missing_infrastructure_files()
+            self.download_dynamic_infrastructure_files()
+            download_remote_config(
+                self.remote_config_location, self.path_to_remote_config
+            )
+            download_remote_config(self.path_to_config)
+
+        if (
+            self.path_to_remote_config
+            and self.file_helper.set_path(self.path_to_remote_config).exists()
+        ):
+            remote_data = self.dict_helper.from_yaml_file(self.path_to_remote_config)
+
+            if isinstance(remote_data, dict):
+                config = Merge(remote_data).into(config)
+
+        if self.file_helper.set_path(self.path_to_overwrite_config).exists():
+            # Load the overwrite configuration again to ensure that user defined
+            # settings are always applied - last one wins.
+            overwrite_data = self.dict_helper.from_yaml_file(
+                self.path_to_overwrite_config
+            )
+
+            if isinstance(overwrite_data, dict):
+                config = Merge(overwrite_data).into(config)
 
         return config
 
@@ -415,10 +611,25 @@ class ConfigLoader:
 
         return PyFunceble.storage.FLATTEN_CONFIGURATION[entry]
 
+    def reload(self, keep_custom: bool = False) -> "ConfigLoader":
+        """
+        Reloads the configuration.
+
+        :param bool keep_custom:
+            If set to :code:`True`, we keep the custom configuration, otherwise
+            we delete it.
+        """
+
+        self.destroy(keep_custom=keep_custom)
+        self.start()
+
     def start(self) -> "ConfigLoader":
         """
         Starts the loading processIs.
         """
+
+        load_dotenv(os.path.join(self.config_dir, ".env"))
+        load_dotenv(os.path.join(self.config_dir, PyFunceble.storage.ENV_FILENAME))
 
         config = self.get_config_file_content()
 
@@ -443,11 +654,23 @@ class ConfigLoader:
         if "proxy" in config and config["proxy"]:
             PyFunceble.storage.PROXY = Box(config["proxy"])
 
+        if "special_rules" in config and config["special_rules"]:
+            PyFunceble.storage.SPECIAL_RULES = config["special_rules"]
+
+        # Early load user agents to allow usage of defined user agents.
+        UserAgentDataset().get_latest()
+
+        self.__config_loaded = True
+
         return self
 
-    def destroy(self) -> "ConfigLoader":
+    def destroy(self, keep_custom: bool = False) -> "ConfigLoader":
         """
         Destroys everything loaded.
+
+        :param bool keep_custom:
+            If set to :code:`True`, we keep the custom configuration, otherwise
+            we delete it.
         """
 
         try:
@@ -459,10 +682,14 @@ class ConfigLoader:
             PyFunceble.storage.PLATFORM = Box({})
             PyFunceble.storage.LINKS = Box({})
             PyFunceble.storage.PROXY = Box({})
+            PyFunceble.storage.SPECIAL_RULES = Box({})
         except (AttributeError, TypeError):  # pragma: no cover ## Safety.
             pass
 
-        # This is not a mistake.
-        self._custom_config = {}
+        if not keep_custom:
+            # This is not a mistake.
+            self._custom_config = {}
+
+        self.__config_loaded = False
 
         return self

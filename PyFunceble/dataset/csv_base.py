@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -208,7 +208,9 @@ class CSVDatasetBase(DBDatasetBase):
             for row in reader:
                 if "tested_at" in row:
                     try:
-                        row["tested_at"] = datetime.fromisoformat(row["tested_at"])
+                        row["tested_at"] = datetime.fromisoformat(
+                            row["tested_at"]
+                        ).astimezone(timezone.utc)
                     except (TypeError, ValueError):
                         row["tested_at"] = datetime.now(timezone.utc) - timedelta(
                             days=365

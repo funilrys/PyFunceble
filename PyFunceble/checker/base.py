@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -62,6 +62,7 @@ import PyFunceble.storage
 from PyFunceble.checker.params_base import CheckerParamsBase
 from PyFunceble.checker.status_base import CheckerStatusBase
 from PyFunceble.converter.url2netloc import Url2Netloc
+from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.query.platform import PlatformQueryTool
 
 
@@ -88,6 +89,7 @@ class CheckerBase:
     _idna_subject: Optional[str] = None
 
     url2netloc: Optional[Url2Netloc] = None
+    regex_helper: Optional[RegexHelper] = None
 
     db_session: Optional[Session] = None
     platform_query_tool: Optional[PlatformQueryTool] = None
@@ -105,6 +107,7 @@ class CheckerBase:
     ) -> None:
         self.platform_query_tool = PlatformQueryTool()
         self.url2netloc = Url2Netloc()
+        self.regex_helper = RegexHelper()
 
         if self.params is None:
             self.params = CheckerParamsBase()
@@ -383,6 +386,7 @@ class CheckerBase:
             self.idna_subject
         ).get_converted()
         self.status.status = None
+        self.status.status_source = None
 
         return self.query_common_checker()
 

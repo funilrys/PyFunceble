@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ class DictHelper:
     Simplify some :code:`dict` manipulation.
 
     :param dict main: The main :code:`dict` to work with.
-    :raise TypeError: When :code:`main` is not a dict nor a list (tolarated).
+    :raise TypeError: When :code:`main` is not a dict nor a list (tolerated).
     """
 
     _subject: Optional[Union[Any, dict]] = None
@@ -349,7 +349,7 @@ class DictHelper:
         :param bool default_flow_style: Uses the default flow style.
         :param int indent: The indentation to apply.
         :param bool allow_unicode: Allows the decoding of unicode chars.
-        :param bool sort_keys: Sors the keys.
+        :param bool sort_keys: Sorts the keys.
 
         :rtype: dict|list
         """
@@ -371,7 +371,7 @@ class DictHelper:
         data: Optional[Any] = None,
     ) -> dict:
         """
-        Flatten the current dictionnary.
+        Flatten the current dictionary.
 
         :param separator:
             The separator to apply.
@@ -405,7 +405,7 @@ class DictHelper:
 
     def unflatten(self, *, separator: str = ".", data: Optional[Any] = None):
         """
-        Unflatten a previously flatten dictionnary.
+        Unflatten a previously flatten dictionary.
 
         :param separator:
             The separator to split.

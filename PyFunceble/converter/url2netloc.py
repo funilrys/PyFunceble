@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ from PyFunceble.converter.base import ConverterBase
 
 class Url2Netloc(ConverterBase):
     """
-    Provides the interface for the conversion/extration of the network location
+    Provides the interface for the conversion/extraction of the network location
     of a given URL.
     """
 
@@ -70,7 +70,7 @@ class Url2Netloc(ConverterBase):
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
         """
-        Overrites the default behavior.
+        Overrides the default behavior.
 
         :raise TypeError:
             When the given data to convert is not :py:class:`str`
@@ -116,7 +116,7 @@ class Url2Netloc(ConverterBase):
         Provides the converted data (after conversion)
         """
 
-        # Retrocompatibility.
+        # Retro-compatibility.
         self.parse_url()
 
         return self.convert(self.data_to_convert)

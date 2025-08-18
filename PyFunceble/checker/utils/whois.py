@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -73,29 +73,25 @@ def get_whois_dataset_object(
         A database session to use.
 
     :raise ValueError:
-        When the given database type is unkown.
+        When the given database type is unknown.
     :raise RuntimeError:
         When the configuration was not loaded yet.
     """
 
     if PyFunceble.facility.ConfigLoader.is_already_loaded():
-        result = None
-
         if PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "csv":
-            result = CSVWhoisDataset()
-        elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type in (
+            return CSVWhoisDataset().set_authorized(
+                bool(PyFunceble.storage.CONFIGURATION.cli_testing.whois_db)
+            )
+
+        if PyFunceble.storage.CONFIGURATION.cli_testing.db_type in (
             "mariadb",
             "mysql",
             "postgresql",
         ):
-            result = SQLDBWhoisDataset(db_session=db_session)
-
-        if result:
-            result.set_authorized(
+            return SQLDBWhoisDataset(db_session=db_session).set_authorized(
                 bool(PyFunceble.storage.CONFIGURATION.cli_testing.whois_db)
             )
-
-            return result
 
         raise ValueError(
             "<config.db_type> "

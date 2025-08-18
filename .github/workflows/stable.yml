@@ -9,6 +9,11 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 jobs:
   lint:
     name: Lint PyFunceble
@@ -24,7 +29,7 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -35,8 +40,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pylint
+          pip install .[test,dev]
 
       - name: Lint PyFunceble with Pylint
         run: pylint PyFunceble
@@ -58,7 +62,7 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -69,7 +73,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install .
           pip install safety
 
       - name: Check the safety of our dependencies.
@@ -85,18 +89,18 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
         os:
           - ubuntu-latest
           - macos-latest
           - windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -107,8 +111,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install tox coveralls
+          pip install .[test]
+          pip install coveralls
 
       - name: Test PyFunceble as defined by tox.ini
         run: |
@@ -161,7 +165,7 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -212,10 +216,10 @@ jobs:
       OUR_DOCKER_EMAIL: ${{ secrets.OUR_DOCKER_EMAIL }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone docker 📦 repository
         with:
           repository: PyFunceble/docker
@@ -294,7 +298,7 @@ jobs:
           pacman -Syu --needed --noconfirm && \
           pacman -S --needed --noconfirm git binutils pacman-contrib openssh rsync python python-setuptools jq
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
       - name: Publish 📦 to the AUR - if necessary
@@ -310,11 +314,11 @@ jobs:
           if [[ $(python3 setup.py --name) == "PyFunceble-dev" ]]
           then
             licenseURL="https://raw.githubusercontent.com/funilrys/PdyFunceble/dev/LICENSE"
-            newURL=$(curl -s https://pypi.org/pypi/PyFunceble-dev/json | jq -r ".releases.\"${latest}\"[] | select(.filename | strings | test(\".tar\")).url")
           else
             licenseURL="https://raw.githubusercontent.com/funilrys/PyFunceble/master/LICENSE"
-            newURL=$(curl -s https://pypi.org/pypi/PyFunceble/json | jq -r ".releases.\"${latest}\"[] | select(.filename | strings | test(\".tar\")).url")
           fi
+
+          genericURL='https://files.pythonhosted.org/packages/source/${upstreamName::1}/${upstreamName}/${upstreamName}-${pkgver}.tar.gz'
 
           git config --global --add safe.directory ${GITHUB_WORKSPACE}
           git config --global --add safe.directory ${aurRepoDir}
@@ -337,7 +341,7 @@ jobs:
 
           sed "/^pkgver=/s/.*/pkgver=${latest}/" -i PKGBUILD
           sed "/^pkgrel=/s/.*/pkgrel=1/" -i PKGBUILD
-          sed "s,^source=(.*),source=('${newURL}' '${licenseURL}')," -i PKGBUILD
+          sed "s,^source=(.*),source=(\"${genericURL}\" \"${licenseURL}\")," -i PKGBUILD
 
           su makepkg -c "updpkgsums"
           su makepkg -c "makepkg --printsrcinfo" > .SRCINFO

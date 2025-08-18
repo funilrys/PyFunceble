@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -56,9 +56,9 @@ import unittest.mock
 import requests
 import requests.models
 
-import PyFunceble.factory
 from PyFunceble.config.loader import ConfigLoader
 from PyFunceble.query.http_status_code import HTTPStatusCode
+from PyFunceble.query.requests.requester import Requester
 
 
 class TestHTTPStatusCode(unittest.TestCase):
@@ -455,7 +455,7 @@ class TestHTTPStatusCode(unittest.TestCase):
         # pylint: disable=unnecessary-lambda
         self.assertRaises(TypeError, lambda: self.query_tool.get_status_code())
 
-    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    @unittest.mock.patch.object(Requester, "get")
     def test_get_status_code(self, request_mock) -> None:
         """
         Tests the method which let us get the status code of the given subject.
@@ -484,7 +484,7 @@ class TestHTTPStatusCode(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    @unittest.mock.patch.object(Requester, "get")
     def test_get_status_code_error(self, request_mock) -> None:
         """
         Tests the method which let us get the status code of the given subject
@@ -492,9 +492,7 @@ class TestHTTPStatusCode(unittest.TestCase):
         """
 
         def mocking(*args, **kwargs):  # pylint: disable=unused-argument
-            raise PyFunceble.factory.Requester.exceptions.ConnectionError(
-                "I'm a teapot."
-            )
+            raise Requester.exceptions.ConnectionError("I'm a teapot.")
 
         self.query_tool.subject = "https://example.org"
 
@@ -505,7 +503,7 @@ class TestHTTPStatusCode(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    @unittest.mock.patch.object(Requester, "get")
     def test_get_status_code_too_many_redirects(self, request_mock) -> None:
         """
         Tests the method which let us get the status code of the given subject
@@ -513,9 +511,7 @@ class TestHTTPStatusCode(unittest.TestCase):
         """
 
         def mocking(*args, **kwargs):  # pylint: disable=unused-argument
-            raise PyFunceble.factory.Requester.exceptions.TooManyRedirects(
-                "Exceeded 30 redirects."
-            )
+            raise Requester.exceptions.TooManyRedirects("Exceeded 30 redirects.")
 
         self.query_tool.subject = "https://example.org"
 
@@ -526,7 +522,7 @@ class TestHTTPStatusCode(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    @unittest.mock.patch.object(Requester, "get")
     def test_get_status_code_http_to_https(self, request_mock) -> None:
         """
         Tests the method which let us get the status code of the given subject
@@ -559,7 +555,7 @@ class TestHTTPStatusCode(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    @unittest.mock.patch.object(Requester, "get")
     def test_get_status_code_http_to_https_different_subject(
         self, request_mock
     ) -> None:
@@ -595,7 +591,7 @@ class TestHTTPStatusCode(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    @unittest.mock.patch.object(Requester, "get")
     def test_get_status_code_http_to_https_different_subject_allow_redirects(
         self, request_mock
     ) -> None:
@@ -635,7 +631,7 @@ class TestHTTPStatusCode(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    @unittest.mock.patch.object(Requester, "get")
     def test_get_status_code_http_to_https_multiple_jump(self, request_mock) -> None:
         """
         Tests the method which let us get the status code of the given subject
@@ -681,7 +677,7 @@ class TestHTTPStatusCode(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    @unittest.mock.patch.object(Requester, "get")
     def test_get_status_code_http_to_https_multiple_jump_allow_redirects(
         self, request_mock
     ) -> None:

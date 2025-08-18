@@ -37,7 +37,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -58,7 +58,6 @@ from typing import Any, List, Optional, Tuple
 
 import PyFunceble.cli.storage
 import PyFunceble.facility
-import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.cli.processes.workers.file_sorter_base import FileSorterWorkerBase
 
@@ -85,8 +84,6 @@ class DireFileSorterWorker(FileSorterWorkerBase):
 
         None
     """
-
-    STD_NAME: str = "pyfunceble_dir_files_sorter_worker"
 
     @staticmethod
     def get_files_to_sort(directory: str) -> List[str]:
@@ -131,6 +128,13 @@ class DireFileSorterWorker(FileSorterWorkerBase):
         return result
 
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
+        """
+        The producer of the worker.
+
+        :param consumed:
+            The consumed data to work with.
+        """
+
         if (
             not isinstance(consumed, dict)
             and "directory" not in consumed
@@ -145,26 +149,18 @@ class DireFileSorterWorker(FileSorterWorkerBase):
         # Just for human brain :-)
         directory = consumed["directory"]
 
-        if "remove_duplicates" in consumed:
-            remove_duplicates = consumed["remove_duplicates"]
-        else:
-            remove_duplicates = True
-
-        if "write_header" in consumed:
-            write_header = consumed["write_header"]
-        else:
-            write_header = True
+        remove_duplicates = consumed.get("remove_duplicates", True)
+        write_header = consumed.get("write_header", True)
 
         with concurrent.futures.ThreadPoolExecutor(
             max_workers=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
         ) as executor:
-            submitted_list = []
-
-            for file in self.get_files_to_sort(directory):
-                submitted = executor.submit(
+            submitted_list = [
+                executor.submit(
                     self.process_file_sorting, file, remove_duplicates, write_header
                 )
-                submitted_list.append(submitted)
+                for file in self.get_files_to_sort(directory)
+            ]
 
             for submitted in concurrent.futures.as_completed(submitted_list):
                 # Ensure that everything is finished

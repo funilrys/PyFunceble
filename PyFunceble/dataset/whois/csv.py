@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ class CSVWhoisDataset(CSVDatasetBase, WhoisDatasetBase):
 
     def __post_init__(self) -> None:
         self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.WHOIS_DB_FILE
+            self.config_dir, PyFunceble.cli.storage.WHOIS_DB_FILE
         )
 
         return super().__post_init__()

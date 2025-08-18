@@ -13,6 +13,11 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 jobs:
   lint:
     name: Lint PyFunceble
@@ -28,7 +33,7 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -39,8 +44,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pylint
+          pip install .[test,dev]
 
       - name: Lint PyFunceble with Pylint
         run: pylint PyFunceble
@@ -58,18 +62,18 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
         os:
           - ubuntu-latest
           - macos-latest
           - windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -80,8 +84,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install tox coveralls
+          pip install .[test]
+          pip install coveralls
 
       - name: Test PyFunceble as defined by tox.ini
         run: |
@@ -126,18 +130,17 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
         os:
           - ubuntu-latest
-          - macos-latest
           - windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -148,8 +151,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install tox
+          pip install .[test]
 
       - name: Run PyFunceble as defined by tox_run.ini
         run: tox -c tox_run.ini
@@ -184,16 +186,16 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
         os:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -204,8 +206,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install tox
+          pip install .[test]
 
       - name: Run PyFunceble as defined by tox_run_mariadb.ini
         run: tox -c tox_run_mariadb.ini
@@ -233,23 +234,23 @@ jobs:
       PYFUNCEBLE_DB_HOST: "127.0.0.1"
       PYFUNCEBLE_DB_NAME: pyfunceble
       PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
-      PYFUNCEBLE_DB_PORT: "3306"
+      PYFUNCEBLE_DB_PORT: "5432"
       PYFUNCEBLE_DB_USERNAME: pyfunceble
 
     strategy:
       fail-fast: false
       matrix:
         python_version:
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
         os:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -260,8 +261,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install tox psycopg2
+          pip install .[psql-binary,test]
 
       - name: Run PyFunceble as defined by tox_run_postgresql.ini
         run: tox -c tox_run_postgresql.ini

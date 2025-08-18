@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -115,18 +115,21 @@ class ListHelper:
 
         return self
 
-    def remove_duplicates(self) -> "ListHelper":
+    def remove_duplicates(self, *, efficient: bool = True) -> "ListHelper":
         """
         Removes the duplicates of the current list.
         """
 
-        result = []
+        if efficient:
+            self.subject = list(set(self.subject))
+        else:
+            result = []
 
-        for element in self.subject:
-            if element not in result:
-                result.append(element)
+            for element in self.subject:
+                if element not in result:
+                    result.append(element)
 
-        self.subject = result
+            self.subject = result
 
         return self
 
@@ -147,7 +150,7 @@ class ListHelper:
 
         :param key_method:
             A function or method to use to format the
-            readed element before sorting.
+            read element before sorting.
         :type key_method: function|method
 
         :param bool reverse: Tell us if we have to reverse the list.

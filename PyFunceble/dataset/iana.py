@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,10 +50,8 @@ License:
     limitations under the License.
 """
 
-import os
 from typing import Any, Optional
 
-import PyFunceble.storage
 from PyFunceble.dataset.base import DatasetBase
 from PyFunceble.downloader.iana import IANADownloader
 
@@ -64,12 +62,11 @@ class IanaDataset(DatasetBase):
     """
 
     STORAGE_INDEX: str = "IANA"
-    DOWNLOADER: IANADownloader = IANADownloader()
+    downloader: Optional[IANADownloader] = None
 
     def __init__(self) -> None:
-        self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.storage.IANA_DUMP_FILENAME
-        )
+        self.downloader = IANADownloader()
+        self.source_file = self.downloader.destination
 
     def __contains__(self, value: Any) -> bool:
         if value.startswith("."):

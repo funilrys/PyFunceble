@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -183,7 +183,7 @@ class FileHelper:
 
     def read_bytes(self) -> Optional[bytes]:
         """
-        Read the given file ath and returns it's bytes contetn.
+        Read the given file ath and returns it's bytes content.
         """
 
         data = None
@@ -201,12 +201,16 @@ class FileHelper:
 
         return open(self.path, *args, **kwargs)  # pylint: disable=unspecified-encoding
 
-    def copy(self, destination: str) -> "FileHelper":
+    def copy(self, destination: str, *, create_parent: bool = False) -> "FileHelper":
         """
-        Copy the globaly given file path to the given destination.
+        Copy the globally given file path to the given destination.
 
         :param str destination: The destination of the copy.
+        :param bool create_parent: Tell us if we have to create the parent directory.
         """
+
+        if create_parent:
+            DirectoryHelper(os.path.dirname(destination)).create()
 
         if self.exists():
             shutil.copy(self.path, destination)

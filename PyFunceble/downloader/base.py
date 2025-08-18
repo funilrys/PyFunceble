@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -89,24 +89,58 @@ class DownloaderBase:
         every hour.
     """
 
+    DEFAULT_DOWNLOAD_URL: Optional[str] = None
+    """
+    The URL to download.
+    """
+
+    DEFAULT_FILENAME: Optional[str] = None
+    """
+    The name of the file to download.
+    """
+
     all_downtimes: Optional[dict] = {}
     """
     Stores the download time of all files (self managed).
     """
 
+    _config_dir: Optional[str] = None
     _destination: Optional[str] = None
     _download_link: Optional[str] = None
+    _download_helper: Optional[DownloadHelper] = None
 
-    dict_helper: DictHelper = DictHelper()
+    dict_helper: Optional[DictHelper] = None
 
-    def __init__(self) -> None:
+    def __init__(self, *, config_dir: Optional[str] = None) -> None:
+        self.dict_helper = DictHelper()
+
+        if config_dir is not None:
+            self.config_dir = config_dir
+        else:
+            self.config_dir = PyFunceble.storage.CONFIG_DIRECTORY
+
         self.downtimes_file = FileHelper(
-            os.path.join(
-                PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.storage.DOWN_FILENAME
-            )
+            os.path.join(self.config_dir, ".pyfunceble_intern_downtime.json")
         )
 
         self.all_downtimes.update(self.get_all_downtimes())
+
+        if self.DEFAULT_DOWNLOAD_URL is not None:
+            self.download_link = self.DEFAULT_DOWNLOAD_URL
+
+        if self.DEFAULT_FILENAME is not None:
+            self.destination = os.path.join(self.config_dir, self.DEFAULT_FILENAME)
+
+        self._download_helper = DownloadHelper(
+            self.download_link,
+            own_proxy_handler=True,
+            proxies=PyFunceble.storage.PROXY,
+            certificate_validation=(
+                PyFunceble.storage.CONFIGURATION.verify_ssl_certificate
+                if PyFunceble.storage.CONFIGURATION
+                else True
+            ),
+        )
 
     @property
     def authorized(self) -> bool:
@@ -115,6 +149,43 @@ class DownloaderBase:
         """
 
         raise NotImplementedError()
+
+    @property
+    def config_dir(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_config_dir` attribute.
+        """
+
+        return self._config_dir
+
+    @config_dir.setter
+    def config_dir(self, value: str) -> None:
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._config_dir = value
+
+    def set_config_dir(self, value: str) -> "DownloaderBase":
+        """
+        Sets the configuration directory.
+
+        :param value:
+            The value to set.
+        """
+
+        self.config_dir = value
+
+        return self
 
     @property
     def destination(self) -> Optional[str]:
@@ -284,8 +355,6 @@ class DownloaderBase:
             if not hasattr(self, "download_link") or not self.download_link:
                 raise PyFunceble.downloader.exceptions.NoDownloadLinkGiven()
 
-            if DownloadHelper(self.download_link).download_text(
-                destination=self.destination
-            ):
+            if self._download_helper.download_text(destination=self.destination):
                 self.set_current_downtime()
                 self.save_all_downtimes()

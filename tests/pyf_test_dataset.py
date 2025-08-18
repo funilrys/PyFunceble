@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -378,7 +378,9 @@ DEFAULT_CONFIG: dict = {
     },
     "platform": {
         "push": False,
-        "preferred_data_origin": "frequent",
+        "preferred_status_origin": "frequent",
+        "checker_priority": ["none"],
+        "checker_exclude": ["none"],
     },
     "debug": {"active": False, "level": "info"},
     "dns": {
@@ -447,8 +449,8 @@ DEFAULT_CONFIG: dict = {
         "self_managed": False,
     },
     "links": {
-        "api_date_format": "https://pyfunceble.funilrys.com/api/date-format",
-        "api_no_referrer": "https://pyfunceble.funilrys.com/api/no-referrer",
+        # Keep this for the sake of the tests - and future reference.
+        "example": "https://example.org",
     },
     "lookup": {
         "dns": True,
@@ -462,6 +464,11 @@ DEFAULT_CONFIG: dict = {
     },
     "proxy": {"global": {"http": None, "https": None}, "rules": []},
     "share_logs": False,
-    "user_agent": {"browser": "chrome", "custom": None, "platform": "linux"},
+    "user_agent": {
+        "browser": "chrome",
+        "custom": None,
+        "platform": "linux",
+        "reference": None,
+    },
     "verify_ssl_certificate": False,
 }

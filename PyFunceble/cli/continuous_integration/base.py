@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -72,19 +72,19 @@ class ContinuousIntegrationBase:
     :param authorized:
         The authorization to run.
     :param git_email:
-        The email to apply while initilizing the git repository for push.
+        The email to apply while initializing the git repository for push.
     :param git_name:
-        The name to apply while initilizing the git repository for push.
+        The name to apply while initializing the git repository for push.
     :param git_branch:
         The branch to use while testing.
     :param git_distribution_branch:
         The branch to push the results into.
     :param token:
-        The token to apply while initilizing the git repository for push.
+        The token to apply while initializing the git repository for push.
     :param command:
         The command to execute before each push (except the latest one).
     :param end_command:
-        The commant to execute at the very end.
+        The command to execute at the very end.
     :param commit_message:
         The commit message to apply before each push (except the latest one).
     :param end_commit_message:
@@ -202,7 +202,7 @@ class ContinuousIntegrationBase:
         Otherwise, apply the given :code:`default`.
         """
 
-        def inner_metdhod(func):
+        def inner_method(func):
             @functools.wraps(func)
             def wrapper(self, *args, **kwargs):
                 if self.authorized:
@@ -211,7 +211,7 @@ class ContinuousIntegrationBase:
 
             return wrapper
 
-        return inner_metdhod
+        return inner_method
 
     def ensure_git_email_is_given(func):  # pylint: disable=no-self-argument
         """
@@ -609,7 +609,7 @@ class ContinuousIntegrationBase:
             raise TypeError(f"<value> should be {str}, {type(value)} given.")
 
         if not value:
-            raise ValueError("<value> should not be empy.")
+            raise ValueError("<value> should not be empty.")
 
         self._command = value
 
@@ -651,7 +651,7 @@ class ContinuousIntegrationBase:
             raise TypeError(f"<value> should be {str}, {type(value)} given.")
 
         if not value:
-            raise ValueError("<value> should not be empy.")
+            raise ValueError("<value> should not be empty.")
 
         self._end_command = value
 
@@ -693,7 +693,7 @@ class ContinuousIntegrationBase:
             raise TypeError(f"<value> should be {str}, {type(value)} given.")
 
         if not value:
-            raise ValueError("<value> should not be empy.")
+            raise ValueError("<value> should not be empty.")
 
         self._commit_message = value
 
@@ -735,7 +735,7 @@ class ContinuousIntegrationBase:
             raise TypeError(f"<value> should be {str}, {type(value)} given.")
 
         if not value:
-            raise ValueError("<value> should not be empy.")
+            raise ValueError("<value> should not be empty.")
 
         self._end_commit_message = value
 
@@ -835,7 +835,7 @@ class ContinuousIntegrationBase:
     @staticmethod
     def exec_command(command: str, allow_stdout: bool) -> None:
         """
-        Exceutes the given command.
+        Executes the given command.
 
         :param command:
             The command to execute.
@@ -1293,17 +1293,17 @@ class ContinuousIntegrationBase:
         The purpose of this method is to be able to have some custom init based
         on the CI we are currently on.
 
-        The init method should be manually started before runing any further
+        The init method should be manually started before running any further
         action.
 
         .. warning::
             We assume that we are aware that you should run this method first.
         """
 
-        PyFunceble.facility.Logger.info("Started initizalization of workflow.")
+        PyFunceble.facility.Logger.info("Started initialization of workflow.")
 
         self.init_git()
 
-        PyFunceble.facility.Logger.info("Finished initizalization of workflow.")
+        PyFunceble.facility.Logger.info("Finished initialization of workflow.")
 
         return self

@@ -1,14 +1,15 @@
 alembic
 colorama
-dnspython[DOH]~=2.6.0
+dnspython[DOH]~=2.7.0
 domain2idna~=1.12.0
 inflection
 packaging
 PyMySQL
-python-box[all]~=6.0.0
+python-box[all]~=7.3.2
 python-dotenv
 PyYAML
 requests[socks]<3
 setuptools>=65.5.1
 shtab
 SQLAlchemy~=2.0
+pyfunceble-process-manager==1.0.10

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
 
     def __post_init__(self) -> None:
         self.source_file = os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.INACTIVE_DB_FILE
+            self.config_dir, PyFunceble.cli.storage.INACTIVE_DB_FILE
         )
 
         return super().__post_init__()
@@ -84,11 +84,17 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
         ):
             if not isinstance(dataset["tested_at"], datetime):
                 try:
-                    date_of_inclusion = datetime.fromisoformat(dataset["tested_at"])
+                    date_of_inclusion = datetime.fromisoformat(
+                        dataset["tested_at"]
+                    ).astimezone(timezone.utc)
                 except (TypeError, ValueError):
                     date_of_inclusion = datetime.now(timezone.utc) - timedelta(days=365)
             else:
                 date_of_inclusion = dataset["tested_at"]
+
+            if date_of_inclusion.tzinfo is None:  # pragma: no cover
+                # Ensure that timezone is set.
+                date_of_inclusion = date_of_inclusion.replace(tzinfo=timezone.utc)
 
             if date_of_inclusion > days_ago:
                 continue

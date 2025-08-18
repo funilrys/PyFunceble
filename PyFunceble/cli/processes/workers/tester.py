@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -55,7 +55,6 @@ from typing import Any, Optional, Tuple
 
 import PyFunceble.cli.utils.testing
 import PyFunceble.facility
-import PyFunceble.factory
 from PyFunceble.checker.availability.domain_and_ip import DomainAndIPAvailabilityChecker
 from PyFunceble.checker.availability.url import URLAvailabilityChecker
 from PyFunceble.checker.base import CheckerBase
@@ -79,8 +78,6 @@ class TesterWorker(WorkerBase):
     the tests.
     """
 
-    STD_NAME: str = "pyfunceble_tester_worker"
-
     continue_dataset: Optional[ContinueDatasetBase] = None
     inactive_dataset: Optional[InactiveDatasetBase] = None
     testing_object: Optional[CheckerBase] = None
@@ -88,9 +85,11 @@ class TesterWorker(WorkerBase):
     known_testing_objects: dict = {}
     initiated_testing_objects: dict = {}
 
-    def __post_init__(self) -> None:
+    def perform_external_poweron_checks(self) -> None:
+        result = super().perform_external_poweron_checks()
+
         self.continue_dataset = (
-            PyFunceble.cli.utils.testing.get_continue_databaset_object(
+            PyFunceble.cli.utils.testing.get_continue_dataset_object(
                 db_session=self.db_session
             )
         )
@@ -124,7 +123,7 @@ class TesterWorker(WorkerBase):
             },
         }
 
-        return super().__post_init__()
+        return result
 
     @staticmethod
     def should_be_ignored(subject: str) -> bool:
@@ -209,18 +208,14 @@ class TesterWorker(WorkerBase):
         queue.
         """
 
-        if (
-            PyFunceble.factory.Requester.session
-            and "Connection" not in PyFunceble.factory.Requester.session.headers
-        ):
+        if "Connection" not in self.requester.headers:
             # Just close the connection immediately. This prevent potential infinite
             # streams.
-            PyFunceble.factory.Requester.session.headers["Connection"] = "close"
+            self.requester.session.headers["Connection"] = "close"
 
         if not isinstance(consumed, dict):
             PyFunceble.facility.Logger.debug(
-                "Skipping latest dataset because consumed data was not "
-                "a dictionnary."
+                "Skipping latest dataset because consumed data was not a dictionary."
             )
             return None
 

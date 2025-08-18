@@ -5,6 +5,7 @@
 [![image](https://img.shields.io/badge/code%20style-black-000000.png)](https://github.com/ambv/black)
 [![image](https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev)](https://coveralls.io/github/funilrys/PyFunceble?branch=dev)
 [![image](https://img.shields.io/github/license/funilrys/PyFunceble.png)](https://github.com/funilrys/PyFunceble/blob/dev/LICENSE)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffunilrys%2FPyFunceble.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffunilrys%2FPyFunceble?ref=badge_shield&issueType=license)
 [![image](https://img.shields.io/pypi/v/pyfunceble-dev.png)](https://pypi.org/project/pyfunceble-dev)
 [![image](https://img.shields.io/github/issues/funilrys/PyFunceble.png)](https://github.com/funilrys/PyFunceble/issues)
 
@@ -43,11 +44,10 @@ Happy testing with PyFunceble!
 
 # Table of Content
 
-- [The tool to check the availability or syntax of domain, IP or URL](#the-tool-to-check-the-availability-or-syntax-of-domain-ip-or-url)
-- [Table of Content](#table-of-content)
 - [Installation](#installation)
   - [Packages \& Versioning](#packages--versioning)
   - [PyPi - Python Package Index](#pypi---python-package-index)
+    - [Optional Dependencies](#optional-dependencies)
     - [pyfunceble](#pyfunceble)
     - [pyfunceble-dev](#pyfunceble-dev)
   - [Container Image Registry](#container-image-registry)
@@ -111,9 +111,35 @@ the OS specific packages _(see below)_.
 Here is an overview of the packages and where they are hosted.
 
 | Package        | PyPi Link                                |
-|----------------|------------------------------------------|
+| -------------- | ---------------------------------------- |
 | pyfunceble     | https://pypi.org/project/PyFunceble      |
 | pyfunceble-dev | https://pypi.org/project/PyFunceblee-dev |
+
+### Optional Dependencies
+
+The following dependencies are optional and can be installed if you need them.
+
+| Dependency                         | Description                                                                                                                                                            |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `all`                              | Install all functional dependencies. Basically all but `dev`, `test` and `docs`. _When a binary and non binary version is available, the binary version is installed._ |
+| `full`                             | Install all dependencies listed below. _When a binary and non binary version is available, the binary version is installed._                                           |
+| `psql`, `postgresql`               | **Build** and install the dependencies required to interact with PostgreSQL.                                                                                           |
+| `psql-binary`, `postgresql-binary` | **Install** the dependencies required to interact with PostgreSQL - from binary.                                                                                       |
+| `docs`                             | Install the dependencies required to build the documentation.                                                                                                          |
+| `test`                             | Install the dependencies required to run the tests.                                                                                                                    |
+| `dev`                              | Install the dependencies required to develop PyFunceble.                                                                                                               |
+
+They are intended to be installed through the following syntax:
+
+```shell
+pip3 install --user {pkg}[{dependency}]
+```
+
+As an example if you want to install the `docs` and `test` dependencies, you should run:
+
+```shell
+pip3 install --user pyfunceble[docs,test]
+```
 
 ### pyfunceble
 
@@ -147,7 +173,7 @@ is available. :smile:
 Here is an overview of the packages and where they are hosted.
 
 | Host       | Package        | Link                                                                                                     |
-|------------|----------------|----------------------------------------------------------------------------------------------------------|
+| ---------- | -------------- | -------------------------------------------------------------------------------------------------------- |
 | Docker Hub | pyfunceble     | [https://hub.docker.com/r/pyfunceble/pyfunceble](https://hub.docker.com/r/pyfunceble/pyfunceble)         |
 | Docker Hub | pyfunceble-dev | [https://hub.docker.com/r/pyfunceble/pyfunceble-dev](https://hub.docker.com/r/pyfunceble/pyfunceble-dev) |
 
@@ -197,7 +223,7 @@ this is probably for you.
 Here is an overview of the packages and where they are hosted.
 
 | Host   | Package        | Repository                                                              |
-|--------|----------------|-------------------------------------------------------------------------|
+| ------ | -------------- | ----------------------------------------------------------------------- |
 | GitHub | pyfunceble     | `git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble`  |
 | GitHub | pyfunceble-dev | `git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble-dev` |
 | GitLab | pyfunceble     | `git+https://gitlab.com/funilrys/PyFunceble.git@master#egg=PyFunceble`  |
@@ -366,7 +392,7 @@ From source:
 
 ```shell
 # Install dependencies.
-pip install --user -r requirements.docs.txt
+pip install --user .[docs]
 # Serve documentation locally.
 mkdocs serve
 # Open Documentation with browser.
@@ -397,6 +423,7 @@ contribution(s) and or issue report which made or make
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+
 <table>
   <tbody>
     <tr>
@@ -414,34 +441,35 @@ contribution(s) and or issue report which made or make
       <td align="center" valign="top" width="20%"><a href="https://github.com/ybreza"><img src="https://avatars.githubusercontent.com/u/35470865?v=4?s=100" width="100px;" alt="Reza Rizqullah"/><br /><sub><b>Reza Rizqullah</b></sub></a><br /><a href="#design-ybreza" title="Design">🎨</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=ybreza" title="Code">💻</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/techdragon"><img src="https://avatars.githubusercontent.com/u/2115079?v=4?s=100" width="100px;" alt="Samuel Bishop"/><br /><sub><b>Samuel Bishop</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Atechdragon" title="Bug reports">🐛</a> <a href="#ideas-techdragon" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="20%"><a href="https://scripttiger.github.io/"><img src="https://avatars.githubusercontent.com/u/29940916?v=4?s=100" width="100px;" alt="ScriptTiger"/><br /><sub><b>ScriptTiger</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3AScriptTiger" title="Bug reports">🐛</a> <a href="#ideas-ScriptTiger" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=ScriptTiger" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/sjhgvr"><img src="https://avatars.githubusercontent.com/u/51121527?v=4?s=100" width="100px;" alt="Stephan van Ruth"/><br /><sub><b>Stephan van Ruth</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Asjhgvr" title="Bug reports">🐛</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=sjhgvr" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="20%"><a href="http://stevenblack.com/"><img src="https://avatars.githubusercontent.com/u/80144?v=4?s=100" width="100px;" alt="Steven Black"/><br /><sub><b>Steven Black</b></sub></a><br /><a href="#ideas-StevenBlack" title="Ideas, Planning, & Feedback">🤔</a> <a href="#financial-StevenBlack" title="Financial">💵</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/T145"><img src="https://avatars.githubusercontent.com/u/1214129?v=4?s=100" width="100px;" alt="T145"/><br /><sub><b>T145</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3AT145" title="Bug reports">🐛</a> <a href="#ideas-T145" title="Ideas, Planning, & Feedback">🤔</a></td>
-      <td align="center" valign="top" width="20%"><a href="https://infosec.exchange/@wally3k"><img src="https://avatars.githubusercontent.com/u/3049142?v=4?s=100" width="100px;" alt="WaLLy3K"/><br /><sub><b>WaLLy3K</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3AWaLLy3K" title="Bug reports">🐛</a> <a href="#ideas-WaLLy3K" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="20%"><a href="https://infosec.exchange/@wally3k"><img src="https://avatars.githubusercontent.com/u/3049142?v=4?s=100" width="100px;" alt="WaLLy3K"/><br /><sub><b>WaLLy3K</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3AWaLLy3K" title="Bug reports">🐛</a> <a href="#ideas-WaLLy3K" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/Yuki2718"><img src="https://avatars.githubusercontent.com/u/58900598?v=4?s=100" width="100px;" alt="Yuki2718"/><br /><sub><b>Yuki2718</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3AYuki2718" title="Bug reports">🐛</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=Yuki2718" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/Zachinquarantine"><img src="https://avatars.githubusercontent.com/u/69423184?v=4?s=100" width="100px;" alt="Zachinquarantine"/><br /><sub><b>Zachinquarantine</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/commits?author=Zachinquarantine" title="Code">💻</a></td>
       <td align="center" valign="top" width="20%"><a href="http://bit.ly/cBWeb"><img src="https://avatars.githubusercontent.com/u/28985171?v=4?s=100" width="100px;" alt="ZeroDot1"/><br /><sub><b>ZeroDot1</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3AZeroDot1" title="Bug reports">🐛</a> <a href="#ideas-ZeroDot1" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-ZeroDot1" title="Answering Questions">💬</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=ZeroDot1" title="Tests">⚠️</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=ZeroDot1" title="Code">💻</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/avatartw"><img src="https://avatars.githubusercontent.com/u/69660730?v=4?s=100" width="100px;" alt="avatartw"/><br /><sub><b>avatartw</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Aavatartw" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="20%"><a href="https://github.com/dnmTX"><img src="https://avatars.githubusercontent.com/u/34774426?v=4?s=100" width="100px;" alt="dnmTX"/><br /><sub><b>dnmTX</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3AdnmTX" title="Bug reports">🐛</a> <a href="#ideas-dnmTX" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-dnmTX" title="Answering Questions">💬</a> <a href="https://github.com/funilrys/PyFunceble/pulls?q=is%3Apr+reviewed-by%3AdnmTX" title="Reviewed Pull Requests">👀</a> <a href="#data-dnmTX" title="Data">🔣</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=dnmTX" title="Tests">⚠️</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/dnmTX"><img src="https://avatars.githubusercontent.com/u/34774426?v=4?s=100" width="100px;" alt="dnmTX"/><br /><sub><b>dnmTX</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3AdnmTX" title="Bug reports">🐛</a> <a href="#ideas-dnmTX" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-dnmTX" title="Answering Questions">💬</a> <a href="https://github.com/funilrys/PyFunceble/pulls?q=is%3Apr+reviewed-by%3AdnmTX" title="Reviewed Pull Requests">👀</a> <a href="#data-dnmTX" title="Data">🔣</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=dnmTX" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/gwarser"><img src="https://avatars.githubusercontent.com/u/886325?v=4?s=100" width="100px;" alt="gwarser"/><br /><sub><b>gwarser</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Agwarser" title="Bug reports">🐛</a> <a href="#data-gwarser" title="Data">🔣</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=gwarser" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/hawkeye116477"><img src="https://avatars.githubusercontent.com/u/19818572?v=4?s=100" width="100px;" alt="hawkeye116477"/><br /><sub><b>hawkeye116477</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Ahawkeye116477" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/jawz101"><img src="https://avatars.githubusercontent.com/u/14151703?v=4?s=100" width="100px;" alt="jawz101"/><br /><sub><b>jawz101</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Ajawz101" title="Bug reports">🐛</a> <a href="#ideas-jawz101" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-jawz101" title="Answering Questions">💬</a> <a href="#data-jawz101" title="Data">🔣</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/keczuppp"><img src="https://avatars.githubusercontent.com/u/74409207?v=4?s=100" width="100px;" alt="keczuppp"/><br /><sub><b>keczuppp</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Akeczuppp" title="Bug reports">🐛</a> <a href="#ideas-keczuppp" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-keczuppp" title="Answering Questions">💬</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=keczuppp" title="Tests">⚠️</a> <a href="#data-keczuppp" title="Data">🔣</a></td>
-      <td align="center" valign="top" width="20%"><a href="https://github.com/opav"><img src="https://avatars.githubusercontent.com/u/6770347?v=4?s=100" width="100px;" alt="opav"/><br /><sub><b>opav</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Aopav" title="Bug reports">🐛</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=opav" title="Tests">⚠️</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/opav"><img src="https://avatars.githubusercontent.com/u/6770347?v=4?s=100" width="100px;" alt="opav"/><br /><sub><b>opav</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Aopav" title="Bug reports">🐛</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=opav" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/rusty-snake"><img src="https://avatars.githubusercontent.com/u/41237666?v=4?s=100" width="100px;" alt="rusty-snake"/><br /><sub><b>rusty-snake</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Arusty-snake" title="Bug reports">🐛</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=rusty-snake" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/smed79"><img src="https://avatars.githubusercontent.com/u/1873139?v=4?s=100" width="100px;" alt="smed79"/><br /><sub><b>smed79</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Asmed79" title="Bug reports">🐛</a> <a href="#ideas-smed79" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=smed79" title="Code">💻</a> <a href="#question-smed79" title="Answering Questions">💬</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=smed79" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="20%"><a href="https://speedmann.de/"><img src="https://avatars.githubusercontent.com/u/424659?v=4?s=100" width="100px;" alt="speedmann"/><br /><sub><b>speedmann</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Aspeedmann" title="Bug reports">🐛</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=speedmann" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="20%"><a href="https://www.mypdns.org/"><img src="https://avatars.githubusercontent.com/u/44526987?v=4?s=100" width="100px;" alt="spirillen"/><br /><sub><b>spirillen</b></sub></a><br /><a href="#a11y-spirillen" title="Accessibility">️️️️♿️</a> <a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Aspirillen" title="Bug reports">🐛</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=spirillen" title="Code">💻</a> <a href="#content-spirillen" title="Content">🖋</a> <a href="#data-spirillen" title="Data">🔣</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=spirillen" title="Documentation">📖</a> <a href="#example-spirillen" title="Examples">💡</a> <a href="#ideas-spirillen" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-spirillen" title="Maintenance">🚧</a> <a href="#mentoring-spirillen" title="Mentoring">🧑‍🏫</a> <a href="#promotion-spirillen" title="Promotion">📣</a> <a href="#question-spirillen" title="Answering Questions">💬</a> <a href="https://github.com/funilrys/PyFunceble/pulls?q=is%3Apr+reviewed-by%3Aspirillen" title="Reviewed Pull Requests">👀</a> <a href="#tool-spirillen" title="Tools">🔧</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=spirillen" title="Tests">⚠️</a> <a href="#tutorial-spirillen" title="Tutorials">✅</a> <a href="#talk-spirillen" title="Talks">📢</a> <a href="#userTesting-spirillen" title="User Testing">📓</a></td>
-      <td align="center" valign="top" width="20%"><a href="https://github.com/NeolithEra"><img src="https://avatars.githubusercontent.com/u/52778917?v=4?s=100" width="100px;" alt="watchman-pypi"/><br /><sub><b>watchman-pypi</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3ANeolithEra" title="Bug reports">🐛</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/NeolithEra"><img src="https://avatars.githubusercontent.com/u/52778917?v=4?s=100" width="100px;" alt="watchman-pypi"/><br /><sub><b>watchman-pypi</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3ANeolithEra" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/xxcriticxx"><img src="https://avatars.githubusercontent.com/u/15007183?v=4?s=100" width="100px;" alt="xxcriticxx"/><br /><sub><b>xxcriticxx</b></sub></a><br /><a href="https://github.com/funilrys/PyFunceble/issues?q=author%3Axxcriticxx" title="Bug reports">🐛</a> <a href="#ideas-xxcriticxx" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/funilrys/PyFunceble/commits?author=xxcriticxx" title="Tests">⚠️</a></td>
     </tr>
   </tbody>
@@ -505,7 +533,7 @@ which helped and/or still help me build, test and or make
 
 # License
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

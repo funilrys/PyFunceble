@@ -97,7 +97,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -112,6 +112,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=line-too-long
+
 import os
 import platform
 import re
@@ -125,9 +127,9 @@ def is_win_platform():
     Checks if the current platform is Windows.
     """
 
-    WIN_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
+    win_platforms = ["windows", "cygwin", "cygwin_nt-10.0"]
 
-    return platform.system().lower() in WIN_PLATFORMS
+    return platform.system().lower() in win_platforms
 
 
 def get_requirements(*, mode="standard"):
@@ -141,7 +143,19 @@ def get_requirements(*, mode="standard"):
         "docs": ["requirements.docs.txt"],
         "test": ["requirements.test.txt"],
         "psql": ["requirements.txt"],
+        "postgresql": ["requirements.txt"],
+        "psql-binary": ["requirements.txt"],
+        "postgresql-binary": ["requirements.txt"],
     }
+
+    ignored_modes_for_all = [
+        "dev",
+        "test",
+        "docs",
+        "psql",
+        "postgresql",
+        "postgresql-binary",
+    ]
 
     if is_win_platform():
         for known_mode, files in mode2files.items():
@@ -158,6 +172,9 @@ def get_requirements(*, mode="standard"):
             mode2files[known_mode] = list(new_files)
 
     mode2files["full"] = [y for x in mode2files.values() for y in x]
+    mode2files["all"] = [
+        z for x, y in mode2files.items() for z in y if x not in ignored_modes_for_all
+    ]
 
     result = set()
 
@@ -177,8 +194,10 @@ def get_requirements(*, mode="standard"):
 
                 result.add(line)
 
-    if mode == "psql":
+    if mode in ("psql", "postgresql"):
         result.add("psycopg2")
+    elif mode in ("psql-binary", "postgresql-binary", "all"):
+        result.add("psycopg2-binary")
 
     return list(result)
 
@@ -250,16 +269,20 @@ def get_console_scripts():  # pragma: no cover
 
 if __name__ == "__main__":
     setuptools.setup(
-        name="PyFunceble",
+        name="PyFunceble-dev",
         version=get_version(),
-        python_requires=">=3.8, <4",
+        python_requires=">=3.9, <4",
         install_requires=get_requirements(mode="standard"),
         extras_require={
             "docs": get_requirements(mode="docs"),
             "dev": get_requirements(mode="dev"),
             "test": get_requirements(mode="test"),
             "psql": get_requirements(mode="psql"),
+            "psql-binary": get_requirements(mode="psql-binary"),
+            "postgresql": get_requirements(mode="postgresql"),
+            "postgresql-binary": get_requirements(mode="postgresql-binary"),
             "full": get_requirements(mode="full"),
+            "all": get_requirements(mode="all"),
         },
         description="The tool to check the availability or syntax of domain, IP or URL.",
         long_description=get_long_description(),
@@ -271,7 +294,7 @@ if __name__ == "__main__":
         project_urls={
             "Documentation": "https://docs.pyfunceble.com",
             "Funding": "https://github.com/sponsors/funilrys",
-            "Source": "https://github.com/funilrys/PyFunceble/tree/master",
+            "Source": "https://github.com/funilrys/PyFunceble/tree/dev",
             "Tracker": "https://github.com/funilrys/PyFunceble/issues",
         },
         platforms=["any"],
@@ -288,12 +311,10 @@ if __name__ == "__main__":
         classifiers=[
             "Environment :: Console",
             "Topic :: Internet",
-            "Development Status :: 5 - Production/Stable",
+            "Development Status :: 4 - Beta",
             "Intended Audience :: Developers",
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",
-            "License :: OSI Approved",
         ],
-        test_suite="setup._test_suite",
         entry_points={"console_scripts": get_console_scripts()},
     )

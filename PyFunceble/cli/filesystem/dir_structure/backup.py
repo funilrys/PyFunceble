@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -55,7 +55,6 @@ import os
 import PyFunceble.facility
 from PyFunceble.cli.filesystem.dir_structure.base import DirectoryStructureBase
 from PyFunceble.helpers.dict import DictHelper
-from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.helpers.file import FileHelper
 from PyFunceble.helpers.hash import HashHelper
 
@@ -75,7 +74,7 @@ class DirectoryStructureBackup(DirectoryStructureBase):
         file_helper = FileHelper()
         hash_helper = HashHelper()
 
-        for file in DirectoryHelper(base_dir).list_all_files():
+        for file in self.directory_helper.set_path(base_dir).list_all_files():
             file_helper.set_path(file)
             reduced_path = self.get_path_without_base_dir(file)
 

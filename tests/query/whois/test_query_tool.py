@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=protected-access
+
 import unittest
 import unittest.mock
 
@@ -293,14 +295,78 @@ class TestWhoisQueryTool(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_read_expiration_date(self) -> None:
+        """
+        Tests the method which let us get the expiration date.
+        """
+
+        self.query_tool.query_timeout = 10000.0
+        self.query_tool.server = "whois.example.org"
+        self.query_tool.subject = "example.org"
+        self.query_tool._expiration_date = ""
+
+        expected = ""
+        self.assertEqual(expected, self.query_tool.expiration_date)
+
+        self.query_tool._expiration_date = "2021-01-01 00:00:00"
+
+        expected = "2021-01-01 00:00:00"
+        self.assertEqual(expected, self.query_tool.expiration_date)
+
+        self.query_tool._expiration_date = None
+        self.query_tool.lookup_record.record = "expires: 2021-01-01 00:00:00"
+
+        expected = "01-jan-2021"
+        self.assertEqual(expected, self.query_tool.expiration_date)
+
+    def test_read_registrar(self) -> None:
+        """
+        Tests the method which let us get the registrar.
+        """
+
+        self.query_tool.query_timeout = 10000.0
+        self.query_tool.server = "whois.example.org"
+        self.query_tool.subject = "example.org"
+        self.query_tool._registrar = ""
+
+        expected = ""
+        self.assertEqual(expected, self.query_tool.registrar)
+
+        self.query_tool._registrar = "Example Registrar"
+
+        expected = "Example Registrar"
+        self.assertEqual(expected, self.query_tool.registrar)
+
+        self.query_tool._registrar = None
+        self.query_tool.lookup_record.record = "registrar: Example Registrar"
+
+        expected = "Example Registrar"
+        self.assertEqual(expected, self.query_tool.registrar)
+
+    def test_read_record(self) -> None:
+        """
+        Tests the method which let us get the record.
+        """
+
+        self.query_tool.query_timeout = 10000.0
+        self.query_tool.server = "whois.example.org"
+        self.query_tool.subject = "example.org"
+        self.query_tool.lookup_record.record = "Hello, World!"
+
+        expected = "Hello, World!"
+        self.assertEqual(expected, self.query_tool.record)
+
     def test_get_lookup_record(self) -> None:
         """
         Tests the method which let us get the lookup record.
         """
 
-        self.query_tool.server = "whois.example.org"
         self.query_tool.query_timeout = 10000.0
+        self.query_tool.server = "whois.example.org"
         self.query_tool.subject = "example.org"
+
+        self.query_tool._expiration_date = "2021-01-01 00:00:00"
+        self.query_tool._registrar = "Example Registrar"
 
         actual = self.query_tool.get_lookup_record()
 
@@ -309,11 +375,17 @@ class TestWhoisQueryTool(unittest.TestCase):
         expected = "example.org"
         self.assertEqual(expected, actual.subject)
 
-        expected = 10000.0
-        self.assertEqual(expected, actual.query_timeout)
-
         expected = "whois.example.org"
         self.assertEqual(expected, actual.server)
+
+        expected = "2021-01-01 00:00:00"
+        self.assertEqual(expected, actual.expiration_date)
+
+        expected = "Example Registrar"
+        self.assertEqual(expected, actual.registrar)
+
+        expected = 10000.0
+        self.assertEqual(expected, actual.query_timeout)
 
 
 if __name__ == "__main__":

@@ -91,17 +91,17 @@ for domain in DOMAINS:
 
     # We order the generation of the status file by putting our information
     # to the producer queue.
-    producer_proc.add_to_input_queue(
+    producer_proc.push_to_input_queue(
         (communication_dataset, test_result), worker_name="main"
     )
 
 # We are now done, it's time to send the stop signal.
 # The stop signal will inform the producer process that it needs to stop
 # listening to new order (from the time it reads the stop signal).
-producer_proc.send_stop_signal()
+producer_proc.push_stop_signal()
 
 # Now we wait until it's done.
-producer_proc.wait()
+producer_proc.terminate()
 
 # From here all files were generated we can do whatever we want with them.
 ```

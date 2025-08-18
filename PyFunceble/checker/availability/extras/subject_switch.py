@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -116,10 +116,9 @@ class SubjectSwitchRulesHandler(ExtraRuleHandlerBase):
             if netloc == self.status.idna_subject and netloc not in variations:
                 continue
 
-            if not start_path:
-                if local_path != "/":
-                    continue
-            elif start_path != local_path:
+            if (not start_path and local_path != "/") or (
+                start_path and start_path != local_path
+            ):
                 continue
 
             self.switch_to_down()
@@ -141,12 +140,12 @@ class SubjectSwitchRulesHandler(ExtraRuleHandlerBase):
         )
 
         try:
-            if any(self.status.netloc.startswith(x) for x in ("www.", "m.")):
+            if self.status.netloc.startswith(("www.", "m.")):
                 self.do_request()
 
                 if not self.status.status_after_extra_rules:
                     self._switch_down_by_history()
-        except PyFunceble.factory.Requester.exceptions.RequestException:
+        except self.requester.exceptions.RequestException:
             pass
 
         PyFunceble.facility.Logger.info(

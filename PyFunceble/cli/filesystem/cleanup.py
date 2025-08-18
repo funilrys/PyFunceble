@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -55,8 +55,6 @@ from typing import List
 
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
-import PyFunceble.cli.utils.testing
-import PyFunceble.sessions
 from PyFunceble.cli.filesystem.dir_base import FilesystemDirBase
 from PyFunceble.database.sqlalchemy.all_schemas import Continue, Inactive
 from PyFunceble.helpers.file import FileHelper
@@ -71,7 +69,7 @@ class FilesystemCleanup(FilesystemDirBase):
 
     def clean_database(self) -> "FilesystemCleanup":
         """
-        Cleanups the uneeded data that were stored in the database.
+        Cleanups the unneeded data that were stored in the database.
 
         .. warning::
             This method cleans everything except the WHOIS records.

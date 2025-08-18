@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -103,6 +103,7 @@ class StdoutPrinter(PrinterBase):
     FOREGROUND_COLORATED: List[str] = ["percentage", "simple"]
 
     _allow_coloration: bool = True
+    _allow_background_coloration: bool = True
 
     def __init__(
         self,
@@ -110,12 +111,18 @@ class StdoutPrinter(PrinterBase):
         *,
         dataset: Optional[Dict[str, str]] = None,
         allow_coloration: Optional[bool] = None,
+        allow_background_coloration: Optional[bool] = None,
         **kwargs,
     ) -> None:
         if allow_coloration is not None:
             self.allow_coloration = allow_coloration
         else:
             self.guess_allow_coloration()
+
+        if allow_background_coloration is not None:
+            self.allow_background_coloration = allow_background_coloration
+        else:
+            self.guess_allow_background_coloration()
 
         super().__init__(template_to_use=template_to_use, dataset=dataset, **kwargs)
 
@@ -170,6 +177,63 @@ class StdoutPrinter(PrinterBase):
         else:
             self.allow_coloration = self.STD_ALLOW_COLORATION
 
+        return self
+
+    @property
+    def allow_background_coloration(self) -> bool:
+        """
+        Provides the current state of the :code:`_allow_background_coloration`
+        attribute.
+        """
+
+        return self._allow_background_coloration
+
+    @allow_background_coloration.setter
+    def allow_background_coloration(self, value: bool) -> Optional[bool]:
+        """
+        Sets the authorization to use the coloration.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`str`.
+        :raise ValueError:
+            When teh given :code:`value` is empty.
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._allow_background_coloration = value
+
+    def set_allow_background_coloration(self, value: bool) -> "StdoutPrinter":
+        """
+        Sets the authorization to use the coloration.
+
+        :param value:
+            The value to set.
+        """
+
+        self.allow_background_coloration = value
+
+        return self
+
+    def guess_allow_background_coloration(self) -> "StdoutPrinter":
+        """
+        Try to guess and set the :code:`disable_background_coloration` attribute.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            # pylint: disable=line-too-long
+            self.allow_background_coloration = (
+                PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.background_colour
+            )
+        else:
+            self.allow_background_coloration = True
+
+        return self
+
     def print_interpolated_line(self):
         """
         Prints the interpolated line into the destination.
@@ -186,10 +250,16 @@ class StdoutPrinter(PrinterBase):
 
             if self.allow_coloration:
                 if self.template_to_use in self.BACKGROUND_COLORATED:
-                    print(
-                        f"{self.STATUS2BACKGROUND_COLOR[status_to_compare]}"
-                        f"{line_to_print}"
-                    )
+                    if self.allow_background_coloration:
+                        print(
+                            f"{self.STATUS2BACKGROUND_COLOR[status_to_compare]}"
+                            f"{line_to_print}"
+                        )
+                    else:
+                        print(
+                            f"{self.STATUS2FORGROUND_COLOR[status_to_compare]}"
+                            f"{line_to_print}"
+                        )
                 elif self.template_to_use in self.FOREGROUND_COLORATED:
                     print(
                         f"{self.STATUS2FORGROUND_COLOR[status_to_compare]}"

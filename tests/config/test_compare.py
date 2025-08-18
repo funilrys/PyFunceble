@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -284,6 +284,29 @@ class TestConfigCompare(unittest.TestCase):
                 "config": "https://example.org/PyFunceble_config.yaml",
                 "iana": "https://example.org/iana-db.json",
             }
+        )
+
+        config_comparison = ConfigComparison(
+            local_config=given_local, upstream_config=given_upstream
+        )
+
+        expected = False
+        actual = config_comparison.is_local_identical()
+
+        self.assertEqual(expected, actual)
+
+    def test_is_local_identical_platform_url_base(self) -> None:
+        """
+        Tests the method which let us check if the given local configuration
+        is identical to the upstream one for the case that the platform url base
+        is set.
+        """
+
+        given_upstream = copy.deepcopy(self.our_config)
+
+        given_local = copy.deepcopy(self.our_config)
+        given_local["platform"].update(
+            {"url_base": "https://example.org/PyFunceble_config.yaml"}
         )
 
         config_comparison = ConfigComparison(
@@ -619,6 +642,37 @@ class TestConfigCompare(unittest.TestCase):
         actual = config_comparison.get_merged()
 
         self.assertEqual(expected, actual)
+
+    def test_get_merged_delete_flatten(self) -> None:
+        """
+        Tests the method which let us get the (clean) merged configuration for
+        the case that we want to delete a nested key.
+        """
+
+        given_local = copy.deepcopy(self.our_config)
+        given_upstream = copy.deepcopy(self.our_config)
+
+        given_local["cli_testing"]["file_generation"]["foobar"] = True
+        given_local["cli_testing"]["file_generation"]["unified_results"] = True
+        given_upstream["cli_testing"]["file_generation"]["barfoo"] = False
+
+        del given_upstream["cli_testing"]["file_generation"]["unified_results"]
+
+        config_comparison = ConfigComparison(
+            local_config=given_local, upstream_config=given_upstream
+        )
+
+        config_comparison.DELETE_FLATTEN = [
+            "cli_testing.file_generation.unified_results",
+        ]
+
+        expected = copy.deepcopy(self.our_config)
+        del expected["cli_testing"]["file_generation"]["unified_results"]
+
+        actual = config_comparison.get_merged()
+
+        self.assertIn("foobar", actual["cli_testing"]["file_generation"])
+        self.assertNotIn("unified_results", actual["cli_testing"]["file_generation"])
 
 
 if __name__ == "__main__":

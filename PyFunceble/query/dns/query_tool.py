@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -69,7 +69,6 @@ import dns.rdatatype
 
 import PyFunceble.facility
 import PyFunceble.storage
-from PyFunceble.helpers.list import ListHelper
 from PyFunceble.query.dns.nameserver import Nameservers
 from PyFunceble.query.record.dns import DNSQueryToolRecord
 
@@ -96,7 +95,7 @@ class DNSQueryTool:
         x.name: x.value for x in dns.rdatatype.RdataType
     }
 
-    nameservers: Nameservers = Nameservers()
+    nameservers: Optional[Nameservers] = None
     _query_record_type: int = dns.rdatatype.RdataType.ANY
 
     _subject: Optional[str] = None
@@ -120,15 +119,17 @@ class DNSQueryTool:
         trust_server: Optional[bool] = None,
         delay: Optional[bool] = None,
     ) -> None:
-        if nameservers is not None:
-            self.nameservers.set_nameservers(nameservers)
-        else:  # pragma: no cover ## I'm not playing with system resolver.
-            self.nameservers.guess_and_set_nameservers()
+        self.nameservers = Nameservers()
 
         if preferred_protocol is not None:
             self.preferred_protocol = preferred_protocol
         else:
             self.guess_and_set_preferred_protocol()
+
+        if nameservers is not None:
+            self.nameservers.set_nameservers(nameservers)
+        else:  # pragma: no cover ## I'm not playing with system resolver.
+            self.nameservers.guess_and_set_nameservers()
 
         if follow_nameserver_order is not None:
             self.follow_nameserver_order = follow_nameserver_order
@@ -342,6 +343,8 @@ class DNSQueryTool:
         """
 
         self.nameservers.set_nameservers(value)
+
+        return self
 
     @property
     def follow_nameserver_order(self) -> bool:
@@ -756,29 +759,54 @@ class DNSQueryTool:
         PyFunceble.facility.Logger.debug("Mixed data:\n%r", dataset)
         return dataset
 
-    @ensure_subject_is_given
-    @ignore_if_query_message_is_missing
-    @update_lookup_record_response
-    def tcp(
-        self,
-    ) -> Optional[List[str]]:
+    def _query_protocol(self, protocol: str) -> Optional[List[str]]:
         """
-        Request the chosen record through the TCP protocol.
+        Given a protocol, we query the nameservers with or through it.
+
+        :param str protocol:
+            The protocol to use for the query.
+
+            It can be one of the following:
+                - "TCP"
+                - "UDP"
+                - "HTTPS"
+                - "TLS"
+        :return:
+            The result of the query, or an empty list if the query failed.
         """
 
-        self.lookup_record.used_protocol = "TCP"
+        self.lookup_record.used_protocol = protocol.upper()
 
-        result = []
+        if self.lookup_record.used_protocol not in self.SUPPORTED_PROTOCOL:
+            raise ValueError(
+                f"<protocol> ({self.lookup_record.used_protocol!r}) is unknown or "
+                f"unsupported (supported: {self.SUPPORTED_PROTOCOL!r})."
+            )
+
+        result = set()
 
         for nameserver, port in self._mix_order(
             self.nameservers.get_nameserver_ports()
         ).items():
             PyFunceble.facility.Logger.debug(
-                "Started to query information of %r from %r", self.subject, nameserver
+                "Started to query information of %r from %r (%s)",
+                self.subject,
+                nameserver,
+                self.lookup_record.used_protocol,
             )
 
+            if self.lookup_record.used_protocol == "HTTPS" and port == 53:
+                # Default port for nameserver class is 53. So we ensure we
+                # overwrite with our own default.
+                port = 443
+
+            if self.lookup_record.used_protocol == "TLS" and port == 53:
+                # Default port for nameserver class is 53. So we ensure we
+                # overwrite with our own default.
+                port = 853
+
             try:
-                response = dns.query.tcp(
+                response = getattr(dns.query, protocol.lower())(
                     self.query_message,
                     nameserver,
                     port=port,
@@ -788,19 +816,18 @@ class DNSQueryTool:
                 local_result = self._get_result_from_response(response)
 
                 if local_result:
-                    result.extend(local_result)
+                    result.update(local_result)
 
                     self.lookup_record.nameserver = nameserver
                     self.lookup_record.port = port
 
                     PyFunceble.facility.Logger.debug(
-                        "Successfully queried information of %r from %r.",
+                        "Successfully queried information of %r from %r. (%s)",
                         self.subject,
                         nameserver,
+                        self.lookup_record.used_protocol,
                     )
 
-                    if not self.trust_server:  # pragma: no cover: Per case.
-                        break
                 if self.trust_server:  # pragma: no cover: Per case.
                     break
             except (dns.exception.Timeout, socket.error):
@@ -818,15 +845,28 @@ class DNSQueryTool:
                 break
 
             PyFunceble.facility.Logger.debug(
-                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
+                "Unsuccessfully queried information of %r from %r (%s). Sleeping %fs.",
                 self.subject,
                 nameserver,
+                self.lookup_record.used_protocol,
                 self.delay,
             )
 
             time.sleep(self.delay)
 
-        return ListHelper(result).remove_duplicates().subject
+        return list(result)
+
+    @ensure_subject_is_given
+    @ignore_if_query_message_is_missing
+    @update_lookup_record_response
+    def tcp(
+        self,
+    ) -> Optional[List[str]]:
+        """
+        Request the chosen record through the TCP protocol.
+        """
+
+        return self._query_protocol("TCP")
 
     @ensure_subject_is_given
     @ignore_if_query_message_is_missing
@@ -838,67 +878,7 @@ class DNSQueryTool:
         Request the chosen record through the UTP protocol.
         """
 
-        self.lookup_record.used_protocol = "UDP"
-
-        result = []
-
-        for nameserver, port in self._mix_order(
-            self.nameservers.get_nameserver_ports()
-        ).items():
-            PyFunceble.facility.Logger.debug(
-                "Started to query information of %r from %r", self.subject, nameserver
-            )
-
-            try:
-                response = dns.query.udp(
-                    self.query_message,
-                    nameserver,
-                    port=port,
-                    timeout=self.query_timeout,
-                )
-
-                local_result = self._get_result_from_response(response)
-
-                if local_result:
-                    result.extend(local_result)
-
-                    self.lookup_record.nameserver = nameserver
-                    self.lookup_record.port = port
-
-                    PyFunceble.facility.Logger.debug(
-                        "Successfully queried information of %r from %r.",
-                        self.subject,
-                        nameserver,
-                    )
-
-                    if not self.trust_server:  # pragma: no cover: Per case.
-                        break
-                if self.trust_server:  # pragma: no cover: Per case.
-                    break
-            except (dns.exception.Timeout, socket.error):
-                # Example: Resource temporarily unavailable.
-                pass
-            except dns.query.UnexpectedSource:
-                # Example: got a response from XXX instead of XXX.
-                pass
-            except dns.query.BadResponse:
-                # Example: A DNS query response does not respond to the question
-                # asked.
-                pass
-            except ValueError:
-                # Example: Input is malformed.
-                break
-
-            PyFunceble.facility.Logger.debug(
-                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
-                self.subject,
-                nameserver,
-                self.delay,
-            )
-
-            time.sleep(self.delay)
-
-        return ListHelper(result).remove_duplicates().subject
+        return self._query_protocol("UDP")
 
     @ensure_subject_is_given
     @ignore_if_query_message_is_missing
@@ -910,61 +890,7 @@ class DNSQueryTool:
         Request the chosen record through the https protocol.
         """
 
-        self.lookup_record.used_protocol = "HTTPS"
-
-        result = []
-
-        for nameserver in self._mix_order(self.nameservers.get_nameservers()):
-            PyFunceble.facility.Logger.debug(
-                "Started to query information of %r from %r", self.subject, nameserver
-            )
-
-            try:
-                response = dns.query.https(
-                    self.query_message, nameserver, timeout=self.query_timeout
-                )
-
-                local_result = self._get_result_from_response(response)
-
-                if local_result:
-                    result.extend(local_result)
-
-                    self.lookup_record.nameserver = nameserver
-
-                    PyFunceble.facility.Logger.debug(
-                        "Successfully queried information of %r from %r.",
-                        self.subject,
-                        nameserver,
-                    )
-
-                    if not self.trust_server:  # pragma: no cover: Per case.
-                        break
-                if self.trust_server:  # pragma: no cover: Per case.
-                    break
-            except (dns.exception.Timeout, socket.error):
-                # Example: Resource temporarily unavailable.
-                pass
-            except dns.query.UnexpectedSource:
-                # Example: got a response from XXX instead of XXX.
-                pass
-            except dns.query.BadResponse:
-                # Example: A DNS query response does not respond to the question
-                # asked.
-                pass
-            except ValueError:
-                # Example: Input is malformed.
-                break
-
-            PyFunceble.facility.Logger.debug(
-                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
-                self.subject,
-                nameserver,
-                self.delay,
-            )
-
-            time.sleep(self.delay)
-
-        return ListHelper(result).remove_duplicates().subject
+        return self._query_protocol("HTTPS")
 
     @ensure_subject_is_given
     @ignore_if_query_message_is_missing
@@ -976,72 +902,7 @@ class DNSQueryTool:
         Request the chosen record through the TLS protocol.
         """
 
-        self.lookup_record.used_protocol = "TLS"
-
-        result = []
-
-        for nameserver, port in self._mix_order(
-            self.nameservers.get_nameserver_ports()
-        ).items():
-            PyFunceble.facility.Logger.debug(
-                "Started to query information of %r from %r", self.subject, nameserver
-            )
-
-            if port == 53:
-                # Default port for nameserver class is 53. So we ensure we
-                # overwrite with our own default.
-                port = 853
-
-            try:
-                response = dns.query.tls(
-                    self.query_message,
-                    nameserver,
-                    port=port,
-                    timeout=self.query_timeout,
-                )
-
-                local_result = self._get_result_from_response(response)
-
-                if local_result:
-                    result.extend(local_result)
-
-                    self.lookup_record.nameserver = nameserver
-                    self.lookup_record.port = port
-
-                    PyFunceble.facility.Logger.debug(
-                        "Successfully queried information of %r from %r.",
-                        self.subject,
-                        nameserver,
-                    )
-
-                    if not self.trust_server:  # pragma: no cover: Per case.
-                        break
-                if self.trust_server:  # pragma: no cover: Per case.
-                    break
-            except (dns.exception.Timeout, socket.error):
-                # Example: Resource temporarily unavailable.
-                pass
-            except dns.query.UnexpectedSource:
-                # Example: got a response from XXX instead of XXX.
-                pass
-            except dns.query.BadResponse:
-                # Example: A DNS query response does not respond to the question
-                # asked.
-                pass
-            except ValueError:
-                # Example: Input is malformed.
-                break
-
-            PyFunceble.facility.Logger.debug(
-                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
-                self.subject,
-                nameserver,
-                self.delay,
-            )
-
-            time.sleep(self.delay)
-
-        return ListHelper(result).remove_duplicates().subject
+        return self._query_protocol("TLS")
 
     def query(
         self,

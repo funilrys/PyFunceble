@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -70,6 +70,8 @@ class FilesystemDirBase:
 
     INLINE_DEST: str = "_inline_"
 
+    directory_helper: Optional[DirectoryHelper] = None
+
     def __init__(
         self,
         parent_dirname: Optional[str] = None,
@@ -82,6 +84,8 @@ class FilesystemDirBase:
             self.parent_dirname = PyFunceble.cli.storage.STD_PARENT_DIRNAME
 
         self.db_session = db_session
+
+        self.directory_helper = DirectoryHelper()
 
     @property
     def parent_dirname(self) -> Optional[str]:
@@ -187,5 +191,5 @@ class FilesystemDirBase:
         else:
             result = PyFunceble.cli.storage.OUTPUT_DIRECTORY
 
-        DirectoryHelper(result).create()
+        self.directory_helper.set_path(result).create()
         return result

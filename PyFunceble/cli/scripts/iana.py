@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -54,6 +54,7 @@ import concurrent.futures
 from typing import Dict, Optional, Tuple
 
 import PyFunceble.facility
+import PyFunceble.storage
 from PyFunceble.dataset.iana import IanaDataset
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.download import DownloadHelper
@@ -142,11 +143,17 @@ class IanaDBGenerator:
     An internal storage map.
     """
 
+    whois_query_tool: Optional[WhoisQueryTool] = None
+    regex_helper: Optional[RegexHelper] = None
+
     def __init__(self, destination: Optional[str] = None) -> None:
         if destination is not None:
             self.destination = destination
         else:
             self.destination = IanaDataset().source_file
+
+        self.whois_query_tool = WhoisQueryTool()
+        self.regex_helper = RegexHelper()
 
     @property
     def destination(self) -> Optional[str]:
@@ -195,11 +202,9 @@ class IanaDBGenerator:
         Given an extension, tries to get or guess its extension.
         """
 
-        whois_query_tool = WhoisQueryTool()
-
         dummy_domain = f"hello.{extension}"
         iana_record = (
-            whois_query_tool.set_server(self.IANA_WHOIS_SERVER)
+            self.whois_query_tool.set_server(self.IANA_WHOIS_SERVER)
             .set_subject(dummy_domain)
             .record
         )
@@ -207,7 +212,7 @@ class IanaDBGenerator:
         if iana_record and "refer" in iana_record:
             regex_referrer = r"(?s)refer\:\s+([a-zA-Z0-9._-]+)\n"
 
-            matched = RegexHelper(regex_referrer).match(
+            matched = self.regex_helper.set_regex(regex_referrer).match(
                 iana_record, return_match=True, group=1
             )
 
@@ -215,7 +220,7 @@ class IanaDBGenerator:
                 return matched
 
         possible_server = f"whois.nic.{extension}"
-        response = whois_query_tool.set_server(possible_server).record
+        response = self.whois_query_tool.set_server(possible_server).record
 
         if response:
             return possible_server
@@ -223,7 +228,7 @@ class IanaDBGenerator:
         if extension in self.MANUAL_SERVER:
             possible_server = self.MANUAL_SERVER[extension]
 
-            response = whois_query_tool.set_server(possible_server).record
+            response = self.whois_query_tool.set_server(possible_server).record
 
             if response:
                 return possible_server
@@ -246,10 +251,10 @@ class IanaDBGenerator:
 
         regex_valid_extension = r"(/domains/root/db/)(.*)(\.html)"
 
-        regex_helper = RegexHelper(regex_valid_extension)
-
-        if regex_helper.match(block, return_match=False):
-            extension = regex_helper.match(block, return_match=True, group=2)
+        if self.regex_helper.set_regex(regex_valid_extension).match(
+            block, return_match=False
+        ):
+            extension = self.regex_helper.match(block, return_match=True, group=2)
 
             if extension:
                 return extension, self.get_referrer_from_extension(extension)
@@ -265,7 +270,16 @@ class IanaDBGenerator:
         """
 
         raw_data = (
-            DownloadHelper(self.UPSTREAM_LINK)
+            DownloadHelper(
+                self.UPSTREAM_LINK,
+                certificate_validation=(
+                    PyFunceble.storage.CONFIGURATION.verify_ssl_certificate
+                    if PyFunceble.storage.CONFIGURATION
+                    else True
+                ),
+                own_proxy_handler=True,
+                proxies=PyFunceble.storage.PROXY,
+            )
             .download_text()
             .split('<span class="domain tld">')
         )

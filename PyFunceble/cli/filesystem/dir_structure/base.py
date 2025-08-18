@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -58,8 +58,6 @@ try:
 except ImportError:  # pragma: no cover ## Retro compatibility
     import importlib_resources as package_resources
 
-
-import PyFunceble.storage
 from PyFunceble.cli.filesystem.cleanup import FilesystemCleanup
 from PyFunceble.cli.filesystem.dir_base import FilesystemDirBase
 
@@ -78,7 +76,7 @@ class DirectoryStructureBase(FilesystemDirBase):
     ) -> None:
         with package_resources.path(
             "PyFunceble.data.infrastructure",
-            PyFunceble.storage.DISTRIBUTED_DIR_STRUCTURE_FILENAME,
+            "dir_structure_production.json",
         ) as file_path:
             self.std_source_file = str(file_path)
 

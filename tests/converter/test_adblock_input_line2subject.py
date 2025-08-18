@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -272,6 +272,19 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
             "expected": {
                 "standard": [],
                 "aggressive": ["example.com", "example.net", "example.org"],
+            },
+        },
+        {
+            "subject": 'example.com##a[href="https://example.org"][target="_blank"]',
+            "expected": {"aggressive": ["example.com", "example.org"], "standard": []},
+        },
+        {
+            # unlikely, but we should be able to handle such weird cases.
+            "subject": 'example.com##a[href="https://example.org"]'
+            '[target="https://example.net"]',
+            "expected": {
+                "aggressive": ["example.com", "example.net", "example.org"],
+                "standard": [],
             },
         },
     ]

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ class DatasetBase:
     """
 
     STORAGE_INDEX: Optional[str] = None
-    DOWNLOADER: Optional[DownloaderBase] = None
+    downloader: Optional[DownloaderBase] = None
 
     source_file: Optional[str] = None
 
@@ -129,9 +129,9 @@ class DatasetBase:
         file_helper = FileHelper(self.source_file)
 
         if not file_helper.exists() and bool(
-            self.DOWNLOADER
+            self.downloader
         ):  # pragma: no cover ## This is just a safety endpoint.
-            self.DOWNLOADER.start()
+            self.downloader.start()
 
             if not file_helper.exists():
                 raise FileNotFoundError(file_helper.path)
@@ -142,4 +142,4 @@ class DatasetBase:
 
         setattr(PyFunceble.storage, self.STORAGE_INDEX, content)
 
-        return content
+        return content or {}

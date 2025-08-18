@@ -30,6 +30,17 @@ user_agent:
   #
   # CLI Argument: -ua | --user-agent
   custom: null
+
+  # Set the reference to add to the User-Agent.
+  # This is useful when you want to add a reference (e.g. a link) to the User-Agent.
+  #
+  # The reference will be added at the end of the User-Agent in the following format:
+  # {user_agent}; +{reference}
+  #
+  # When set to `null`, no reference will be added.
+  #
+  # CLI Argument: --user-agent-reference
+  reference: null
 ```
 
 ## `browser`

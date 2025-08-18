@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -53,6 +53,8 @@ License:
 from typing import List, Optional
 
 from PyFunceble.checker.reputation.base import ReputationCheckerBase
+from PyFunceble.checker.reputation.params import ReputationCheckerParams
+from PyFunceble.checker.reputation.status import ReputationCheckerStatus
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.converter.url2netloc import Url2Netloc
 
@@ -67,6 +69,15 @@ class URLReputationChecker(ReputationCheckerBase):
         Optional, Activates/Disables the check of the status before the actual
         status gathering.
     """
+
+    def subject_propagator(self) -> "URLReputationChecker":
+        self.status = ReputationCheckerStatus()
+        self.params = ReputationCheckerParams()
+        self.status.params = self.params
+
+        self.status.subject_kind = "url"
+
+        return super().subject_propagator()
 
     def query_a_record(self) -> Optional[List[str]]:
         url_base = Url2Netloc(self.status.subject).get_converted()
@@ -96,7 +107,7 @@ class URLReputationChecker(ReputationCheckerBase):
 
             self.dns_query_tool.subject = self.idna_subject
 
-            return result
+            return list(result)
 
         result = (
             self.dns_query_tool.set_query_record_type("A").set_subject(url_base).query()

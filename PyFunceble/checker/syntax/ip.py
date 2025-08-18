@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -56,6 +56,7 @@ from PyFunceble.checker.base import CheckerBase
 from PyFunceble.checker.syntax.base import SyntaxCheckerBase
 from PyFunceble.checker.syntax.ipv4 import IPv4SyntaxChecker
 from PyFunceble.checker.syntax.ipv6 import IPv6SyntaxChecker
+from PyFunceble.checker.syntax.params import SyntaxCheckerParams
 from PyFunceble.checker.syntax.status import SyntaxCheckerStatus
 
 
@@ -88,6 +89,9 @@ class IPSyntaxChecker(SyntaxCheckerBase):
         self.ipv6_checker.subject = self.idna_subject
 
         self.status = SyntaxCheckerStatus()
+        self.params = SyntaxCheckerParams()
+        self.status.params = self.params
+
         self.status.subject_kind = "ip"
 
         return super().subject_propagator()

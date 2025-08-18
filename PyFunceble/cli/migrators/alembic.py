@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -68,10 +68,8 @@ from alembic import command as alembic_command
 from alembic.script.base import ScriptDirectory
 
 import PyFunceble.cli.facility
-import PyFunceble.cli.factory
 import PyFunceble.cli.storage
 import PyFunceble.facility
-import PyFunceble.sessions
 from PyFunceble.cli.migrators.db_base import DBMigratorBase
 
 
@@ -97,7 +95,7 @@ class Alembic:
         Otherwise, apply the given :code:`default`.
         """
 
-        def inner_metdhod(func):
+        def inner_method(func):
             @functools.wraps(func)
             def wrapper(self, *args, **kwargs):
                 if self.authorized:
@@ -106,7 +104,7 @@ class Alembic:
 
             return wrapper
 
-        return inner_metdhod
+        return inner_method
 
     @property
     def authorized(self):

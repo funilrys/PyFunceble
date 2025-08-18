@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -123,7 +123,9 @@ class AdblockInputLine2Subject(ConverterBase):
             Giving :code:`"hello.world/?is=beautiful"` returns :code:`"hello.world"`
         """
 
-        subject = subject.replace("*", "").replace("~", "")
+        subject = (
+            subject.replace("*", "").replace("~", "").replace('"', "").replace("'", "")
+        )
 
         try:
             return Url2Netloc(subject).get_converted()
@@ -175,11 +177,12 @@ class AdblockInputLine2Subject(ConverterBase):
 
             if "href" in rule:
                 matched = self._regex_helper.set_regex(
-                    r"((?:\"|\')(.*)(?:\"|\'))"
-                ).match(rule, return_match=True, rematch=True, group=1)
+                    r"((?:\"|\')(.*?)(?:\"|\'))"
+                ).match(rule, return_match=True, rematch=True)
 
                 if matched:
-                    result.add(self.extract_base(matched))
+                    result.update(self.extract_base(x) for x in matched)
+
                 continue
 
         return result

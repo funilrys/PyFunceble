@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -75,10 +75,12 @@ class Month2Unified(ConverterBase):
         "dec": [str(12), "dec", "december", "dec."],
     }
 
+    REVERSE_MAP: Dict[str, str] = {z: x for x, y in MAP.items() for z in y}
+
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
         """
-        Overrites the default behavior.
+        Overrides the default behavior.
 
         :raise TypeError:
             When the given data to convert is not :py:class:`str`
@@ -99,8 +101,4 @@ class Month2Unified(ConverterBase):
             If no month is found, the given data is given as response.
         """
 
-        for to_return, possibilities in self.MAP.items():
-            if self.data_to_convert.lower() in possibilities:
-                return to_return
-
-        return self.data_to_convert
+        return self.REVERSE_MAP.get(self.data_to_convert.lower(), self.data_to_convert)

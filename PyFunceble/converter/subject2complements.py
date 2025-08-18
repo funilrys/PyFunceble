@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -64,6 +64,7 @@ class Subject2Complements(ConverterBase):
     """
 
     _include_given: bool = False
+    domain_syntax_checker: Optional[DomainSyntaxChecker] = None
 
     def __init__(
         self,
@@ -73,6 +74,8 @@ class Subject2Complements(ConverterBase):
     ) -> None:
         if include_given is not None:
             self.include_given = include_given
+
+        self.domain_syntax_checker = DomainSyntaxChecker()
 
         super().__init__(data_to_convert=data_to_convert)
 
@@ -143,7 +146,7 @@ class Subject2Complements(ConverterBase):
         _ = aggressive
         result = []
 
-        checker = DomainSyntaxChecker(data)
+        checker = self.domain_syntax_checker.set_subject(data)
 
         if self.include_given and data not in result:
             result.append(data)

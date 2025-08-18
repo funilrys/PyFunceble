@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ import os
 import secrets
 import unittest
 import unittest.mock
-from datetime import datetime
+from datetime import datetime, timezone
 
 import requests
 import requests.models
@@ -170,7 +170,9 @@ class TestPlatformQueryTool(unittest.TestCase):
             "status_source_before_extra_rules": None,
             "subdomain_syntax": False,
             "subject": "example.com",
-            "tested_at": datetime.fromisoformat("2021-03-09T17:42:15.771647"),
+            "tested_at": datetime.fromisoformat(
+                "2021-03-09T17:42:15.771647"
+            ).astimezone(timezone.utc),
             "url_syntax": False,
             "whois_lookup_record": {
                 "expiration_date": None,
@@ -253,10 +255,10 @@ class TestPlatformQueryTool(unittest.TestCase):
         In this test we test the case that nothing is given or declared.
         """
 
-        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
 
-        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
 
         expected = ""
@@ -1096,10 +1098,10 @@ class TestPlatformQueryTool(unittest.TestCase):
         response_dict["subject"] = "example.net"
         self.availability_status_dataset["expiration_date"] = "23-nov-2090"
 
-        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
 
-        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
 
         self.query_tool.token = ""
@@ -1198,10 +1200,10 @@ class TestPlatformQueryTool(unittest.TestCase):
         In this test, we test the case that no token is given.
         """
 
-        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_COLLECTION_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_COLLECTION_API_TOKEN"]
 
-        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:
+        if "PYFUNCEBLE_PLATFORM_API_TOKEN" in os.environ:  # pragma: no cover
             del os.environ["PYFUNCEBLE_PLATFORM_API_TOKEN"]
 
         self.query_tool.token = ""

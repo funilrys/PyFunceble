@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of dosubject, IP or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023, 2024, 2025 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -164,7 +164,7 @@ class Merge:
 
     def into(self, origin: Any, strict: bool = True) -> Any:
         """
-        Process the mergin.
+        Process the merging.
 
         :param origin: The original data.
         :param strict:
