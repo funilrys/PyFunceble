@@ -211,7 +211,7 @@ class CSVDatasetBase(DBDatasetBase):
                         row["tested_at"] = datetime.fromisoformat(
                             row["tested_at"]
                         ).astimezone(timezone.utc)
-                    except (TypeError, ValueError):
+                    except (TypeError, ValueError, KeyError):
                         row["tested_at"] = datetime.now(timezone.utc) - timedelta(
                             days=365
                         )

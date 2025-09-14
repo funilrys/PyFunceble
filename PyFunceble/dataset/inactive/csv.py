@@ -87,7 +87,7 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
                     date_of_inclusion = datetime.fromisoformat(
                         dataset["tested_at"]
                     ).astimezone(timezone.utc)
-                except (TypeError, ValueError):
+                except (TypeError, ValueError, KeyError):
                     date_of_inclusion = datetime.now(timezone.utc) - timedelta(days=365)
             else:
                 date_of_inclusion = dataset["tested_at"]
