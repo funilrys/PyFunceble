@@ -77,7 +77,7 @@ class StatusFileGenerator(FilesystemDirBase):
 
     # pylint: disable=too-many-public-methods
 
-    STD_HOSTS_IP: str = "0.0.0.0"
+    STD_HOSTS_IP: str = "0.0.0.0"  # nosec: B104  # Default to non-routable IP
     STD_ALLOW_HOSTS_FILES: bool = True
     STD_ALLOW_PLAIN_FILES: bool = True
     STD_ALLOW_ANALYTIC_FILES: bool = True
