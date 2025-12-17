@@ -1,6 +1,6 @@
 # Mkdocs
 mkdocs~=1.5
-mkdocstrings[python]~=0.26
+mkdocstrings[python]~=1.0
 mkdocs-material~=9.5
 mkdocs-git-revision-date-localized-plugin~=1.2
 mkdocs-gen-files~=0.5
