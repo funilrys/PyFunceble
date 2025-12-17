@@ -107,7 +107,7 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
             destination = get_destination_from_origin(file_info["path"])
 
             for status in self.get_rows(
-                f"SELECT * from pyfunceble_status WHERE file_id = {file_info['id']}"
+                f"SELECT * from pyfunceble_status WHERE file_id = {file_info['id']}"  # nosec: B608 # Self-Controlled Input
             ):
                 if (
                     self.continuous_integration
@@ -144,7 +144,9 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
 
                 # pylint: disable=line-too-long
                 self.db_session.execute(
-                    text(f"DELETE from pyfunceble_status WHERE id = {status['id']}")
+                    text(
+                        f"DELETE from pyfunceble_status WHERE id = {status['id']}"  # nosec: B608 # Self-Controlled Input
+                    )
                 )
                 self.db_session.commit()
 
@@ -155,7 +157,9 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
             if drop_table:
                 # pylint: disable=line-too-long
                 self.db_session.execute(
-                    text(f"DELETE from pyfunceble_file WHERE id = {file_info['id']}")
+                    text(
+                        f"DELETE from pyfunceble_file WHERE id = {file_info['id']}"  # nosec: B608 # Self-Controlled Input
+                    )
                 )
                 self.db_session.commit()
 

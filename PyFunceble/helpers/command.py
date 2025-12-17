@@ -191,7 +191,7 @@ class CommandHelper:
             self.command,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            shell=True,
+            shell=True,  # nosec: B602 # Aware of the security implications.
             env=os.environ,
         ) as process:
             stdout, stderr = process.communicate()
@@ -222,7 +222,7 @@ class CommandHelper:
             self.command,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            shell=True,
+            shell=True,  # nosec: B602 # Aware of the security implications.
             env=os.environ,
         ) as process:
             while True:
