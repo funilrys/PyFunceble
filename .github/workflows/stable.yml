@@ -79,7 +79,7 @@ jobs:
         run: bandit --ini=setup.cfg -r PyFunceble
 
   test:
-    needs: [lint, deps_safety_check, sec_check]
+    needs: [lint,sec_check]
     name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Test PyFunceble"
 
     runs-on: "${{ matrix.os }}"
