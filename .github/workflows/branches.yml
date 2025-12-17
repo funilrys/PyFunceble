@@ -52,8 +52,38 @@ jobs:
       - name: Lint tests with Pylint
         run: pylint tests
 
+  sec_check:
+    name: Check the safety of PyFunceble
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.12"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install .[test,dev]
+
+      - name: Check the safety of the codebase with Bandit
+        run: bandit --ini=setup.cfg -r PyFunceble
+
   test:
-    needs: [lint]
+    needs: [lint,sec_check]
     name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Test PyFunceble"
 
     runs-on: "${{ matrix.os }}"
