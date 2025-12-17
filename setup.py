@@ -271,7 +271,7 @@ if __name__ == "__main__":
     setuptools.setup(
         name="PyFunceble-dev",
         version=get_version(),
-        python_requires=">=3.9, <4",
+        python_requires=">=3.10, <4",
         install_requires=get_requirements(mode="standard"),
         extras_require={
             "docs": get_requirements(mode="docs"),

@@ -4,10 +4,10 @@ On this page, you will find any issues that are known and not fixed - yet.
 
 ## Python Support
 
-Any Python version lower than `3.9` are not compatible with PyFunceble.
+Any Python version lower than `3.10` are not compatible with PyFunceble.
 
 Because we don't want to support a version that is not maintained anymore, we
-decided to drop the support for Python `3.6`, `3.7`, and `3.8`.
+decided to drop the support for Python `3.6`, `3.7`, `3.8`, and `3.9`.
 
 ## PyFunceble CLI
 
@@ -109,4 +109,3 @@ While using PyFunceble under the GitLab CI/CD engine, no coloration will be disp
 ### GitHub Workflows
 
 While using PyFunceble under the GitHub Workflows/Actions engine, no coloration will be displayed.
-
