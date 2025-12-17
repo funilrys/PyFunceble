@@ -72,7 +72,7 @@ class TestDomainReputationChecker(reputation_test_base.ReputationCheckerTestBase
         Setups everything we need.
         """
 
-        upstream_result = super().setUp()
+        super().setUp()
 
         self.checker = DomainReputationChecker()
         self.checker.ipv4_reputation_query_tool.source_file = self.tempfile.name
@@ -83,21 +83,17 @@ class TestDomainReputationChecker(reputation_test_base.ReputationCheckerTestBase
         # Not needed in this scope :-)
         self.checker.do_syntax_check_first = False
 
-        return upstream_result
-
     def tearDown(self) -> None:
         """
         Destroys everything previously initiated for the tests.
         """
 
-        upstream_result = super().tearDown()
+        super().tearDown()
 
         self.dns_query_tool_path.stop()
 
         del self.dns_query_tool_path
         del self.mock_query_tool
-
-        return upstream_result
 
     def test_query_status_positive(self) -> None:
         """
