@@ -106,8 +106,8 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
 
             destination = get_destination_from_origin(file_info["path"])
 
-            for status in self.get_rows(
-                f"SELECT * from pyfunceble_status WHERE file_id = {file_info['id']}"  # nosec: B608 # Self-Controlled Input
+            for status in self.get_rows(  # nosec: B608 # Self-Controlled Input
+                "SELECT * from pyfunceble_status WHERE file_id = {file_info['id']}"
             ):
                 if (
                     self.continuous_integration
