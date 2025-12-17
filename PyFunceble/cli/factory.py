@@ -52,4 +52,6 @@ License:
 
 from PyFunceble.database.session import DBSession as db_session
 
+# pylint: disable=invalid-name
+
 DBSession = db_session()

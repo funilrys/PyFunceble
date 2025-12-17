@@ -53,6 +53,8 @@ License:
 from PyFunceble.config.loader import ConfigLoader as config_loader
 from PyFunceble.logger import Logger as logger
 
+# pylint: disable=invalid-name
+
 ConfigLoader = config_loader()
 
 Logger = logger()

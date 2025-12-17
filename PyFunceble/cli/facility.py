@@ -52,4 +52,6 @@ License:
 
 from PyFunceble.cli.credential_loader import CredentialLoader as credential_loader
 
+# pylint: disable=invalid-name
+
 CredentialLoader = credential_loader()

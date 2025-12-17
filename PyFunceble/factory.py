@@ -52,4 +52,6 @@ License:
 
 from PyFunceble.query.requests.requester import Requester as requester
 
+# pylint: disable=invalid-name
+
 Requester = requester()
