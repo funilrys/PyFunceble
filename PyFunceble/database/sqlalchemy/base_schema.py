@@ -54,12 +54,13 @@ from datetime import datetime, timezone
 
 import inflection
 from sqlalchemy import BigInteger, Column, DateTime
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.orm import DeclarativeBase
 
 import PyFunceble.storage
 
 
-class OurSchemaBase:
+class SchemaBase(DeclarativeBase):
     """
     Provides the base of all our schema.
     """
@@ -92,6 +93,3 @@ class OurSchemaBase:
         """
 
         return {x: y for x, y in self.__dict__.items() if not x.startswith("_sa")}
-
-
-SchemaBase = declarative_base(cls=OurSchemaBase)
