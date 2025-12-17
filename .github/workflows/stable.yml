@@ -29,7 +29,7 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -62,7 +62,7 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -130,7 +130,7 @@ jobs:
           - windows-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -195,7 +195,7 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -246,10 +246,10 @@ jobs:
       OUR_DOCKER_EMAIL: ${{ secrets.OUR_DOCKER_EMAIL }}
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone docker 📦 repository
         with:
           repository: PyFunceble/docker
@@ -328,7 +328,7 @@ jobs:
           pacman -Syu --needed --noconfirm && \
           pacman -S --needed --noconfirm git binutils pacman-contrib openssh rsync python python-setuptools jq
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
       - name: Publish 📦 to the AUR - if necessary

@@ -33,7 +33,7 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -103,7 +103,7 @@ jobs:
           - windows-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -170,7 +170,7 @@ jobs:
           - windows-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -225,7 +225,7 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
@@ -280,7 +280,7 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
