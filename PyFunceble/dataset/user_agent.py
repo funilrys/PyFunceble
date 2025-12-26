@@ -62,6 +62,9 @@ from PyFunceble.downloader.user_agents import UserAgentsDownloader
 class UserAgentDataset(DatasetBase):
     """
     Provides the dataset and infrastructure for the User Agent navigation
+
+    :param Any shared_lock:
+        Optional, The shared lock to use to access shared resources.
     """
 
     STORAGE_INDEX: str = "USER_AGENTS"
@@ -70,9 +73,11 @@ class UserAgentDataset(DatasetBase):
     preferred_browser: str = "chrome"
     preferred_platform: str = "linux"
 
-    def __init__(self) -> None:
+    def __init__(self, *, shared_lock: Optional[Any] = None) -> None:
         self.downloader = UserAgentsDownloader()
         self.source_file = self.downloader.destination
+
+        super().__init__(shared_lock=shared_lock)
 
     def __contains__(self, value: Any) -> bool:
         content = self.get_content()

@@ -59,14 +59,19 @@ from PyFunceble.downloader.iana import IANADownloader
 class IanaDataset(DatasetBase):
     """
     Provides the dataset handler for the IANA dataset.
+
+    :param Any shared_lock:
+        Optional, The shared lock to use to access shared resources.
     """
 
     STORAGE_INDEX: str = "IANA"
     downloader: Optional[IANADownloader] = None
 
-    def __init__(self) -> None:
+    def __init__(self, *, shared_lock: Optional[Any] = None) -> None:
         self.downloader = IANADownloader()
         self.source_file = self.downloader.destination
+
+        super().__init__(shared_lock=shared_lock)
 
     def __contains__(self, value: Any) -> bool:
         if value.startswith("."):

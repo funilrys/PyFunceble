@@ -60,14 +60,19 @@ from PyFunceble.helpers.file import FileHelper
 class IPV4ReputationDataset(DatasetBase):
     """
     Provides the interface for the lookup of the IPv4 reputation.
+
+    :param Any shared_lock:
+        Optional, The shared lock to use to access shared resources.
     """
 
     STORAGE_INDEX: Optional[str] = None
     downloader: Optional[IPV4ReputationDownloader] = None
 
-    def __init__(self) -> None:
+    def __init__(self, *, shared_lock: Optional[Any] = None) -> None:
         self.downloader = IPV4ReputationDownloader()
         self.source_file = self.downloader.destination
+
+        super().__init__(shared_lock=shared_lock)
 
     def __contains__(self, value: Any) -> bool:
         with self.get_content() as file_stream:
@@ -80,6 +85,7 @@ class IPV4ReputationDataset(DatasetBase):
         return False
 
     @DatasetBase.ensure_source_file_exists
+    @DatasetBase.autolock
     def get_content(self) -> open:
         """
         Provides a file handler which does let you read the content line by

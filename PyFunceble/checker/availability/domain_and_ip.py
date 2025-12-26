@@ -112,6 +112,7 @@ class DomainAndIPAvailabilityChecker(AvailabilityCheckerBase):
                 db_session=self.db_session,
                 use_whois_db=self.use_whois_db,
                 use_platform=self.use_platform,
+                shared_lock=self.shared_lock,
             )
         else:
             query_object = DomainAvailabilityChecker(
@@ -126,6 +127,7 @@ class DomainAndIPAvailabilityChecker(AvailabilityCheckerBase):
                 db_session=self.db_session,
                 use_whois_db=self.use_whois_db,
                 use_platform=self.use_platform,
+                shared_lock=self.shared_lock,
             )
 
         query_object.dns_query_tool = self.dns_query_tool

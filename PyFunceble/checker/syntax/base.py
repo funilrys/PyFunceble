@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from typing import Optional
+from typing import Any, Optional
 
 from sqlalchemy.orm import Session
 
@@ -78,13 +78,16 @@ class SyntaxCheckerBase(CheckerBase):
         self,
         subject: Optional[str] = None,
         db_session: Optional[Session] = None,
+        shared_lock: Optional[Any] = None,
     ) -> None:
         self.params = SyntaxCheckerParams()
 
         self.status = SyntaxCheckerStatus()
         self.status.params = self.params
 
-        super().__init__(subject=subject, db_session=db_session)
+        super().__init__(
+            subject=subject, db_session=db_session, shared_lock=shared_lock
+        )
 
     def subject_propagator(self) -> "CheckerBase":
         """

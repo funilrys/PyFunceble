@@ -54,7 +54,7 @@ License:
 
 import multiprocessing
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from sqlalchemy.orm import Session
 
@@ -110,8 +110,12 @@ class AvailabilityCheckerBase(CheckerBase):
         Optional, Activates/Disables the check of the status before the actual
         status gathering.
     :param bool use_whois_db:
-        Optional, Activates/Disable the usage of a local database to store the
+        Optional, Activates/Disables the usage of a local database to store the
         WHOIS datasets.
+    :param bool use_platform:
+        Optional, Activates/Disables the usage of the platform features.
+    :param multiprocessing.Lock shared_lock:
+        Optional, The shared lock to use to access shared resources.
     """
 
     # pylint: disable=too-many-public-methods, too-many-instance-attributes
@@ -160,6 +164,7 @@ class AvailabilityCheckerBase(CheckerBase):
         db_session: Optional[Session] = None,
         use_whois_db: Optional[bool] = None,
         use_platform: Optional[bool] = None,
+        shared_lock: Optional[Any] = None,
     ) -> None:
         self.dns_query_tool = DNSQueryTool()
         self.whois_query_tool = WhoisQueryTool()
@@ -226,6 +231,7 @@ class AvailabilityCheckerBase(CheckerBase):
             do_syntax_check_first=do_syntax_check_first,
             db_session=db_session,
             use_platform=use_platform,
+            shared_lock=shared_lock,
         )
 
     @property
@@ -761,7 +767,9 @@ class AvailabilityCheckerBase(CheckerBase):
         if (
             PyFunceble.facility.ConfigLoader.is_already_loaded() and self.use_whois_db
         ):  # pragma: no cover ## Not interesting enough to spend time on it.
-            whois_object = get_whois_dataset_object(db_session=self.db_session)
+            whois_object = get_whois_dataset_object(
+                db_session=self.db_session, shared_lock=self.shared_lock
+            )
             known_record = whois_object[self.subject]
 
             if known_record and not isinstance(known_record, dict):

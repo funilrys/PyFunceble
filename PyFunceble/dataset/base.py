@@ -57,17 +57,27 @@ import PyFunceble.storage
 from PyFunceble.downloader.base import DownloaderBase
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.file import FileHelper
+from PyFunceble.utils.platform import PlatformUtility
 
 
 class DatasetBase:
     """
     Provides the base of all dataset.
+
+    :param Any shared_lock:
+        Optional, The shared lock to use to access shared resources.
     """
 
     STORAGE_INDEX: Optional[str] = None
     downloader: Optional[DownloaderBase] = None
 
     source_file: Optional[str] = None
+
+    shared_lock: Optional[Any] = None
+
+    def __init__(self, *, shared_lock: Optional[Any] = None) -> None:
+        if shared_lock is not None:
+            self.shared_lock = shared_lock
 
     def __contains__(self, value: Any):  # pragma: no cover
         raise NotImplementedError()
@@ -110,7 +120,22 @@ class DatasetBase:
 
         return wrapper
 
+    def autolock(func):  # pylint: disable=no-self-argument
+        """
+        A decorator to automatically lock and unlock the shared lock.
+        """
+
+        @functools.wraps(func)
+        def wrapper(self, *args, **kwargs):
+            if PlatformUtility.is_windows() and self.shared_lock is not None:
+                with self.shared_lock:
+                    return func(self, *args, **kwargs)  # pylint: disable=not-callable
+            return func(self, *args, **kwargs)  # pylint: disable=not-callable
+
+        return wrapper
+
     @ensure_source_file_exists
+    @autolock
     def get_content(self) -> Optional[dict]:
         """
         Provides the cached or the real contend of the dataset (after caching)

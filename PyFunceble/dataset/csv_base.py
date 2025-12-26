@@ -118,6 +118,7 @@ class CSVDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.ensure_source_file_exists
     @DBDatasetBase.execute_if_authorized(None)
+    @DBDatasetBase.autolock
     def add(self, row: dict) -> "CSVDatasetBase":
         """
         Adds the given dataset into the CSV file.
@@ -151,6 +152,7 @@ class CSVDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.ensure_source_file_exists
     @DBDatasetBase.execute_if_authorized(None)
+    @DBDatasetBase.autolock
     def remove(self, row: dict) -> "CSVDatasetBase":
         """
         Removes the given dataset from the CSV file.
@@ -194,6 +196,7 @@ class CSVDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.ensure_source_file_exists
     @DBDatasetBase.execute_if_authorized(None)
+    @DBDatasetBase.autolock
     def get_content(self) -> Generator[Optional[dict], None, None]:
         """
         Provides a generator which provides the next line to read.

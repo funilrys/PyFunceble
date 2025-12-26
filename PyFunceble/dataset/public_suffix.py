@@ -59,14 +59,19 @@ from PyFunceble.downloader.public_suffix import PublicSuffixDownloader
 class PublicSuffixDataset(DatasetBase):
     """
     Provides the dataset handler for the Public Suffix List dataset.
+
+    :param Any shared_lock:
+        Optional, The shared lock to use to access shared resources.
     """
 
     STORAGE_INDEX: str = "PUBLIC_SUFFIX"
     downloader: Optional[PublicSuffixDownloader] = None
 
-    def __init__(self) -> None:
+    def __init__(self, *, shared_lock: Optional[Any] = None) -> None:
         self.downloader = PublicSuffixDownloader()
         self.source_file = self.downloader.destination
+
+        super().__init__(shared_lock=shared_lock)
 
     def __contains__(self, value: Any) -> bool:
         if value.startswith("."):

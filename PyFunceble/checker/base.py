@@ -52,7 +52,7 @@ License:
 
 import datetime
 import functools
-from typing import Optional
+from typing import Any, Optional
 
 import domain2idna
 from sqlalchemy.orm import Session
@@ -77,6 +77,12 @@ class CheckerBase:
 
         .. warning::
             This does not apply to the syntax checker - itself.
+    :param Session db_session:
+        Optional, The database session to use.
+    :param bool use_platform:
+        Optional, Authorizes the usage of the platform.
+    :param Any shared_lock:
+        Optional, The shared lock to use to access shared resources.
     """
 
     STD_DO_SYNTAX_CHECK_FIRST: bool = False
@@ -97,6 +103,8 @@ class CheckerBase:
     status: Optional[CheckerStatusBase] = None
     params: Optional[CheckerParamsBase] = None
 
+    shared_lock: Optional[Any] = None
+
     def __init__(
         self,
         subject: Optional[str] = None,
@@ -104,6 +112,7 @@ class CheckerBase:
         do_syntax_check_first: Optional[bool] = None,
         db_session: Optional[Session] = None,
         use_platform: Optional[bool] = None,
+        shared_lock: Optional[Any] = None,
     ) -> None:
         self.platform_query_tool = PlatformQueryTool()
         self.url2netloc = Url2Netloc()
@@ -114,6 +123,9 @@ class CheckerBase:
 
         if self.status is None:
             self.status = CheckerStatusBase()
+
+        if shared_lock is not None:
+            self.shared_lock = shared_lock
 
         if subject is not None:
             self.subject = subject

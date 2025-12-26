@@ -51,7 +51,7 @@ License:
 """
 
 import os
-from typing import List, Optional, Union
+from typing import Any, List, Optional, Union
 
 from sqlalchemy.orm import Session
 
@@ -92,12 +92,15 @@ def get_testing_mode() -> str:
 
 def get_continue_dataset_object(
     db_session: Optional[Session] = None,
+    shared_lock: Optional[Any] = None,
 ) -> Union[DatasetBase, CSVDatasetBase, DBDatasetBase]:
     """
     Provides the continue object to work with.
 
     :param db_session:
         A database session to use.
+    :param shared_lock:
+        Optional, The shared lock to use to access shared resources.
 
     :raise ValueError:
         When the given database type is unkown.
@@ -106,7 +109,7 @@ def get_continue_dataset_object(
     result = None
 
     if PyFunceble.storage.CONFIGURATION.cli_testing.db_type in "csv":
-        result = CSVContinueDataset()
+        result = CSVContinueDataset(shared_lock=shared_lock)
     elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type in (
         "mariadb",
         "mysql",
@@ -129,12 +132,15 @@ def get_continue_dataset_object(
 
 def get_inactive_dataset_object(
     db_session: Optional[Session] = None,
+    shared_lock: Optional[Any] = None,
 ) -> Union[DatasetBase, CSVDatasetBase, DBDatasetBase]:
     """
     Provides the inactive object to work with.
 
     :param db_session:
         A database session to use.
+    :param shared_lock:
+        An optional shared lock to use.
 
     :raise ValueError:
         When the given database type is unkown.
@@ -143,7 +149,7 @@ def get_inactive_dataset_object(
     result = None
 
     if PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "csv":
-        result = CSVInactiveDataset()
+        result = CSVInactiveDataset(shared_lock=shared_lock)
     elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type in (
         "mariadb",
         "mysql",

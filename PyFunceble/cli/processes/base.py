@@ -60,3 +60,10 @@ class ProcessesManagerBase(PyFunceble.ext.process_manager.ProcessManagerCore):
     """
     Provides the base of all classes.
     """
+
+    def __init__(self, *args, **kwargs) -> None:
+        # Better handling of shared locks.
+        # This help be be retro-compatible. Allowing existing users to
+        # not get exceptions.
+        shared_lock = kwargs.pop("shared_lock", None)
+        super().__init__(*args, **kwargs, shared_lock=shared_lock)

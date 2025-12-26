@@ -85,7 +85,9 @@ class TestDatasetBase(unittest.TestCase):
         self.tempfile.write("\n".join(self.our_dataset).encode())
         self.tempfile.seek(0)
 
-        self.dataset = DatasetBase()
+        self.shared_lock = unittest.mock.MagicMock()
+
+        self.dataset = DatasetBase(shared_lock=self.shared_lock)
         self.dataset.source_file = self.tempfile.name
 
     def tearDown(self) -> None:

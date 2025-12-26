@@ -66,6 +66,17 @@ class CSVContinueDataset(CSVDatasetBase, ContinueDatasetBase):
     """
     Provides the interface for the management of the continue
     CSV file.
+
+    :param bool authorized:
+        Optional, Authorizes/Disables the usage of this dataset.
+        If not set, :code:`STD_AUTHORIZED` is used.
+    :param bool remove_unneeded_fields:
+        Optional, Activates/Deactivates the removal of unneeded fields.
+        If not set, :code:`STD_REMOVE_UNNEEDED_FIELDS` is used.
+    :param str base_directory:
+        Optional, The base directory to use.
+    :param Any shared_lock:
+        Optional, The shared lock to use to access shared resources.
     """
 
     source_file: Optional[str] = None
@@ -78,12 +89,15 @@ class CSVContinueDataset(CSVDatasetBase, ContinueDatasetBase):
         authorized: Optional[bool] = None,
         remove_unneeded_fields: Optional[bool] = None,
         base_directory: Optional[str] = None,
+        shared_lock: Optional[Any] = None,
     ) -> None:
         if base_directory is not None:
             self.set_base_directory(base_directory)
 
         super().__init__(
-            authorized=authorized, remove_unneeded_fields=remove_unneeded_fields
+            authorized=authorized,
+            remove_unneeded_fields=remove_unneeded_fields,
+            shared_lock=shared_lock,
         )
 
     def __contains__(self, value: str) -> bool:

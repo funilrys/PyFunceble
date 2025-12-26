@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from sqlalchemy.orm import Session
 
@@ -64,13 +64,17 @@ from PyFunceble.dataset.whois.sql import SQLDBWhoisDataset
 
 
 def get_whois_dataset_object(
-    *, db_session: Optional[Session] = None
+    *,
+    db_session: Optional[Session] = None,
+    shared_lock: Optional[Any] = None,
 ) -> Union[DatasetBase, CSVDatasetBase, DBDatasetBase]:
     """
     Provides the whois dataset object to work with.
 
     :param db_session:
         A database session to use.
+    :param shared_lock:
+        Optional, The shared lock to use to access shared resources.
 
     :raise ValueError:
         When the given database type is unknown.
@@ -80,7 +84,7 @@ def get_whois_dataset_object(
 
     if PyFunceble.facility.ConfigLoader.is_already_loaded():
         if PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "csv":
-            return CSVWhoisDataset().set_authorized(
+            return CSVWhoisDataset(shared_lock=shared_lock).set_authorized(
                 bool(PyFunceble.storage.CONFIGURATION.cli_testing.whois_db)
             )
 

@@ -156,6 +156,7 @@ class SystemLauncher(SystemBase):
     file_preloader: Optional[FilePreloader] = None
 
     manager: Optional[multiprocessing.Manager]
+    shared_lock: Optional[multiprocessing.Lock] = None
     tester_process_manager: Optional[
         Union[TesterProcessesManager, ChancyTesterProcessesManager]
     ] = None
@@ -185,19 +186,26 @@ class SystemLauncher(SystemBase):
         except TypeError:
             self.db_session = None
 
+        self.manager = multiprocessing.Manager()
+        self.shared_lock = multiprocessing.Lock()
+
         self.execution_time_holder = ExecutionTime().set_start_time()
         self.checker_type = get_testing_mode()
-        self.continue_dataset = get_continue_dataset_object(db_session=self.db_session)
-        self.inactive_dataset = get_inactive_dataset_object(db_session=self.db_session)
-        self.whois_dataset = get_whois_dataset_object(db_session=self.db_session)
+        self.continue_dataset = get_continue_dataset_object(
+            db_session=self.db_session, shared_lock=self.shared_lock
+        )
+        self.inactive_dataset = get_inactive_dataset_object(
+            db_session=self.db_session, shared_lock=self.shared_lock
+        )
+        self.whois_dataset = get_whois_dataset_object(
+            db_session=self.db_session, shared_lock=self.shared_lock
+        )
         self.continuous_integration = ci_object()
 
         if self.continuous_integration.authorized:
             self.continuous_integration.init()
 
         self.stdout_printer.guess_allow_coloration().guess_allow_background_coloration()
-
-        self.manager = multiprocessing.Manager()
 
         if not PyFunceble.storage.CONFIGURATION.cli_testing.chancy_tester:
             self.tester_process_manager = TesterProcessesManager(
@@ -215,6 +223,7 @@ class SystemLauncher(SystemBase):
                 delay_shutdown=PyFunceble.storage.CONFIGURATION.cli_testing.mining,
                 generate_configuration_queue=False,
                 continuous_integration=self.continuous_integration,
+                shared_lock=self.shared_lock,
             )
 
             self.producer_process_manager = ProducerProcessesManager(
@@ -227,6 +236,7 @@ class SystemLauncher(SystemBase):
                 delay_shutdown=PyFunceble.storage.CONFIGURATION.cli_testing.mining,
                 generate_configuration_queue=False,
                 continuous_integration=self.continuous_integration,
+                shared_lock=self.shared_lock,
             )
         else:
             self.tester_process_manager = ChancyTesterProcessesManager(
@@ -266,6 +276,7 @@ class SystemLauncher(SystemBase):
             daemon=True,
             generate_output_queue=False,
             generate_configuration_queue=False,
+            shared_lock=self.shared_lock,
         )
         self.migrator_process_manager = MigratorProcessesManager(
             manager=self.manager,
@@ -273,6 +284,7 @@ class SystemLauncher(SystemBase):
             daemon=True,
             generate_input_queue=False,
             generate_output_queue=False,
+            shared_lock=self.shared_lock,
         )
 
         if PyFunceble.storage.CONFIGURATION.cli_testing.mining:
@@ -287,6 +299,7 @@ class SystemLauncher(SystemBase):
                 spread_stop_signal=False,
                 spread_wait_signal=True,
                 delay_shutdown=PyFunceble.storage.CONFIGURATION.cli_testing.mining,
+                shared_lock=self.shared_lock,
             )
 
             self.tester_process_manager.add_dependent_manager(

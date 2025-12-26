@@ -101,6 +101,19 @@ class TestCheckerBase(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_set_shared_lock(self) -> None:
+        """
+        Tests the proper initialization of the :code:`shared_lock` attribute.
+        """
+
+        checker = CheckerBase(shared_lock="Hello World!")
+
+        expected = "Hello World!"
+        actual = checker.shared_lock
+
+        self.assertEqual(expected, actual)
+
+
     def test_set_subject_idna(self) -> None:
         """
         Tests the initilization of the :code:`idna_subject` attribute when

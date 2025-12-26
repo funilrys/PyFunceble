@@ -115,7 +115,9 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
             self.status.idna_subject,
         )
 
-        lookup_result = DomainReputationChecker(self.status.idna_subject).get_status()
+        lookup_result = DomainReputationChecker(
+            self.status.idna_subject, shared_lock=self.shared_lock
+        ).get_status()
 
         # pylint: disable=no-member
         if lookup_result and lookup_result.is_malicious():

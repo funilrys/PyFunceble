@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from typing import List, Optional
+from typing import Any, List, Optional
 
 from sqlalchemy.orm import Session
 
@@ -75,6 +75,12 @@ class ReputationCheckerBase(CheckerBase):
     :param bool do_syntax_check_first:
         Optional, Activates/Disables the check of the status before the actual
         status gathering.
+    :param Session db_session:
+        Optional, The database session to use.
+    :param bool use_platform:
+        Optional, Authorizes the usage of the platform.
+    :param Any shared_lock:
+        Optional, The shared lock to use to access shared resources.
     """
 
     dns_query_tool: Optional[DNSQueryTool] = None
@@ -92,9 +98,10 @@ class ReputationCheckerBase(CheckerBase):
         do_syntax_check_first: Optional[bool] = None,
         db_session: Optional[Session] = None,
         use_platform: Optional[bool] = None,
+        shared_lock: Optional[Any] = None,
     ) -> None:
         self.dns_query_tool = DNSQueryTool()
-        self.ipv4_reputation_query_tool = IPV4ReputationDataset()
+        self.ipv4_reputation_query_tool = IPV4ReputationDataset(shared_lock=shared_lock)
         self.domain_syntax_checker = DomainSyntaxChecker()
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
@@ -110,6 +117,7 @@ class ReputationCheckerBase(CheckerBase):
             do_syntax_check_first=do_syntax_check_first,
             db_session=db_session,
             use_platform=use_platform,
+            shared_lock=shared_lock,
         )
 
     @staticmethod

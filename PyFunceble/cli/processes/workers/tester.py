@@ -90,12 +90,12 @@ class TesterWorker(WorkerBase):
 
         self.continue_dataset = (
             PyFunceble.cli.utils.testing.get_continue_dataset_object(
-                db_session=self.db_session
+                db_session=self.db_session, shared_lock=self.shared_lock
             )
         )
         self.inactive_dataset = (
             PyFunceble.cli.utils.testing.get_inactive_dataset_object(
-                db_session=self.db_session
+                db_session=self.db_session, shared_lock=self.shared_lock
             )
         )
 
@@ -191,7 +191,7 @@ class TesterWorker(WorkerBase):
             self.initiated_testing_objects[checker_type][
                 subject_type
             ] = self.known_testing_objects[checker_type][subject_type](
-                db_session=self.db_session
+                db_session=self.db_session, shared_lock=self.shared_lock
             ).set_do_syntax_check_first(
                 # We want to always check the syntax first (ONLY UNDER THE CLI)
                 not bool(PyFunceble.storage.CONFIGURATION.cli_testing.local_network)
@@ -278,12 +278,12 @@ class TesterWorker(WorkerBase):
             test_dataset["idna_subject"],
         )
 
-        self._init_testing_object(
+        testing_object = self._init_testing_object(
             test_dataset["subject_type"], test_dataset["checker_type"]
         )
 
         result = (
-            self.testing_object.set_subject(test_dataset["idna_subject"])
+            testing_object.set_subject(test_dataset["idna_subject"])
             .query_status()
             .get_status()
         )

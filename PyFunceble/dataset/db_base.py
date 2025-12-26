@@ -60,6 +60,17 @@ from PyFunceble.dataset.base import DatasetBase
 class DBDatasetBase(DatasetBase):
     """
     Provides the base of all datasets which acts as database interface.
+
+    :param bool authorized:
+        Optional, Whether we are authorized to process or not.
+        If not set, :code:`STD_AUTHORIZED` is used.
+    :param bool remove_unneeded_fields:
+        Optional, Whether we should remove unneeded fields or not.
+        If not set, :code:`STD_REMOVE_UNNEEDED_FIELDS` is used.
+    :param str config_dir:
+        Optional, The configuration directory to use.
+    :param Any shared_lock:
+        Optional, The shared lock to use to access shared resources.
     """
 
     STD_REMOVE_UNNEEDED_FIELDS: bool = True
@@ -79,6 +90,7 @@ class DBDatasetBase(DatasetBase):
         authorized: Optional[bool] = None,
         remove_unneeded_fields: Optional[bool] = None,
         config_dir: Optional[str] = None,
+        shared_lock: Optional[Any] = None,
     ) -> None:
         if config_dir is not None:
             self.config_dir = config_dir
@@ -90,6 +102,8 @@ class DBDatasetBase(DatasetBase):
 
         if remove_unneeded_fields is not None:
             self.set_remove_unneeded_fields(remove_unneeded_fields)
+
+        super().__init__(shared_lock=shared_lock)
 
         self.__post_init__()
 
