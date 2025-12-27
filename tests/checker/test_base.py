@@ -113,7 +113,6 @@ class TestCheckerBase(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-
     def test_set_subject_idna(self) -> None:
         """
         Tests the initilization of the :code:`idna_subject` attribute when
