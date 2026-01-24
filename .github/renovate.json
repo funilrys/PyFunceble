@@ -1,18 +1,30 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": [
+    "config:recommended"
+  ],
   "ignorePaths": [],
   "separateMajorMinor": true,
-  "assignees": ["funilrys"],
-  "baseBranches": ["dev"],
+  "assignees": [
+    "funilrys"
+  ],
+  "baseBranchPatterns": [
+    "dev"
+  ],
   "packageRules": [
     {
-      "matchDatasources": ["pypi"],
-      "matchManagers": ["pip_requirements"],
+      "matchDatasources": [
+        "pypi"
+      ],
+      "matchManagers": [
+        "pip_requirements"
+      ],
       "groupName": "pip deps"
     },
     {
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "groupName": "github-actions deps"
     }
   ]
