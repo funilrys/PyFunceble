@@ -8,8 +8,8 @@ PyMySQL
 python-box[all]~=7.3.2
 python-dotenv
 PyYAML
-requests<3
+requests[socks]<3
 setuptools>=65.5.1
 shtab
 SQLAlchemy~=2.0
-pyfunceble-process-manager==1.0.10
+pyfunceble-process-manager==1.0.11
