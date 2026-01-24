@@ -187,6 +187,8 @@ class TestHashHelper(unittest.TestCase):
 
             self.assertEqual(expected, actual)
 
+        our_file.close()
+
 
 if __name__ == "__main__":
     unittest.main()

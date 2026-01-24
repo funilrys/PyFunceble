@@ -93,6 +93,8 @@ class TestPublicSuffixDataset(unittest.TestCase):
         Destroys everything needed by the tests.
         """
 
+        self.tempfile.close()
+
         del self.tempfile
         del self.our_dataset
         del self.ps_dataset

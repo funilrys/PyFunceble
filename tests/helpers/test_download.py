@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import os
 import tempfile
 import unittest
 import unittest.mock
@@ -264,6 +265,9 @@ class TestDownloadHelper(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+        destination.close()
+        os.unlink(destination.name)
+
     @unittest.mock.patch.object(requests.Session, "get")
     def test_download_text_response_not_ok(
         self, session_patch: unittest.mock.MagicMock
@@ -285,6 +289,9 @@ class TestDownloadHelper(unittest.TestCase):
             PyFunceble.helpers.exceptions.UnableToDownload,
             lambda: download_helper.download_text(destination=destination.name),
         )
+
+        destination.close()
+        os.unlink(destination.name)
 
 
 if __name__ == "__main__":

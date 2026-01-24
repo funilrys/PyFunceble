@@ -93,6 +93,8 @@ class TestIPV4ReputationDataset(unittest.TestCase):
         Destroys everything needed by the tests.
         """
 
+        self.tempfile.close()
+
         del self.tempfile
         del self.our_dataset
         del self.ipv4_reputation_dataset

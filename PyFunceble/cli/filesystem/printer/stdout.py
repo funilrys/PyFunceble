@@ -254,11 +254,13 @@ class StdoutPrinter(PrinterBase):
                         print(
                             f"{self.STATUS2BACKGROUND_COLOR[status_to_compare]}"
                             f"{line_to_print}"
+                            f"{colorama.Style.RESET_ALL}"
                         )
                     else:
                         print(
                             f"{self.STATUS2FORGROUND_COLOR[status_to_compare]}"
                             f"{line_to_print}"
+                            f"{colorama.Style.RESET_ALL}"
                         )
                 elif self.template_to_use in self.FOREGROUND_COLORATED:
                     print(

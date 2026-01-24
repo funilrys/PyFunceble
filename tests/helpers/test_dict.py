@@ -311,7 +311,7 @@ class TestDictHelper(unittest.TestCase):
 
         output_file.close()
 
-        os.remove(output_file.name)
+        os.unlink(output_file.name)
 
     def test_from_json_file_not_json(self) -> None:
         """
@@ -331,7 +331,7 @@ class TestDictHelper(unittest.TestCase):
 
         output_file.close()
 
-        os.remove(output_file.name)
+        os.unlink(output_file.name)
 
     def test_to_json(self) -> None:
         """
@@ -398,7 +398,7 @@ class TestDictHelper(unittest.TestCase):
 
         output_file.close()
 
-        os.remove(output_file.name)
+        os.unlink(output_file.name)
 
     def test_to_yaml(self) -> None:
         """

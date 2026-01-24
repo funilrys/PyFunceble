@@ -78,7 +78,7 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         """
 
         self.temp_env_file.close()
-        os.remove(self.temp_env_file.name)
+        os.unlink(self.temp_env_file.name)
 
         del self.temp_env_file
         del self.test_name

@@ -96,7 +96,6 @@ class ReputationCheckerTestBase(unittest.TestCase):
         """
 
         self.tempfile.close()
-
         os.unlink(self.tempfile.name)
 
         del self.checker

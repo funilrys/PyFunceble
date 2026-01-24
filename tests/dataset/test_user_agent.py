@@ -233,6 +233,10 @@ class TestUserAgentDataset(unittest.TestCase):
         """
 
         self.get_content_patch.stop()
+
+        self.tempfile.close()
+        self.modern_tempfile.close()
+
         del self.mock_get_content
         del self.tempfile
         del self.our_dataset

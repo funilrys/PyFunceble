@@ -76,6 +76,8 @@ class TestFileHelper(unittest.TestCase):
 
         self.assertIsInstance(actual, FileHelper)
 
+        given.close()
+
     def test_set_path(self) -> None:
         """
         Tests the method which let us set the path to work with.
@@ -96,6 +98,8 @@ class TestFileHelper(unittest.TestCase):
         actual = file_helper.path
 
         self.assertEqual(expected, actual)
+
+        given.close()
 
     def test_set_path_not_str(self) -> None:
         """
@@ -273,6 +277,9 @@ class TestFileHelper(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+        given.close()
+        os.unlink(given.name)
+
     def test_read(self) -> None:
         """
         Tests the method which let us read a file.
@@ -289,6 +296,9 @@ class TestFileHelper(unittest.TestCase):
         actual = file_helper.read()
 
         self.assertEqual(expected, actual)
+
+        given.close()
+        os.unlink(given.name)
 
     def test_read_file_does_not_exists(self) -> None:
         """
@@ -325,6 +335,9 @@ class TestFileHelper(unittest.TestCase):
         actual = file_helper.read_bytes()
 
         self.assertEqual(expected, actual)
+
+        given.close()
+        os.unlink(given.name)
 
     def test_read_bytes_file_does_not_exists(self) -> None:
         """

@@ -1281,18 +1281,13 @@ def platform_parser(
 
     args = [
         (
-            ["cli_testing.testing_mode.platform_contribution"],
+            ["--contribution"],
             {
-                "default": get_configured_value(
+                "default": not get_configured_value(
                     "cli_testing.testing_mode.platform_contribution", value_only=True
                 ),
-                "action": "store_%s"
-                % str(
-                    not get_configured_value(
-                        "cli_testing.testing_mode.platform_contribution",
-                        value_only=True,
-                    )
-                ).lower(),
+                "action": "store_true",
+                "dest": "cli_testing.testing_mode.platform_contribution",
                 "help": argparse.SUPPRESS,
             },
         )

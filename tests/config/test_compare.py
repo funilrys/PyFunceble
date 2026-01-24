@@ -661,7 +661,7 @@ class TestConfigCompare(unittest.TestCase):
         config_comparison = ConfigComparison(
             local_config=given_local, upstream_config=given_upstream
         )
-
+        # pylint: disable=invalid-name
         config_comparison.DELETE_FLATTEN = [
             "cli_testing.file_generation.unified_results",
         ]
