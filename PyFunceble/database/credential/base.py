@@ -75,7 +75,7 @@ class CredentialBase:
         "port": "PYFUNCEBLE_DB_PORT",
         "name": "PYFUNCEBLE_DB_NAME",
         "username": "PYFUNCEBLE_DB_USERNAME",
-        "password": "PYFUNCEBLE_DB_PASSWORD",
+        "password": "PYFUNCEBLE_DB_PASSWORD",  # nosec: B105 # var name not password.
         "charset": "PYFUNCEBLE_DB_CHARSET",
     }
     """
