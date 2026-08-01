@@ -14,6 +14,10 @@ permissions:
   checks: write
   pull-requests: write
 
+env:
+  TMP: ${{ github.workspace }}/.tmp
+  TEMP: ${{ github.workspace }}/.tmp
+
 jobs:
   lint:
     name: Lint PyFunceble
@@ -29,11 +33,11 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python_version }}
 
@@ -62,11 +66,11 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python_version }}
 
@@ -98,13 +102,19 @@ jobs:
           - windows-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python_version }}
+
+      - name: Setup Temporary Directory
+        shell: bash
+        run: |
+          mkdir -p ${TMP}
+          mkdir -p ${TEMP}
 
       - name: Install dependencies
         run: |
@@ -163,11 +173,11 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python_version }}
 
@@ -214,17 +224,17 @@ jobs:
       OUR_DOCKER_EMAIL: ${{ secrets.OUR_DOCKER_EMAIL }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         name: Clone repository
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         name: Clone docker 📦 repository
         with:
           repository: PyFunceble/docker
           path: ${{ env.BUILDER_CLONE_DIRNAME }}/
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python_version }}
 
@@ -296,7 +306,7 @@ jobs:
           pacman -Syu --needed --noconfirm && \
           pacman -S --needed --noconfirm git binutils pacman-contrib openssh rsync python python-setuptools jq
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         name: Clone repository
 
       - name: Publish 📦 to the AUR - if necessary

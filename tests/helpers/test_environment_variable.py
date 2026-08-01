@@ -51,7 +51,9 @@ License:
 """
 
 import os
+from pathlib import Path
 import tempfile
+import uuid
 import unittest
 
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
@@ -70,15 +72,18 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         self.helper = EnvironmentVariableHelper()
 
         self.test_name = "PYFUNCEBLE_TESTING"
-        self.temp_env_file = tempfile.NamedTemporaryFile("w", delete=False)
+
+        temp_dir = tempfile.gettempdir()
+        uniq_env_file_name = f"test_envsys_{uuid.uuid4()}.env"
+        self.temp_env_file = Path(os.path.join(temp_dir, uniq_env_file_name))
+        self.temp_env_file.touch(exist_ok=True)
 
     def tearDown(self) -> None:
         """
         Destroys everything needed for the tests.
         """
 
-        self.temp_env_file.close()
-        os.unlink(self.temp_env_file.name)
+        self.temp_env_file.unlink(missing_ok=True)
 
         del self.temp_env_file
         del self.test_name
@@ -142,7 +147,7 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         dot env file to work with.
         """
 
-        actual = self.helper.set_env_file_path(self.temp_env_file.name)
+        actual = self.helper.set_env_file_path(str(self.temp_env_file))
 
         self.assertIsInstance(actual, EnvironmentVariableHelper)
 
@@ -151,7 +156,7 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         Tests the method which let us set the path to the dotenv file to work with.
         """
 
-        given = self.temp_env_file.name
+        given = str(self.temp_env_file)
         expected = given
 
         self.helper.set_env_file_path(given)
@@ -165,7 +170,7 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         Tests the method which let us overwrite the `env_file_path` attribute.
         """
 
-        given = self.temp_env_file.name
+        given = str(self.temp_env_file)
         expected = given
 
         self.helper.env_file_path = given
@@ -180,7 +185,7 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         constructor.
         """
 
-        given = self.temp_env_file.name
+        given = str(self.temp_env_file)
         expected = given
 
         helper = EnvironmentVariableHelper(env_file_path=given)
@@ -259,11 +264,11 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         variable from a given environment file.
         """
 
-        self.temp_env_file.write("IS_THIS_A_GHOST=yes\n")
+        self.temp_env_file.write_text(
+            "IS_THIS_A_GHOST=yes", encoding="utf-8", newline="\n"
+        )
 
-        self.temp_env_file.seek(0)
-
-        self.helper.set_env_file_path(self.temp_env_file.name)
+        self.helper.set_env_file_path(str(self.temp_env_file))
         self.helper.set_name("IS_THIS_A_GHOST")
 
         expected = "yes"
@@ -279,11 +284,11 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         In this case, we test the case that the given value is not known.
         """
 
-        self.temp_env_file.write("IS_THIS_A_GHOST_NOOOO=yes")
+        self.temp_env_file.write_text(
+            "IS_THIS_A_GHOST_NOOOO=yes", encoding="utf-8", newline="\n"
+        )
 
-        self.temp_env_file.seek(0)
-
-        self.helper.set_env_file_path(self.temp_env_file.name)
+        self.helper.set_env_file_path(str(self.temp_env_file))
         self.helper.set_name("IS_THIS_A_GHOST")
 
         expected = "hello"
@@ -317,7 +322,7 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         variable into a file.
         """
 
-        self.helper.set_env_file_path(self.temp_env_file.name)
+        self.helper.set_env_file_path(str(self.temp_env_file))
         self.helper.set_name("GHOST_FINDER")
 
         self.assertIsNone(self.helper.get_value())
@@ -326,8 +331,7 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
 
         self.helper.set_value_in_env_file("no")
 
-        with open(self.temp_env_file.name, "r", encoding="utf-8") as file_stream:
-            self.assertTrue("no" in file_stream.read())
+        self.assertTrue("no" in self.temp_env_file.read_text(encoding="utf-8"))
 
         expected = "no"
 
@@ -376,20 +380,30 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         variable into a file.
         """
 
-        self.temp_env_file.write("GHOST_SPEAKER=yes\n")
+        self.temp_env_file.write_text(
+            "GHOST_SPEAKER=yes", encoding="utf-8", newline="\n"
+        )
 
-        self.helper.set_env_file_path(self.temp_env_file.name)
+        self.helper.set_env_file_path(str(self.temp_env_file))
         self.helper.set_name("GHOST_SPEAKER")
 
         self.helper.set_value("no")
 
-        with open(self.temp_env_file.name, "r", encoding="utf-8") as file_stream:
-            self.assertTrue(self.helper.name in x for x in file_stream.readlines())
+        self.assertTrue(
+            all(
+                self.helper.name in x
+                for x in self.temp_env_file.read_text(encoding="utf-8").splitlines()
+            )
+        )
 
         self.helper.delete_from_env_file()
 
-        with open(self.temp_env_file.name, "r", encoding="utf-8") as file_stream:
-            self.assertTrue(self.helper.name not in x for x in file_stream.readlines())
+        self.assertTrue(
+            all(
+                self.helper.name not in x
+                for x in self.temp_env_file.read_text(encoding="utf-8").splitlines()
+            )
+        )
 
         self.assertIsNone(self.helper.get_value())
 
