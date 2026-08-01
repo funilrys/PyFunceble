@@ -51,7 +51,7 @@ License:
 """
 
 import os
-import subprocess # nosec: B404 # aware of implications.
+import subprocess  # nosec: B404 # aware of implications.
 import sys
 from typing import Generator, Optional, Union
 

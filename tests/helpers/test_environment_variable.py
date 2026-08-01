@@ -51,10 +51,10 @@ License:
 """
 
 import os
-from pathlib import Path
 import tempfile
-import uuid
 import unittest
+import uuid
+from pathlib import Path
 
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 

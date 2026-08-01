@@ -60,7 +60,7 @@ from dotenv import load_dotenv
 from PyFunceble.storage_facility import get_config_directory
 
 PROJECT_NAME: str = "PyFunceble"
-PROJECT_VERSION: str = "4.4.1.dev"
+PROJECT_VERSION: str = "4.4.2.dev"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
 
