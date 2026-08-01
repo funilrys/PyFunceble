@@ -18,6 +18,10 @@ permissions:
   checks: write
   pull-requests: write
 
+env:
+  TMP: ${{ github.workspace }}/.tmp
+  TEMP: ${{ github.workspace }}/.tmp
+
 jobs:
   lint:
     name: Lint PyFunceble
@@ -83,7 +87,7 @@ jobs:
         run: bandit --ini=setup.cfg -r PyFunceble
 
   test:
-    needs: [lint,sec_check]
+    needs: [lint, sec_check]
     name: "[${{ matrix.os }}-py${{ matrix.python_version }}] Test PyFunceble"
 
     runs-on: "${{ matrix.os }}"
@@ -109,6 +113,12 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python_version }}
+
+      - name: Setup Temporary Directory
+        shell: bash
+        run: |
+          mkdir -p ${TMP}
+          mkdir -p ${TEMP}
 
       - name: Install dependencies
         run: |
@@ -176,6 +186,12 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
+      - name: Setup Temporary Directory
+        shell: bash
+        run: |
+          mkdir -p ${TMP}
+          mkdir -p ${TEMP}
+
       - name: Install dependencies
         run: |
           pip install --upgrade pip
@@ -230,6 +246,12 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
+      - name: Setup Temporary Directory
+        shell: bash
+        run: |
+          mkdir -p ${TMP}
+          mkdir -p ${TEMP}
+
       - name: Install dependencies
         run: |
           pip install --upgrade pip
@@ -283,6 +305,12 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python_version }}
+
+      - name: Setup Temporary Directory
+        shell: bash
+        run: |
+          mkdir -p ${TMP}
+          mkdir -p ${TEMP}
 
       - name: Install dependencies
         run: |
