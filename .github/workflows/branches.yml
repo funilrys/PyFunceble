@@ -32,7 +32,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.12"
+          - "3.14"
         os:
           - ubuntu-latest
 
@@ -65,7 +65,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.12"
+          - "3.14"
         os:
           - ubuntu-latest
 
@@ -100,6 +100,7 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
+          - "3.14"
         os:
           - ubuntu-latest
           - macos-latest
@@ -148,7 +149,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.12"
+          - "3.14"
         os:
           - ubuntu-latest
 
@@ -173,6 +174,7 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
+          - "3.14"
         os:
           - ubuntu-latest
           - windows-latest
@@ -234,6 +236,7 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
+          - "3.14"
         os:
           - ubuntu-latest
 
@@ -267,7 +270,7 @@ jobs:
     runs-on: "${{ matrix.os }}"
 
     services:
-      mariadb:
+      postgresql:
         image: postgres:latest
         ports:
           - 5432:5432
@@ -275,7 +278,6 @@ jobs:
           POSTGRES_USER: pyfunceble
           POSTGRES_PASSWORD: my_pyfunceble_password
           POSTGRES_DB: pyfunceble
-          MYSQL_ROOT_PASSWORD: my_awesome_root_password
         options: --health-cmd="pg_isready --host=localhost --username=pyfunceble --port=5432" --health-interval=5s --health-timeout=2s --health-retries=3
 
     env:
@@ -294,6 +296,7 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
+          - "3.14"
         os:
           - ubuntu-latest
 
