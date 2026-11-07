@@ -56,7 +56,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.12"
+          - "3.14"
         os:
           - ubuntu-latest
 
@@ -91,7 +91,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.12"
+          - "3.14"
         os:
           - ubuntu-latest
 
