@@ -239,8 +239,8 @@ class IanaDBGenerator:
         self, line: str
     ) -> Tuple[Optional[str], Optional[str]]:
         """
-        Given a line from the IANA TLD list, we try to extract an extension and it's underlying
-        referrer (WHOIS server).
+        Given a line from the IANA TLD list, we try to extract an extension and
+        it's underlying referrer (WHOIS server).
 
         The referrer is extracted from the official IANA page, and guessed if
         missing.
