@@ -78,6 +78,11 @@ class WorkerBase(PyFunceble.ext.process_manager.WorkerCore):
     db_session: Optional[PyFunceble.cli.factory.db_session] = None
     requester: Optional[Requester] = None
 
+    def __getstate__(self) -> dict:
+        state = self.__dict__.copy()
+        state["db_session"] = None
+        return state
+
     def __del__(self) -> None:
         if self.db_session is not None:
             try:
@@ -109,6 +114,13 @@ class WorkerBase(PyFunceble.ext.process_manager.WorkerCore):
             PyFunceble.facility.ConfigLoader.start()
             PyFunceble.cli.facility.CredentialLoader.start()
             PyFunceble.cli.factory.DBSession.init_db_sessions()
+            try:
+                self.db_session = (
+                    PyFunceble.cli.factory.DBSession.get_db_session()
+                    .get_new_session()()
+                )
+            except TypeError:
+                self.db_session = None
 
         return super().perform_external_poweron_checks()
 

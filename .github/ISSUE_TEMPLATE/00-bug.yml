@@ -149,10 +149,10 @@ body:
         Please select the Python version you used.
       multiple: true
       options:
-        - "3.10"
         - "3.11"
         - "3.12"
         - "3.13"
+        - "3.14"
     validations:
       required: false
 
