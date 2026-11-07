@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import multiprocessing
 import traceback
 
 import PyFunceble.facility
@@ -69,6 +70,8 @@ class MigratorWorker(WorkerBase):
         """
 
         try:
+            if multiprocessing.get_start_method() != "fork":
+                self.perform_external_poweron_checks()
             try:
                 self.target(self.continuous_integration, db_session=self.db_session)
             except TypeError:
