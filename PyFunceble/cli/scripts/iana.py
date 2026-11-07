@@ -67,7 +67,7 @@ class IanaDBGenerator:
     Provides an interface for the generation of the iana database file.
     """
 
-    UPSTREAM_LINK: str = "https://www.iana.org/domains/root/db"
+    UPSTREAM_LINK: str = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt"
     """
     Provides the upstream link.
     """
@@ -199,7 +199,7 @@ class IanaDBGenerator:
 
     def get_referrer_from_extension(self, extension: str) -> Optional[str]:
         """
-        Given an extension, tries to get or guess its extension.
+        Given an extension, tries to get or guess its referrer (WHOIS server).
         """
 
         dummy_domain = f"hello.{extension}"
@@ -235,29 +235,30 @@ class IanaDBGenerator:
 
         return None
 
-    def get_extension_and_referrer_from_block(
-        self, block: str
+    def get_extension_and_referrer_from_line(
+        self, line: str
     ) -> Tuple[Optional[str], Optional[str]]:
         """
-        Given an HTML block, we try to extract an extension and it's underlying
+        Given a line from the IANA TLD list, we try to extract an extension and it's underlying
         referrer (WHOIS server).
 
         The referrer is extracted from the official IANA page, and guessed if
         missing.
 
-        :param block:
-            The block to parse.
+        :param line:
+            The line to parse.
         """
 
-        regex_valid_extension = r"(/domains/root/db/)(.*)(\.html)"
+        if not line or line.startswith("#"):
+            return None, None
 
-        if self.regex_helper.set_regex(regex_valid_extension).match(
-            block, return_match=False
-        ):
-            extension = self.regex_helper.match(block, return_match=True, group=2)
+        extension = line.strip().lower()
 
-            if extension:
-                return extension, self.get_referrer_from_extension(extension)
+        if extension:
+            if "#" in extension:
+                extension = extension.split("#", 1)[0].strip()
+
+            return extension, self.get_referrer_from_extension(extension)
 
         return None, None
 
@@ -281,12 +282,12 @@ class IanaDBGenerator:
                 proxies=PyFunceble.storage.PROXY,
             )
             .download_text()
-            .split('<span class="domain tld">')
+            .splitlines()[1:]
         )
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             for extension, whois_server in executor.map(
-                self.get_extension_and_referrer_from_block, raw_data
+                self.get_extension_and_referrer_from_line, raw_data
             ):
                 if extension:
                     self.database[extension] = whois_server
